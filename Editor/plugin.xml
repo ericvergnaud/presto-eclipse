@@ -11,7 +11,7 @@
  	<extension point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.core.runtime.text"
-            describer="presto.editor.boa.ContentDescriber"
+            describer="presto.editor.e.ContentDescriber"
             file-extensions="boa"
             id="presto.content-type.boa"
             name="Presto content type"
@@ -19,7 +19,7 @@
       </content-type>
       <content-type
             base-type="org.eclipse.core.runtime.text"
-            describer="presto.editor.oops.ContentDescriber"
+            describer="presto.editor.o.ContentDescriber"
             file-extensions="oops"
             id="presto.content-type.oops"
             name="Presto content type"
@@ -27,14 +27,14 @@
       </content-type>
   </extension>
 	<extension point="org.eclipse.ui.editors">
-      <editor class="presto.editor.boa.SourceEditor"
+      <editor class="presto.editor.e.SourceEditor"
             default="false"
             icon="images/NewProject.png"
             id="presto.editor.boa"
             name="Presto Editor">
          <contentTypeBinding contentTypeId="presto.content-type.boa"/>
       </editor>
-      <editor class="presto.editor.oops.SourceEditor"
+      <editor class="presto.editor.o.SourceEditor"
             default="false"
             icon="images/NewProject.png"
             id="presto.editor.oops"

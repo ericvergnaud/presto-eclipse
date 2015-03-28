@@ -1,11 +1,10 @@
-package presto.editor.oops;
+package presto.editor.p;
 
-import static core.oops.lexer.OopsLexer.*;
-
-import org.antlr.runtime.Token;
+import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
 import presto.editor.Constants;
+import static presto.parser.PIndentingLexer.*;
 
 public class TokenProxy implements IToken {
 
@@ -66,46 +65,60 @@ public class TokenProxy implements IToken {
 		case DO:
 		case WHILE:
 			return Constants.LOOP_PARTITION_NAME;
-		case ELSE:
 		case IF:
-		case FINALLY:
-		case RETURN:
+		case ELSE:
+		case OTHERWISE:
+		case ALWAYS:
 		case SWITCH:
+		case WHEN:
+		case RETURN:
 			return Constants.BRANCH_PARTITION_NAME;
 		case SYMBOL_IDENTIFIER:
 			return Constants.SYMBOL_PARTITION_NAME;
 		case ABSTRACT:
 		case ALL:
+		case AND:
 		case ANY:
+		case AS:
 		case ATTRIBUTE:
+		case ATTRIBUTES:
 		case BOOLEAN_LITERAL:
 		case CATEGORY:
 		case CLOSE:
 		case CODE:
 		case CONTAINS:
 		case CSHARP:
+		case DEFINE:
+		case DOING:
 		case ENUMERATED:
 		case EXECUTE:
 		case FETCH:
 		case FROM:
 		case GETTER:
 		case IN:
+		case INVOKE:
+		case IS:
 		case JAVA:
 		case JAVASCRIPT:
 		case MAPPINGS:
 		case MATCHING:
 		case METHOD:
+		case METHODS:
 		case NATIVE:
 		case NOT:
-		case NULL_LITERAL:
+		case NULL:
+		case ON:
 		case OPEN:
-		case PYTHON:
-		case THROW:
+		case OR:
+		case PYTHON2:
+		case PYTHON3:
+		case RAISE:
 		case READ:
+		case RECEIVING:
+		case RETURNING:
 		case SETTER:
 		case SORTED:
 		case TO:
-		case VBNET:
 		case WHERE:
 		case WITH:
 		case WRITE:

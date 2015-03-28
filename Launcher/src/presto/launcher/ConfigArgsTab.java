@@ -14,8 +14,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
+import presto.utils.CmdLineParser;
 import presto.utils.ImageUtils;
-import utils.cmd.CmdLineParser;
 
 public class ConfigArgsTab extends AbstractLaunchConfigurationTab {
 

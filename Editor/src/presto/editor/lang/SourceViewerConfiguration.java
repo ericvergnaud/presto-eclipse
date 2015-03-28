@@ -6,7 +6,7 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import presto.editor.Constants;
-import core.parser.Dialect;
+import presto.parser.Dialect;
 
 public class SourceViewerConfiguration extends TextSourceViewerConfiguration {
 

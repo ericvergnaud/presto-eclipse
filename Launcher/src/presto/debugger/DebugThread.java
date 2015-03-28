@@ -14,19 +14,19 @@ import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.jface.dialogs.MessageDialog;
 
+import presto.debug.Debugger;
+import presto.debug.IDebugEventListener;
+import presto.debug.ResumeReason;
+import presto.debug.StackFrame;
+import presto.debug.SuspendReason;
+import presto.error.PrestoError;
 import presto.launcher.ContextMap;
 import presto.launcher.LaunchContext;
+import presto.parser.ISection;
+import presto.runtime.Context;
+import presto.runtime.IContext;
+import presto.runtime.Interpreter;
 import presto.utils.ShellUtils;
-import core.debug.Debugger;
-import core.debug.IDebugEventListener;
-import core.debug.ResumeReason;
-import core.debug.StackFrame;
-import core.debug.SuspendReason;
-import core.error.PrestoError;
-import core.parser.ISection;
-import core.runtime.Context;
-import core.runtime.IContext;
-import core.runtime.Interpreter;
 
 public class DebugThread extends PlatformObject implements IThread, IDebugEventListener {
 

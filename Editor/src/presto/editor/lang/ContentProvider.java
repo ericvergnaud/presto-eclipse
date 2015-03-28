@@ -8,24 +8,23 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 
+import presto.declaration.AttributeDeclaration;
+import presto.declaration.CategoryDeclaration;
+import presto.declaration.ConcreteCategoryDeclaration;
+import presto.declaration.ConcreteMethodDeclaration;
+import presto.declaration.IDeclaration;
+import presto.declaration.IEnumeratedDeclaration;
+import presto.declaration.IMethodDeclaration;
 import presto.editor.Constants;
-import core.grammar.AttributeDeclaration;
-import core.grammar.CategoryDeclaration;
-import core.grammar.CategoryMethodDeclarationList;
-import core.grammar.ConcreteCategoryDeclaration;
-import core.grammar.ConcreteMethodDeclaration;
-import core.grammar.Declaration;
-import core.grammar.DeclarationInstruction;
-import core.grammar.DeclarationList;
-import core.grammar.EnumeratedDeclaration;
-import core.grammar.Identifier;
-import core.grammar.IdentifierList;
-import core.grammar.MethodDeclaration;
-import core.grammar.Statement;
-import core.grammar.Symbol;
-import core.parser.Dialect;
-import core.parser.IParser;
-import core.parser.ISection;
+import presto.grammar.CategoryMethodDeclarationList;
+import presto.grammar.DeclarationList;
+import presto.grammar.IdentifierList;
+import presto.grammar.Symbol;
+import presto.parser.Dialect;
+import presto.parser.IParser;
+import presto.parser.ISection;
+import presto.statement.DeclarationInstruction;
+import presto.statement.IStatement;
 
 public class ContentProvider implements ITreeContentProvider {
 
@@ -99,7 +98,7 @@ public class ContentProvider implements ITreeContentProvider {
 
 	private Element populateDeclarationList(DeclarationList list) {
 		Element root = new Element();
-		for(Declaration decl : list) {
+		for(IDeclaration decl : list) {
 			Element elem = populateDeclaration(decl);
 			elem.parent = root;
 			root.children.add(elem);
@@ -107,20 +106,20 @@ public class ContentProvider implements ITreeContentProvider {
 		return root;
 	}
 
-	private Element populateDeclaration(Declaration decl) {
+	private Element populateDeclaration(IDeclaration decl) {
 		if(decl instanceof AttributeDeclaration)
 			return populateAttribute((AttributeDeclaration)decl);
 		else if(decl instanceof CategoryDeclaration)
 			return populateCategory((CategoryDeclaration)decl);
-		else if(decl instanceof EnumeratedDeclaration)
-			return populateEnumerated((EnumeratedDeclaration)decl);
-		else if(decl instanceof MethodDeclaration)
-			return populateMethod((MethodDeclaration)decl);
+		else if(decl instanceof IEnumeratedDeclaration)
+			return populateEnumerated((IEnumeratedDeclaration)decl);
+		else if(decl instanceof IMethodDeclaration)
+			return populateMethod((IMethodDeclaration)decl);
 		else
 			throw new RuntimeException("Unsupported:" + decl.getClass().getName());
 	}
 
-	private Element populateEnumerated(EnumeratedDeclaration decl) {
+	private Element populateEnumerated(IEnumeratedDeclaration decl) {
 		Element elem = new Element();
 		elem.name = decl.getName();
 		elem.section = decl;
@@ -129,7 +128,7 @@ public class ContentProvider implements ITreeContentProvider {
 		return elem;
 	}
 
-	private void populateSymbols(Element elem, EnumeratedDeclaration decl) {
+	private void populateSymbols(Element elem, IEnumeratedDeclaration decl) {
 		for(Symbol s : decl.getSymbols()) {
 			Element child = new Element();
 			child.name = s.getName();
@@ -139,13 +138,13 @@ public class ContentProvider implements ITreeContentProvider {
 		}
 	}
 
-	private Element populateMethod(MethodDeclaration decl) {
+	private Element populateMethod(IMethodDeclaration decl) {
 		Element elem = new Element();
 		elem.name = decl.getName();
 		elem.section = decl;
 		elem.type = ContentType.METHOD;
 		if(decl instanceof ConcreteMethodDeclaration) {
-			for(Statement s : ((ConcreteMethodDeclaration)decl).getStatements()) {
+			for(IStatement s : ((ConcreteMethodDeclaration)decl).getStatements()) {
 				if(s instanceof DeclarationInstruction) {
 					Element child = populateDeclaration(((DeclarationInstruction<?>)s).getDeclaration());
 					child.parent = elem;
@@ -160,20 +159,20 @@ public class ContentProvider implements ITreeContentProvider {
 		Element elem = new Element();
 		elem.name = decl.getName();
 		elem.section = decl;
-		elem.type = decl instanceof EnumeratedDeclaration ? ContentType.ENUMERATED : ContentType.CATEGORY;
+		elem.type = decl instanceof IEnumeratedDeclaration ? ContentType.ENUMERATED : ContentType.CATEGORY;
 		populateInherited(elem, decl.getDerivedFrom());
-		if(decl.getAttributes()!=null) for(Identifier name : decl.getAttributes()) {
+		if(decl.getAttributes()!=null) for(String name : decl.getAttributes()) {
 			Element child = populateAttribute(name);
 			child.parent = elem;
 			elem.children.add(child);
 		}
-		if(decl instanceof EnumeratedDeclaration) {
-			populateSymbols(elem, (EnumeratedDeclaration)decl);
+		if(decl instanceof IEnumeratedDeclaration) {
+			populateSymbols(elem, (IEnumeratedDeclaration)decl);
 		}
 		if(decl instanceof ConcreteCategoryDeclaration) {
 			CategoryMethodDeclarationList methods = ((ConcreteCategoryDeclaration)decl).getMethods();
-			if(methods!=null) for(MethodDeclaration method : methods) {
-				Element child = populateMethod((MethodDeclaration)method);
+			if(methods!=null) for(IMethodDeclaration method : methods) {
+				Element child = populateMethod((IMethodDeclaration)method);
 				child.parent = elem;
 				elem.children.add(child);
 			}
@@ -182,10 +181,10 @@ public class ContentProvider implements ITreeContentProvider {
 	}
 	
 	private void populateInherited(Element elem, IdentifierList names) {
-		if(names!=null) for(Identifier name : names) {
+		if(names!=null) for(String name : names) {
 			Element child = new Element();
-			child.name = name.getName();
-			child.section = name;
+			child.name = name;
+			child.section = null; // TODO
 			child.type = ContentType.CATEGORY;
 			elem.children.add(child);
 		}
@@ -199,10 +198,10 @@ public class ContentProvider implements ITreeContentProvider {
 		return elem;
 	}
 	
-	private Element populateAttribute(Identifier name) {
+	private Element populateAttribute(String name) {
 		Element elem = new Element();
-		elem.name = name.getName();
-		elem.section = name;
+		elem.name = name;
+		elem.section = null; // TODO name;
 		elem.type = ContentType.ATTRIBUTE;
 		return elem;
 	}

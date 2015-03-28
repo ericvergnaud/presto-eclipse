@@ -1,23 +1,23 @@
-package presto.editor.oops;
+package presto.editor.o;
 
-import org.antlr.runtime.CommonToken;
+import org.antlr.v4.runtime.CommonToken;
 import org.eclipse.jface.text.rules.IToken;
 
 import presto.editor.lang.PartitionTokenScannerBase;
-import core.oops.lexer.OopsLexer;
-import core.parser.Dialect;
+import presto.parser.Dialect;
+import presto.parser.OLexer;
 
 
 public class PartitionTokenScanner extends PartitionTokenScannerBase {
 
 	public PartitionTokenScanner() {
-		super(Dialect.OOPS);
+		super(Dialect.O);
 	}
 
 	@Override
 	public IToken nextToken() {
 		CommonToken token = (CommonToken)lexer.nextToken();
-		if(token.getType()!=OopsLexer.EOF)
+		if(token.getType()!=OLexer.EOF)
 			setLastToken(token);
 		return new TokenProxy(token);
 	}

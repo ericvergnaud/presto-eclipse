@@ -11,7 +11,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
 import presto.debugger.Constants;
-import core.parser.Dialect;
+import presto.parser.Dialect;
 
 public class ModelPresentation extends LabelProvider implements IDebugModelPresentation {
 

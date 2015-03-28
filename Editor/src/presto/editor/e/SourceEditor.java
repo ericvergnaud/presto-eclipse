@@ -1,14 +1,14 @@
-package presto.eclipse.plugin.oops;
+package presto.editor.e;
 
 import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
 
-import presto.eclipse.plugin.lang.SourceEditorBase;
-import core.runtime.Dialect;
+import presto.editor.lang.SourceEditorBase;
+import presto.parser.Dialect;
 
 public class SourceEditor extends SourceEditorBase {
 
 	public SourceEditor() {
-		super(Dialect.OOPS);
+		super(Dialect.E);
 	}
 
 	@Override
@@ -16,4 +16,5 @@ public class SourceEditor extends SourceEditorBase {
 		return new DocumentSetupParticipant();
 	}
 
+	
 }

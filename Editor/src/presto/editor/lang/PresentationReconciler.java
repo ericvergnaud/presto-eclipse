@@ -4,7 +4,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 
 import presto.editor.Constants;
-import core.parser.Dialect;
+import presto.parser.Dialect;
 
 public class PresentationReconciler extends org.eclipse.jface.text.presentation.PresentationReconciler {
 

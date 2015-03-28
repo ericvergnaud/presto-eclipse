@@ -1,20 +1,26 @@
 package presto.editor.lang;
 
-import org.antlr.runtime.CommonToken;
+import org.antlr.v4.runtime.CommonToken;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 
-import core.parser.Dialect;
-import core.parser.ILexer;
+import presto.parser.Dialect;
+import presto.parser.ILexer;
 
 public abstract class PartitionTokenScannerBase implements IPartitionTokenScanner {
 
 	public static IPartitionTokenScanner newPartitionTokenScanner(Dialect dialect) {
-		if(dialect==Dialect.BOA)
-			return new presto.editor.boa.PartitionTokenScanner();
-		else
-			return new presto.editor.oops.PartitionTokenScanner();
+		switch(dialect) {
+		case E:
+			return new presto.editor.e.PartitionTokenScanner();
+		case O:
+			return new presto.editor.o.PartitionTokenScanner();
+		case P:
+			return new presto.editor.p.PartitionTokenScanner();
+		default:
+			throw new RuntimeException("Unsupported");
+		}
 	}
 	
 	protected Dialect dialect;

@@ -12,7 +12,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointListener;
 import org.eclipse.debug.core.model.IBreakpoint;
 
-import core.parser.ISection;
+import presto.parser.ISection;
 
 public class DebuggerUtils {
 

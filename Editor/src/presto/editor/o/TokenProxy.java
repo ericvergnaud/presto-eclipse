@@ -1,11 +1,11 @@
-package presto.eclipse.plugin.oops;
+package presto.editor.o;
 
-import static core.oops.lexer.OopsLexer.*;
+import static presto.parser.OLexer.*;
 
-import org.antlr.runtime.Token;
+import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
-import presto.eclipse.plugin.PrestoConstants;
+import presto.editor.Constants;
 
 public class TokenProxy implements IToken {
 
@@ -50,7 +50,7 @@ public class TokenProxy implements IToken {
 		case RESOURCE:
 		case TEXT:
 		case TIME:
-			return PrestoConstants.TYPE_PARTITION_NAME;
+			return Constants.TYPE_PARTITION_NAME;
 		case CHAR_LITERAL:
 		case DATETIME_LITERAL:
 		case DATE_LITERAL:
@@ -60,20 +60,20 @@ public class TokenProxy implements IToken {
 		case PERIOD_LITERAL:
 		case TEXT_LITERAL:
 		case TIME_LITERAL:
-			return PrestoConstants.LITERAL_PARTITION_NAME;
+			return Constants.LITERAL_PARTITION_NAME;
 		case FOR:
 		case EACH:
 		case DO:
 		case WHILE:
-			return PrestoConstants.LOOP_PARTITION_NAME;
+			return Constants.LOOP_PARTITION_NAME;
 		case ELSE:
 		case IF:
 		case FINALLY:
 		case RETURN:
 		case SWITCH:
-			return PrestoConstants.BRANCH_PARTITION_NAME;
+			return Constants.BRANCH_PARTITION_NAME;
 		case SYMBOL_IDENTIFIER:
-			return PrestoConstants.SYMBOL_PARTITION_NAME;
+			return Constants.SYMBOL_PARTITION_NAME;
 		case ABSTRACT:
 		case ALL:
 		case ANY:
@@ -97,23 +97,23 @@ public class TokenProxy implements IToken {
 		case METHOD:
 		case NATIVE:
 		case NOT:
-		case NULL_LITERAL:
+		case NULL:
 		case OPEN:
-		case PYTHON:
+		case PYTHON2:
+		case PYTHON3:
 		case THROW:
 		case READ:
 		case SETTER:
 		case SORTED:
 		case TO:
-		case VBNET:
 		case WHERE:
 		case WITH:
 		case WRITE:
-			return PrestoConstants.KEYWORD_PARTITION_NAME;
+			return Constants.KEYWORD_PARTITION_NAME;
 		case COMMENT:
-			return PrestoConstants.COMMENT_PARTITION_NAME;
+			return Constants.COMMENT_PARTITION_NAME;
 		default:
-			return PrestoConstants.OTHER_PARTITION_NAME;
+			return Constants.OTHER_PARTITION_NAME;
 
 		}
 	}

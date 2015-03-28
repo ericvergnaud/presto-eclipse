@@ -1,14 +1,14 @@
-package presto.editor.boa;
+package presto.editor.e;
 
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 
 import presto.editor.lang.DocumentSetupParticipantBase;
-import core.parser.Dialect;
+import presto.parser.Dialect;
 
 public class DocumentSetupParticipant extends DocumentSetupParticipantBase {
 
 	public DocumentSetupParticipant() {
-		super(Dialect.BOA);
+		super(Dialect.E);
 	}
 
 	@Override

@@ -32,19 +32,14 @@
 			<location>/Users/ericvergnaud/.m2/repository/Presto/Core/trunk-SNAPSHOT/Core-trunk-SNAPSHOT.jar</location>
 		</link>
 		<link>
-			<name>libs/Utils-trunk-SNAPSHOT.jar</name>
+			<name>libs/antlr4-runtime-4.5.jar</name>
 			<type>1</type>
-			<location>/Users/ericvergnaud/.m2/repository/Presto/Utils/trunk-SNAPSHOT/Utils-trunk-SNAPSHOT.jar</location>
-		</link>
-		<link>
-			<name>libs/antlr-runtime-3.5.1.jar</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/.m2/repository/org/antlr/antlr-runtime/3.5.1/antlr-runtime-3.5.1.jar</locationURI>
+			<location>/Users/ericvergnaud/.m2/repository/org/antlr/antlr4-runtime/4.5/antlr4-runtime-4.5.jar</location>
 		</link>
 		<link>
 			<name>libs/joda-time-2.0.jar</name>
 			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/.m2/repository/joda-time/joda-time/2.0/joda-time-2.0.jar</locationURI>
+			<location>/Users/ericvergnaud/.m2/repository/joda-time/joda-time/2.0/joda-time-2.0.jar</location>
 		</link>
 	</linkedResources>
 </projectDescription>

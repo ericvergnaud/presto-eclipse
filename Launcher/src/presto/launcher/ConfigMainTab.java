@@ -21,8 +21,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
+import presto.declaration.IMethodDeclaration;
 import presto.utils.ImageUtils;
-import core.grammar.MethodDeclaration;
 
 public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 
@@ -179,8 +179,8 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 
 	private void fillInMethods(IFile file) {
 		methodCombo.setItems(new String[0]);
-		List<MethodDeclaration> methods = Utils.getEligibleMethods(file);
-		for(MethodDeclaration method : methods)
+		List<IMethodDeclaration> methods = Utils.getEligibleMethods(file);
+		for(IMethodDeclaration method : methods)
 			methodCombo.add(method.getName());
 	}
 	
@@ -231,7 +231,7 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 	}
 
 	private void selectMethod(ILaunchConfiguration configuration, IFile file) {
-		MethodDeclaration method = Utils.getConfiguredMethod(configuration, file);
+		IMethodDeclaration method = Utils.getConfiguredMethod(configuration, file);
 		if(method!=null && methodCombo.getItemCount()>0) 
 			Utils.selectInCombo(methodCombo,method.getName());
 	}
@@ -266,13 +266,13 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 		configuration.setAttribute(Constants.PROJECT, getProjectName(project));
 		IFile file = getSelectedFile(project);
 		configuration.setAttribute(Constants.FILE, file==null ? null : Utils.getFilePath(file));
-		MethodDeclaration method = getSelectedMethod(file);
+		IMethodDeclaration method = getSelectedMethod(file);
 		String signature = method==null ? null : Utils.getMethodSignature(method, Utils.getDialect(file));
 		configuration.setAttribute(Constants.METHOD, signature);
 		configuration.setAttribute(Constants.STOP_IN_MAIN, stopInMainButton.getSelection());
 	}
 
-	private MethodDeclaration getSelectedMethod(IFile file) {
+	private IMethodDeclaration getSelectedMethod(IFile file) {
 		if(file==null)
 			return null;
 		int idx = methodCombo.getSelectionIndex();

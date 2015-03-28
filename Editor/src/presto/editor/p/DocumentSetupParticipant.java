@@ -1,14 +1,14 @@
-package presto.eclipse.plugin.oops;
+package presto.editor.p;
 
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 
-import presto.eclipse.plugin.lang.DocumentSetupParticipantBase;
-import core.runtime.Dialect;
+import presto.editor.lang.DocumentSetupParticipantBase;
+import presto.parser.Dialect;
 
 public class DocumentSetupParticipant extends DocumentSetupParticipantBase {
 
 	public DocumentSetupParticipant() {
-		super(Dialect.OOPS);
+		super(Dialect.P);
 	}
 
 	@Override

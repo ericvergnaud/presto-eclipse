@@ -16,7 +16,7 @@ import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.debug.core.sourcelookup.containers.WorkspaceSourceContainer;
 
-import core.debug.StackFrame;
+import presto.debug.StackFrame;
 
 public class StackFrameProxy extends PlatformObject implements IStackFrame {
 

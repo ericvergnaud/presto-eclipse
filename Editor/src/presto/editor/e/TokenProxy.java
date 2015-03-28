@@ -1,10 +1,10 @@
-package presto.editor.boa;
+package presto.editor.e;
 
-import org.antlr.runtime.Token;
+import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
 import presto.editor.Constants;
-import static core.boa.lexer.IndentingLexer.*;
+import static presto.parser.EIndentingLexer.*;
 
 public class TokenProxy implements IToken {
 
@@ -106,11 +106,12 @@ public class TokenProxy implements IToken {
 		case METHODS:
 		case NATIVE:
 		case NOT:
-		case NULL_LITERAL:
+		case NULL:
 		case ON:
 		case OPEN:
 		case OR:
-		case PYTHON:
+		case PYTHON2:
+		case PYTHON3:
 		case RAISE:
 		case READ:
 		case RECEIVING:
@@ -118,7 +119,6 @@ public class TokenProxy implements IToken {
 		case SETTER:
 		case SORTED:
 		case TO:
-		case VBNET:
 		case WHERE:
 		case WITH:
 		case WRITE:

@@ -13,11 +13,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.swt.widgets.Combo;
 
-import core.grammar.Declaration;
-import core.grammar.DeclarationList;
-import core.grammar.MethodDeclaration;
-import core.parser.Dialect;
-import core.parser.IParser;
+import presto.declaration.IDeclaration;
+import presto.declaration.IMethodDeclaration;
+import presto.grammar.DeclarationList;
+import presto.parser.Dialect;
+import presto.parser.IParser;
 
 public class Utils {
 
@@ -49,16 +49,16 @@ public class Utils {
 		}
 	}
 
-	public static List<MethodDeclaration> getEligibleMethods(IFile file) {
-		List<MethodDeclaration> list = new LinkedList<MethodDeclaration>();
+	public static List<IMethodDeclaration> getEligibleMethods(IFile file) {
+		List<IMethodDeclaration> list = new LinkedList<IMethodDeclaration>();
 		if(file!=null) try {
 			Dialect dialect = getDialect(file);
 			IParser parser = dialect.getParserFactory().newParser(file.getFullPath().toPortableString(),
 					file.getContents());
 			DeclarationList all = parser.parse();
-			for(Declaration decl : all) {
+			for(IDeclaration decl : all) {
 				if(isEligible(decl))
-					list.add((MethodDeclaration)decl);
+					list.add((IMethodDeclaration)decl);
 			}
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
@@ -66,10 +66,10 @@ public class Utils {
 		return list;
 	}
 	
-	public static boolean isEligible(Declaration declaration) {
-		if(!(declaration instanceof MethodDeclaration))	
+	public static boolean isEligible(IDeclaration declaration) {
+		if(!(declaration instanceof IMethodDeclaration))	
 			return false;
-		return ((MethodDeclaration)declaration).isEligibleAsMain();
+		return ((IMethodDeclaration)declaration).isEligibleAsMain();
 	}
 
 	public static Dialect getDialect(IFile file) {
@@ -115,16 +115,16 @@ public class Utils {
 		}
 	}
 
-	public static String getMethodSignature(MethodDeclaration method, Dialect dialect) {
+	public static String getMethodSignature(IMethodDeclaration method, Dialect dialect) {
 		return method==null ? null : method.getSignature(dialect);
 	}
 
-	public static MethodDeclaration getConfiguredMethod( ILaunchConfiguration configuration, IFile file) {
+	public static IMethodDeclaration getConfiguredMethod( ILaunchConfiguration configuration, IFile file) {
 		try {
 			String signature = configuration.getAttribute(Constants.METHOD, "");
 			if(!signature.isEmpty()) {
 				Dialect dialect = getDialect(file);
-				for(MethodDeclaration method : Utils.getEligibleMethods(file)) {
+				for(IMethodDeclaration method : Utils.getEligibleMethods(file)) {
 					if(signature.equals(method.getSignature(dialect))) 
 						return method;
 				}

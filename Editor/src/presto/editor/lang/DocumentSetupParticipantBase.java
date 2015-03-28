@@ -8,7 +8,7 @@ import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 
 import presto.editor.Constants;
-import core.parser.Dialect;
+import presto.parser.Dialect;
 
 public abstract class DocumentSetupParticipantBase implements IDocumentSetupParticipant {
 

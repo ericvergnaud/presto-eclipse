@@ -18,9 +18,9 @@ import presto.editor.Constants;
 import presto.editor.Plugin;
 import presto.editor.lang.ContentProvider.Element;
 import presto.editor.prefs.SyntaxColoring;
-import core.parser.Dialect;
-import core.parser.ISection;
 // import presto.eclipse.plugin.lang.FormattingStrategy;
+import presto.parser.Dialect;
+import presto.parser.ISection;
 
 public abstract class SourceEditorBase extends AbstractDecoratedTextEditor {
 

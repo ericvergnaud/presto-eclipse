@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.Token;
+import org.antlr.v4.runtime.CommonToken;
+import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.preference.ColorSelector;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
@@ -30,8 +30,8 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import presto.editor.Plugin;
 import presto.editor.prefs.SyntaxColoring.ColorPreference;
-import core.parser.Dialect;
-import core.parser.ILexer;
+import presto.parser.Dialect;
+import presto.parser.ILexer;
 
 public class ColoringPage extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -40,11 +40,12 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 	Button boldCheckBox;
 	Button italicCheckBox;
 	Button underlineCheckBox;
-	Button boaRadio;
-	Button oopsRadio;
+	Button eRadio;
+	Button oRadio;
+	Button pRadio;
 	StyledText preview;
 	
-	static final String boaPreviewContent = "define id as: Integer attribute\r\n"
+	static final String ePreviewContent = "define id as: Integer attribute\r\n"
 			+ "define name as: Text attribute\r\n"
 			+ "\r\n"
 			+ "define Person as: enumerated category with attributes: id and name, with symbols:\r\n"
@@ -60,7 +61,26 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			+ "        for each person in Person.symbols:\r\n"
 			+ "            print person.name\r\n";
 	
-	static final String oopsPreviewContent = "attribute id : Integer;\r\n" 
+	static final String oPreviewContent = "attribute id : Integer;\r\n" 
+			+ "attribute name : Text;\r\n"
+			+ "\r\n"
+			+ "enumerated category Person(id , name) {\r\n"
+			+ "    JOHN ( id = 1, name = \"John\" ); \r\n"
+			+ "    SYLVIA ( id = 2, name = \"Sylvia\" );\r\n"
+			+ "}\r\n" 
+			+ "\r\n"
+			+ "/* this is a comment */\r\n"
+			+ "method main ( Text{} options ) {\r\n"
+			+ "    if ( options[\"what\"] == \"id\" ) {\r\n"
+			+ "        for each ( person in Person.symbols )\r\n"
+			+ "            print ( person.id );\r\n"
+			+ "    } else {\r\n"
+			+ "        for each ( person in Person.symbols )\r\n"
+			+ "            print ( person.name );\r\n"
+			+ "    }\r\n"
+			+ "}\r\n";
+
+	static final String pPreviewContent = "attribute id : Integer;\r\n" 
 			+ "attribute name : Text;\r\n"
 			+ "\r\n"
 			+ "enumerated category Person(id , name) {\r\n"
@@ -165,8 +185,9 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 		layout.marginWidth = 0;
 		control.setLayout(layout);
 		createPreviewLabel(control);
-		createPreviewBoa(control);
-		createPreviewOops(control);
+		createPreviewE(control);
+		createPreviewO(control);
+		createPreviewP(control);
 	}
 	
 	private void createPreviewLabel(Composite parent) {
@@ -175,11 +196,11 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 		label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 	}
 
-	private void createPreviewBoa(Composite parent) {
-		boaRadio = new Button(parent, SWT.RADIO);
-		boaRadio.setText("Boa");
-		boaRadio.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-		boaRadio.addSelectionListener(new SelectionListener() {
+	private void createPreviewE(Composite parent) {
+		eRadio = new Button(parent, SWT.RADIO);
+		eRadio.setText("E");
+		eRadio.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+		eRadio.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -191,11 +212,27 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 		});
 	}
 	
-	private void createPreviewOops(Composite parent) {
-		oopsRadio = new Button(parent, SWT.RADIO);
-		oopsRadio.setText("Oops");
-		oopsRadio.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-		oopsRadio.addSelectionListener(new SelectionListener() {
+	private void createPreviewO(Composite parent) {
+		oRadio = new Button(parent, SWT.RADIO);
+		oRadio.setText("O");
+		oRadio.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+		oRadio.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				populatePreview();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) { }
+		});
+	}
+
+	private void createPreviewP(Composite parent) {
+		oRadio = new Button(parent, SWT.RADIO);
+		oRadio.setText("P");
+		oRadio.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+		oRadio.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -229,19 +266,36 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 		for(ColorPreference pref  : ColorPreference.values())
 			colorList.add(pref.toString());
 		colorList.addSelectionListener(new ColorSelectionListener());
-		oopsRadio.setSelection(false);
-		boaRadio.setSelection(true);
+		oRadio.setSelection(false);
+		pRadio.setSelection(false);
+		eRadio.setSelection(true);
 	}
 	
 	private void populatePreview() {
-		Dialect dialect = boaRadio.getSelection() ? Dialect.BOA : Dialect.OOPS;
+		Dialect dialect = dialectFromSelection();
 		preview.setText(getPreviewContent(dialect));	
 		StyleRange[] ranges = collectRanges(dialect);
 		preview.setStyleRanges(ranges);
 	}
 	
+	private Dialect dialectFromSelection() {
+		if(eRadio.getSelection())
+			return Dialect.E;
+		else if(oRadio.getSelection())
+			return Dialect.O;
+		else
+			return Dialect.P;
+	}
+
 	private String getPreviewContent(Dialect dialect) {
-		return dialect==Dialect.BOA ? boaPreviewContent : oopsPreviewContent;
+		switch(dialect) {
+		case E:
+			return ePreviewContent;
+		case O:
+			return oPreviewContent;
+		default:
+			return pPreviewContent;
+		}
 	}
 
 	private StyleRange[] collectRanges(Dialect dialect) {
@@ -283,10 +337,15 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 	}
 	
 	private String getPartition(Dialect dialect, Token token) {
-		if(dialect==Dialect.BOA)
-			return new presto.editor.boa.TokenProxy(token).getData().toString();
-		else
-			return new presto.editor.oops.TokenProxy(token).getData().toString();
+		switch(dialect) {
+		case E:
+			return new presto.editor.e.TokenProxy(token).getData().toString();
+		case O:
+			return new presto.editor.o.TokenProxy(token).getData().toString();
+		case P:
+		default:
+			return new presto.editor.p.TokenProxy(token).getData().toString();
+		}
 	}
 
 	class ColorSelectionListener implements SelectionListener {

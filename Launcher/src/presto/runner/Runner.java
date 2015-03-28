@@ -1,8 +1,8 @@
 package presto.runner;
 
-import core.runtime.Interpreter;
 import presto.launcher.ContextMap;
 import presto.launcher.LaunchContext;
+import presto.runtime.Interpreter;
 
 public class Runner {
 

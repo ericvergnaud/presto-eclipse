@@ -5,12 +5,12 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 
-import core.grammar.ConcreteMethodDeclaration;
-import core.grammar.Declaration;
-import core.grammar.DeclarationList;
-import core.grammar.Statement;
-import core.parser.ISection;
-import core.runtime.Context;
+import presto.declaration.ConcreteMethodDeclaration;
+import presto.declaration.IDeclaration;
+import presto.grammar.DeclarationList;
+import presto.parser.ISection;
+import presto.runtime.Context;
+import presto.statement.IStatement;
 
 public class ContextMap {
 	
@@ -35,7 +35,7 @@ public class ContextMap {
 	
 	
 	public ISection findSection(DeclarationList list, int lineNumber) {
-		for(Declaration decl : list) {
+		for(IDeclaration decl : list) {
 			if(decl.getStart().getLine()>lineNumber)
 				continue;
 			if(decl.getEnd().getLine()<lineNumber)
@@ -45,7 +45,7 @@ public class ContextMap {
 		return null;
 	}
 
-	private ISection findSection(Declaration decl, int lineNumber) {
+	private ISection findSection(IDeclaration decl, int lineNumber) {
 		if(decl instanceof ConcreteMethodDeclaration)
 			return findSection((ConcreteMethodDeclaration)decl, lineNumber);
 		else
@@ -53,7 +53,7 @@ public class ContextMap {
 	}
 	
 	private ISection findSection(ConcreteMethodDeclaration decl, int lineNumber) {
-		for(Statement stmt : decl.getStatements()) {
+		for(IStatement stmt : decl.getStatements()) {
 			if(stmt.getStart().getLine()>lineNumber)
 				continue;
 			if(stmt.getEnd().getLine()<lineNumber)

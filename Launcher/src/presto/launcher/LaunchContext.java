@@ -9,11 +9,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
-import core.error.SyntaxError;
-import core.grammar.DeclarationList;
-import core.grammar.MethodDeclaration;
-import core.parser.Dialect;
-import core.runtime.Context;
+import presto.declaration.IMethodDeclaration;
+import presto.error.SyntaxError;
+import presto.grammar.DeclarationList;
+import presto.parser.Dialect;
+import presto.runtime.Context;
 
 public class LaunchContext {
 
@@ -21,7 +21,7 @@ public class LaunchContext {
 	ILaunchConfiguration configuration;
 	IProject project;
 	IFile file;
-	MethodDeclaration method;
+	IMethodDeclaration method;
 	String cmdLineArgs;
 	boolean stopInMain;
 	
@@ -43,7 +43,7 @@ public class LaunchContext {
 		return launch;
 	}
 	
-	public MethodDeclaration getMethod() {
+	public IMethodDeclaration getMethod() {
 		return method;
 	}
 	
