@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Presto Core plugin
+Bundle-SymbolicName: presto.core;singleton:=true
+Bundle-Version: 1.0.0.0
+Bundle-Activator: presto.core.Plugin
+Bundle-Vendor: Presto
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: org.antlr.runtime
+Bundle-ClassPath: 

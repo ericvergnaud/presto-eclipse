@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension point="org.eclipse.ui.editors.documentProviders">
+    	<provider 
+        	extensions="boa,oops" 
+        	class="presto.editor.lang.DocumentProvider" 
+        	id="presto.editor.lang.documentProvider"> 
+    	</provider> 
+	</extension>
+ 	<extension point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            describer="presto.editor.boa.ContentDescriber"
+            file-extensions="boa"
+            id="presto.content-type.boa"
+            name="Presto content type"
+            priority="high">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            describer="presto.editor.oops.ContentDescriber"
+            file-extensions="oops"
+            id="presto.content-type.oops"
+            name="Presto content type"
+            priority="high">
+      </content-type>
+  </extension>
+	<extension point="org.eclipse.ui.editors">
+      <editor class="presto.editor.boa.SourceEditor"
+            default="false"
+            icon="images/NewProject.png"
+            id="presto.editor.boa"
+            name="Presto Editor">
+         <contentTypeBinding contentTypeId="presto.content-type.boa"/>
+      </editor>
+      <editor class="presto.editor.oops.SourceEditor"
+            default="false"
+            icon="images/NewProject.png"
+            id="presto.editor.oops"
+            name="Presto Editor">
+         <contentTypeBinding contentTypeId="presto.content-type.oops"/>
+      </editor>
+    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="presto.editor.prefs.Initializer">
+      </initializer>
+   </extension>
+    <extension
+      point = "org.eclipse.ui.preferencePages">
+      <page
+         id="presto.prefs.root"
+         class="presto.editor.prefs.RootPage"
+         name="Presto">
+      </page>
+      <page
+         id="presto.prefs.editor"
+         class="presto.editor.prefs.EditorPage"
+         name="Editor"
+         category="presto.prefs.root">
+      </page>
+      <page
+         id="presto.prefs.coloring"
+         class="presto.editor.prefs.ColoringPage"
+         name="Syntax coloring"
+         category="presto.prefs.editor">
+      </page>
+   </extension>  
+   <extension point="org.eclipse.core.runtime.adapters">
+		<factory
+    		class="presto.editor.lang.BreakpointAdapterFactory"
+       		adaptableType="presto.editor.lang.SourceEditorBase">
+       		<adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget"/>
+    	</factory>
+   </extension>
+   <!--
+ 	<extension point="org.eclipse.ui.newWizards">
+      <wizard
+            category="presto.wizard.category"
+            class="presto.wizards.project.Wizard"
+            icon="images/NewProject.png"
+            id="presto.project.wizard"
+            name="Presto project"
+            project="true">
+      </wizard>
+      <category id="presto.wizard.category" name="Presto" />
+   </extension>
+  <extension point="org.eclipse.ui.menus">
+ 		<menuContribution locationURI="popup:org.eclipse.ui.projectConfigure">
+ 			<command commandId="disable.presto.boa">
+		      	<visibleWhen>
+		      		<iterate ifEmpty="false" operator="or">
+	        			<adapt type="org.eclipse.core.resources.IResource">
+		             		<test property="org.eclipse.core.resources.projectNature" value="presto.boa.nature"/>
+	         			</adapt>
+	         		</iterate>
+ 		      	</visibleWhen>
+ 			</command>
+			<command commandId="enable.presto.boa">
+		      	<visibleWhen>
+		      		<iterate>
+	        			<adapt type="org.eclipse.core.resources.IResource">
+		             		<not>
+		             			<test property="org.eclipse.core.resources.projectNature" value="presto.boa.nature"/>
+		             		</not>
+	         			</adapt>
+	         		</iterate>
+ 		      	</visibleWhen>
+ 			</command>
+        </menuContribution> 
+   </extension>
+   <extension point="org.eclipse.ui.commands">
+      <command id="disable.presto.boa" defaultHandler="presto.boa.DisableBoaHandler" name="Remove Presto (Boa) nature" />
+      <command id="enable.presto.boa" defaultHandler="presto.boa.EnableBoaHandler" name="Convert to Presto (Boa) project" />
+   </extension>
+     -->
+ </plugin>

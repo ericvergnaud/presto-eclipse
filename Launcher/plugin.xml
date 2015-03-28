@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin> 
+	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
+	   <launchConfigurationType
+	   	   id="presto.launcher"
+		   name="Presto application"
+		   delegate="presto.launcher.LaunchDelegate"
+		   sourceLocatorId="presto.locator.sourceLocator"
+		   sourcePathComputerId="presto.locator.sourcePathComputer"
+		   modes= "run, debug">
+	   </launchConfigurationType>
+	</extension>
+ 	<extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+ 		<launchConfigurationTypeImage
+			icon="images/launcher.png"
+			configTypeID="presto.launcher"
+			id="presto.launcher">
+		</launchConfigurationTypeImage>
+	</extension>
+	<extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+	  <launchConfigurationTabGroup
+	      id="presto.launcher.tabGroup"
+	      type="presto.launcher"
+	      class="presto.launcher.ConfigTabGroup">
+	  </launchConfigurationTabGroup>
+ 	</extension>
+	<extension point="org.eclipse.debug.core.sourcePathComputers">
+ 		<sourcePathComputer
+    		class="presto.locator.SourcePathComputer"
+   			 id="presto.locator.sourcePathComputer">
+    	</sourcePathComputer>
+	</extension>
+	<extension point="org.eclipse.debug.core.sourceLocators">
+	    <sourceLocator
+	       name="Prestor source locator"
+	    	class="presto.locator.SourceLocator"
+	    	id="presto.locator.sourceLocator">
+	    </sourceLocator>
+	</extension>
+	<extension point="org.eclipse.debug.ui.debugModelPresentations">
+ 		<debugModelPresentation
+    		class="presto.locator.ModelPresentation"
+    		id="presto.debug">
+    	</debugModelPresentation>
+  	</extension>
+	<extension point="org.eclipse.debug.core.breakpoints">
+ 		<breakpoint
+    		markerType="presto.debug.line.marker"
+    		class="presto.debugger.LineBreakpoint"
+       		id="presto.debug.lineBreakpoint">
+    	</breakpoint>
+ 	</extension>
+  	<extension id="presto.debug.line.marker" point="org.eclipse.core.resources.markers">
+       <super type="org.eclipse.debug.core.lineBreakpointMarker"/>
+       <persistent value="true"/>
+    </extension>
+</plugin>
