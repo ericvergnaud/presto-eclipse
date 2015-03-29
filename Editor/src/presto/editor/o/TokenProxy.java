@@ -1,11 +1,11 @@
 package presto.editor.o;
 
-import static presto.parser.OLexer.*;
 
 import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
 import presto.editor.Constants;
+import static presto.parser.OLexer.*;
 
 public class TokenProxy implements IToken {
 
@@ -66,45 +66,76 @@ public class TokenProxy implements IToken {
 		case DO:
 		case WHILE:
 			return Constants.LOOP_PARTITION_NAME;
+		case ALWAYS:
 		case ELSE:
-		case IF:
 		case FINALLY:
+		case IF:
+		case OTHERWISE:
 		case RETURN:
 		case SWITCH:
+		case WHEN:
 			return Constants.BRANCH_PARTITION_NAME;
 		case SYMBOL_IDENTIFIER:
 			return Constants.SYMBOL_PARTITION_NAME;
 		case ABSTRACT:
 		case ALL:
+		case AND:
 		case ANY:
+		case AS:
+		case ATTR:
 		case ATTRIBUTE:
+		case ATTRIBUTES:
 		case BOOLEAN_LITERAL:
 		case CATEGORY:
+		case CLASS:
 		case CLOSE:
 		case CODE:
 		case CONTAINS:
 		case CSHARP:
+		case DEF:
+		case DEFAULT:
+		case DEFINE:
+		case DOING:
 		case ENUMERATED:
+		case EXCEPT:
 		case EXECUTE:
+		case EXPECTING:
+		case EXTENDS:
 		case FETCH:
 		case FROM:
 		case GETTER:
 		case IN:
+		case INVOKE:
+		case IS:
 		case JAVA:
 		case JAVASCRIPT:
 		case MAPPINGS:
 		case MATCHING:
 		case METHOD:
+		case METHODS:
+		case MODULO:	
 		case NATIVE:
 		case NOT:
+		case NOTHING:
 		case NULL:
+		case ON:
 		case OPEN:
+		case OPERATOR:
+		case OR:
+		case PASS:
 		case PYTHON2:
 		case PYTHON3:
-		case THROW:
+		case RAISE:
 		case READ:
+		case RECEIVING:
+		case RETURNING:
+		case SELF:
 		case SETTER:
+		case SINGLETON:
 		case SORTED:
+		case TEST:
+		case THIS:
+		case THROW:
 		case TO:
 		case WHERE:
 		case WITH:

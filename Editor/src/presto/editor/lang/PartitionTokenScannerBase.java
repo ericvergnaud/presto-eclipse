@@ -1,6 +1,7 @@
 package presto.editor.lang;
 
 import org.antlr.v4.runtime.CommonToken;
+import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
@@ -58,7 +59,11 @@ public abstract class PartitionTokenScannerBase implements IPartitionTokenScanne
 
 	@Override
 	public int getTokenLength() {
-		return lastToken==null ? 0 : 1+lastToken.getStopIndex()-lastToken.getStartIndex();
+		return lastToken==null ? 0 : getTokenLength(lastToken);
+	}
+	
+	public int getTokenLength(Token token) {
+		return 1+token.getStopIndex()-token.getStartIndex();
 	}
 
 	@Override

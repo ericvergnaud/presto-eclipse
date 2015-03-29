@@ -17,10 +17,16 @@ public class PartitionTokenScanner extends PartitionTokenScannerBase {
 	@Override
 	public IToken nextToken() {
 		CommonToken token = (CommonToken)lexer.nextToken();
-		if(token.getType()!=ELexer.EOF) {
-			if(token.getStartIndex()==token.getStopIndex()) 
+		switch(token.getType()) {
+			// skip tokens generated from LF_TAB, since they have inconsistent offsets 
+			case ELexer.LF:
+			case ELexer.INDENT:
+			case ELexer.DEDENT:
 				return nextToken();
-			setLastToken(token);
+			case ELexer.EOF:
+				break;
+			default:
+				setLastToken(token);
 		}
 		return new TokenProxy(token);
 	}

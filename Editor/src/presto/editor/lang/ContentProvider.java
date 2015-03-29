@@ -15,6 +15,7 @@ import presto.declaration.ConcreteMethodDeclaration;
 import presto.declaration.IDeclaration;
 import presto.declaration.IEnumeratedDeclaration;
 import presto.declaration.IMethodDeclaration;
+import presto.declaration.TestMethodDeclaration;
 import presto.editor.Constants;
 import presto.grammar.CategoryMethodDeclarationList;
 import presto.grammar.DeclarationList;
@@ -25,6 +26,7 @@ import presto.parser.IParser;
 import presto.parser.ISection;
 import presto.statement.DeclarationInstruction;
 import presto.statement.IStatement;
+import presto.statement.StatementList;
 
 public class ContentProvider implements ITreeContentProvider {
 
@@ -115,6 +117,8 @@ public class ContentProvider implements ITreeContentProvider {
 			return populateEnumerated((IEnumeratedDeclaration)decl);
 		else if(decl instanceof IMethodDeclaration)
 			return populateMethod((IMethodDeclaration)decl);
+		else if(decl instanceof TestMethodDeclaration)
+			return populateTest((TestMethodDeclaration)decl);
 		else
 			throw new RuntimeException("Unsupported:" + decl.getClass().getName());
 	}
@@ -143,15 +147,26 @@ public class ContentProvider implements ITreeContentProvider {
 		elem.name = decl.getName();
 		elem.section = decl;
 		elem.type = ContentType.METHOD;
-		if(decl instanceof ConcreteMethodDeclaration) {
-			for(IStatement s : ((ConcreteMethodDeclaration)decl).getStatements()) {
-				if(s instanceof DeclarationInstruction) {
-					Element child = populateDeclaration(((DeclarationInstruction<?>)s).getDeclaration());
-					child.parent = elem;
-					elem.children.add(child);
-				}
+		if(decl instanceof ConcreteMethodDeclaration) 
+			populateStatements(elem, ((ConcreteMethodDeclaration)decl).getStatements());
+		return elem;
+}	
+	private void populateStatements(Element elem, StatementList statements) {
+		for(IStatement s : statements) {
+			if(s instanceof DeclarationInstruction) {
+				Element child = populateDeclaration(((DeclarationInstruction<?>)s).getDeclaration());
+				child.parent = elem;
+				elem.children.add(child);
 			}
 		}
+	}
+	
+	private Element populateTest(TestMethodDeclaration decl) {
+		Element elem = new Element();
+		elem.name = decl.getName();
+		elem.section = decl;
+		elem.type = ContentType.METHOD;
+		populateStatements(elem, decl.getStatements());
 		return elem;
 	}
 

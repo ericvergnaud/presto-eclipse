@@ -4,7 +4,8 @@ import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
 import presto.editor.Constants;
-import static presto.parser.PIndentingLexer.*;
+import presto.parser.ELexer;
+import static presto.parser.PLexer.*;
 
 public class TokenProxy implements IToken {
 
@@ -21,7 +22,15 @@ public class TokenProxy implements IToken {
 
 	@Override
 	public boolean isWhitespace() {
-		return token.getType() == WS;
+		switch( token.getType() ) {
+		case ELexer.LF:
+		case ELexer.TAB:
+		case ELexer.LF_TAB:
+		case ELexer.WS:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	@Override
@@ -65,13 +74,14 @@ public class TokenProxy implements IToken {
 		case DO:
 		case WHILE:
 			return Constants.LOOP_PARTITION_NAME;
-		case IF:
-		case ELSE:
-		case OTHERWISE:
 		case ALWAYS:
+		case ELSE:
+		case FINALLY:
+		case IF:
+		case OTHERWISE:
+		case RETURN:
 		case SWITCH:
 		case WHEN:
-		case RETURN:
 			return Constants.BRANCH_PARTITION_NAME;
 		case SYMBOL_IDENTIFIER:
 			return Constants.SYMBOL_PARTITION_NAME;
@@ -80,18 +90,25 @@ public class TokenProxy implements IToken {
 		case AND:
 		case ANY:
 		case AS:
+		case ATTR:
 		case ATTRIBUTE:
 		case ATTRIBUTES:
 		case BOOLEAN_LITERAL:
 		case CATEGORY:
+		case CLASS:
 		case CLOSE:
 		case CODE:
 		case CONTAINS:
 		case CSHARP:
+		case DEF:
+		case DEFAULT:
 		case DEFINE:
 		case DOING:
 		case ENUMERATED:
+		case EXCEPT:
 		case EXECUTE:
+		case EXPECTING:
+		case EXTENDS:
 		case FETCH:
 		case FROM:
 		case GETTER:
@@ -104,20 +121,29 @@ public class TokenProxy implements IToken {
 		case MATCHING:
 		case METHOD:
 		case METHODS:
+		case MODULO:	
 		case NATIVE:
 		case NOT:
+		case NOTHING:
 		case NULL:
 		case ON:
 		case OPEN:
+		case OPERATOR:
 		case OR:
+		case PASS:
 		case PYTHON2:
 		case PYTHON3:
 		case RAISE:
 		case READ:
 		case RECEIVING:
 		case RETURNING:
+		case SELF:
 		case SETTER:
+		case SINGLETON:
 		case SORTED:
+		case TEST:
+		case THIS:
+		case THROW:
 		case TO:
 		case WHERE:
 		case WITH:
