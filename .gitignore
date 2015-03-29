@@ -1,3 +1,6 @@
 .metadata
 **/bin/*
 Plugin/*
+Core/src/presto/core/ApplicationNature.java
+
+Launcher/src/presto/launcher/AppLaunchConfigTabGroup.java

@@ -37,21 +37,21 @@
 	<extension point="org.eclipse.ui.editors">
       <editor class="presto.editor.e.SourceEditor"
             default="false"
-            icon="images/NewProject.png"
+            icon="images/ped_obj.gif" 
             id="presto.editor.ped"
             name="Presto E Editor">
          <contentTypeBinding contentTypeId="presto.content-type.ped"/>
       </editor>
       <editor class="presto.editor.o.SourceEditor"
             default="false"
-            icon="images/NewProject.png"
+            icon="images/pod_obj.gif"
             id="presto.editor.pod"
             name="Presto O Editor">
          <contentTypeBinding contentTypeId="presto.content-type.pod"/>
       </editor>
       <editor class="presto.editor.p.SourceEditor"
             default="false"
-            icon="images/NewProject.png"
+            icon="images/ppd_obj.gif"
             id="presto.editor.ppd"
             name="Presto P Editor">
          <contentTypeBinding contentTypeId="presto.content-type.ppd"/>
