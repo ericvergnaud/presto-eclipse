@@ -3,7 +3,7 @@
 <plugin>
 	<extension point="org.eclipse.ui.editors.documentProviders">
     	<provider 
-        	extensions="boa,oops" 
+        	extensions="ped,pod,ppd" 
         	class="presto.editor.lang.DocumentProvider" 
         	id="presto.editor.lang.documentProvider"> 
     	</provider> 
@@ -12,34 +12,49 @@
       <content-type
             base-type="org.eclipse.core.runtime.text"
             describer="presto.editor.e.ContentDescriber"
-            file-extensions="boa"
-            id="presto.content-type.boa"
-            name="Presto content type"
+            file-extensions="ped"
+            id="presto.content-type.ped"
+            name="Presto E content type"
             priority="high">
       </content-type>
       <content-type
             base-type="org.eclipse.core.runtime.text"
             describer="presto.editor.o.ContentDescriber"
-            file-extensions="oops"
-            id="presto.content-type.oops"
-            name="Presto content type"
+            file-extensions="pod"
+            id="presto.content-type.pod"
+            name="Presto O content type"
             priority="high">
       </content-type>
-  </extension>
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            describer="presto.editor.p.ContentDescriber"
+            file-extensions="ppd"
+            id="presto.content-type.ppd"
+            name="Presto P content type"
+            priority="high">
+      </content-type>
+    </extension>
 	<extension point="org.eclipse.ui.editors">
       <editor class="presto.editor.e.SourceEditor"
             default="false"
             icon="images/NewProject.png"
-            id="presto.editor.boa"
-            name="Presto Editor">
-         <contentTypeBinding contentTypeId="presto.content-type.boa"/>
+            id="presto.editor.ped"
+            name="Presto E Editor">
+         <contentTypeBinding contentTypeId="presto.content-type.ped"/>
       </editor>
       <editor class="presto.editor.o.SourceEditor"
             default="false"
             icon="images/NewProject.png"
-            id="presto.editor.oops"
-            name="Presto Editor">
-         <contentTypeBinding contentTypeId="presto.content-type.oops"/>
+            id="presto.editor.pod"
+            name="Presto O Editor">
+         <contentTypeBinding contentTypeId="presto.content-type.pod"/>
+      </editor>
+      <editor class="presto.editor.p.SourceEditor"
+            default="false"
+            icon="images/NewProject.png"
+            id="presto.editor.ppd"
+            name="Presto P Editor">
+         <contentTypeBinding contentTypeId="presto.content-type.ppd"/>
       </editor>
     </extension>
    <extension

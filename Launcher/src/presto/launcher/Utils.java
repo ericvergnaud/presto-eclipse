@@ -40,7 +40,7 @@ public class Utils {
 				else if(member instanceof IFile) {
 					IFile file = (IFile)member;
 					String ext = file.getFileExtension().toLowerCase();
-					if("boa".equals(ext) || "oops".equals(ext))
+					if("ped".equals(ext) || "pod".equals(ext) || "ppd".equals(ext))
 						files.add(file);
 				}
 			}
@@ -73,7 +73,7 @@ public class Utils {
 	}
 
 	public static Dialect getDialect(IFile file) {
-		return Dialect.valueOf(file.getFileExtension().toUpperCase());
+		return Dialect.valueOf(file.getFileExtension().substring(1, 2).toUpperCase());
 	}
 
 	public static IProject getConfiguredProject(ILaunchConfiguration configuration) {

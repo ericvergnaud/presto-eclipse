@@ -10,7 +10,18 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: libs/antlr4-runtime-4.5.jar,
+ libs/Core-trunk-SNAPSHOT.jar,
+ libs/joda-time-2.0.jar,
+ .
 Export-Package: org.antlr.v4.runtime,
+ org.joda.time,
+ org.joda.time.base,
+ org.joda.time.chrono,
+ org.joda.time.convert,
+ org.joda.time.field,
+ org.joda.time.format,
+ org.joda.time.tz,
  presto.core,
  presto.csharp,
  presto.debug,
@@ -28,7 +39,3 @@ Export-Package: org.antlr.v4.runtime,
  presto.type,
  presto.utils,
  presto.value
-Bundle-ClassPath: libs/antlr4-runtime-4.5.jar,
- libs/Core-trunk-SNAPSHOT.jar,
- libs/joda-time-2.0.jar,
- .
