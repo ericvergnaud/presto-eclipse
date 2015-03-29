@@ -1,12 +1,12 @@
-package presto.runner;
+package presto.profiler;
 
 import presto.launcher.ContextMap;
 import presto.launcher.LaunchContext;
 import presto.runtime.Interpreter;
 
-public class Runner {
+public class ProfileTarget {
 
-	public static void run(LaunchContext context) {
+	public static void profile(LaunchContext context) {
 		try {
 			ContextMap cm = context.buildContextMap();
 			Interpreter.interpret(cm.getContext(), context.getMethod().getName(), context.getCmdLineArgs());
