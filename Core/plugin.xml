@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.4"?>
+<?eclipse version="4.4"?>
 <plugin>
-	<extension id="presto.nature" point="org.eclipse.core.resources.natures">
+	<extension id="presto.nature.scripts" point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="presto.core.Nature"/>
+         <run class="presto.core.ScriptsNature"/>
       </runtime>
+      <one-of-nature id="presto.natures"/>
    </extension>
+	<extension id="presto.nature.framework" point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="presto.core.FrameworkNature"/>
+      </runtime>
+      <one-of-nature id="presto.natures"/>
+   </extension>
+	<extension id="presto.nature.application" point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="presto.core.ApplicationNature"/>
+      </runtime>
+      <one-of-nature id="presto.natures"/>
+   </extension>
+  <extension point="org.eclipse.ui.perspectiveExtensions">
+    <perspectiveExtension targetID="*">
+    	<newWizardShortcut id="presto.project.scripts"/> 
+    </perspectiveExtension>
+  </extension>
+  <extension point="org.eclipse.ui.newWizards">
+  	<category id="presto.project" name="Presto"/>
+  	<wizard
+         category="presto.project"
+         class="presto.core.ScriptsProjectWizard"
+         icon="images/scripts_wizard.gif"
+         id="presto.project.scripts"
+         name="Presto Scripts Project"
+         project="true"/>
+  	
+  </extension>
 </plugin>

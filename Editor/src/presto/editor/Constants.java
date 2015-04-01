@@ -7,7 +7,6 @@ import presto.utils.ImageUtils;
 
 public class Constants {
 
-	public static final String NATURE_ID = "presto.nature";
 	public static final String BUILDER_ID = "presto.builder";
 	public static final String PARTITION_ID = "presto.partition";
 	public static final String TYPE_PARTITION_NAME = "presto.partition.type";
