@@ -33,6 +33,15 @@
          id="presto.project.scripts"
          name="Presto Scripts Project"
          project="true"/>
-  	
+  </extension>
+  <extension point="org.eclipse.ui.newWizards">
+  	<category id="presto.project" name="Presto"/>
+  	<wizard
+         category="presto.project"
+         class="presto.core.FrameworkProjectWizard"
+         icon="images/framework_wizard.gif"
+         id="presto.project.framework"
+         name="Presto Framework Project"
+         project="true"/>
   </extension>
 </plugin>
