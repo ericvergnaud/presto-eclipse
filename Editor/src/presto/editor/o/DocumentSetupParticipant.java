@@ -1,8 +1,7 @@
 package presto.editor.o;
 
-import org.eclipse.jface.text.rules.IPartitionTokenScanner;
-
 import presto.editor.lang.DocumentSetupParticipantBase;
+import presto.editor.lang.PartitionTokenScannerBase;
 import presto.parser.Dialect;
 
 public class DocumentSetupParticipant extends DocumentSetupParticipantBase {
@@ -12,7 +11,7 @@ public class DocumentSetupParticipant extends DocumentSetupParticipantBase {
 	}
 
 	@Override
-	protected IPartitionTokenScanner newPartitionScanner() {
+	protected PartitionTokenScannerBase newPartitionScanner() {
 		return new PartitionTokenScanner();
 	}
 

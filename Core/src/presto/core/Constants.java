@@ -18,4 +18,13 @@ public abstract class Constants {
 	public static final String SCRIPTS_PROJECT_DESCRIPTION = "A Presto project where each file is a standalone script";
 	public static final String FRAMEWORK_PROJECT_DESCRIPTION = "A Presto project for reusable attributes, categories and methods";
 	public static final String APPLICATION_PROJECT_DESCRIPTION = "A Presto project for a runnable aplication";
+
+	public static final String PRESTO_MARKER_TYPE = "presto.marker";
+
+	public static final String PROBLEM_MARKER_TYPE = "presto.problem.marker";
+
+	public static final String DEBUG_MARKER_TYPE = "presto.debug.marker";
+	public static final String DEBUG_MODEL_IDENTIFIER = "presto.debug"; 
+
+	public static final String EDITOR_ID = "presto.editor.$";
 }

@@ -1,8 +1,18 @@
 package presto.editor.lang;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -22,6 +32,9 @@ import presto.grammar.DeclarationList;
 import presto.grammar.IdentifierList;
 import presto.grammar.Symbol;
 import presto.parser.Dialect;
+import presto.parser.ErrorCollector;
+import presto.parser.IError;
+import presto.parser.IErrorListener;
 import presto.parser.IParser;
 import presto.parser.ISection;
 import presto.statement.DeclarationInstruction;
@@ -70,10 +83,17 @@ public class ContentProvider implements ITreeContentProvider {
 	}
 	
 	Dialect dialect;
+	IFile file;
+	IErrorListener listener;
+	IParser parser;
 	Element root;
 	
-	public ContentProvider(Dialect dialect) {
+	public ContentProvider(Dialect dialect, IFile file) {
 		this.dialect = dialect;
+		this.file = file;
+		this.listener = new ErrorCollector();
+		this.parser = dialect.getParserFactory().newParser();
+		this.parser.setErrorListener(this.listener);
 	}
 	
 	@Override
@@ -84,17 +104,91 @@ public class ContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		root = null;
 		if(newInput instanceof IDocument) try {
-			root = parse(((IDocument)newInput).get());
+			IDocument doc = (IDocument)newInput;
+			inputChanged(doc);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private Element parse(String data) throws Exception {
-		IParser parser = dialect.getParserFactory().newParser(data);
-		DeclarationList list = parser.parse();
+	private void inputChanged(IDocument document) throws Exception {
+		String data = document.get();
+		InputStream input = new ByteArrayInputStream(data.getBytes());
+		root = parseRoot(file.getName(), input);
+		resetErrorMarkers(document);
+	}
+
+	private void resetErrorMarkers(final IDocument document) throws CoreException {
+		// work on copy of error list in runnable
+		final Collection<IError> errors = new ArrayList<IError>(listener.getErrors());
+		try { 
+			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
+				@Override
+				public void run(IProgressMonitor monitor) throws CoreException {
+					clearErrorMarkers();
+					createErrorMarkers(document, errors);
+				}
+			}, null);
+		} catch (CoreException e) {
+			// TODO, but what?
+			e.printStackTrace(System.err);
+		}
+	}
+
+	public void clearErrorMarkers() throws CoreException {
+		for(IMarker marker : file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
+			if(!marker.exists())
+				continue;
+			// System.out.println("Removing " + marker.toString());
+			marker.delete();
+		}
+		
+	}
+
+	public void createErrorMarkers(final IDocument document, final Collection<IError> errors) throws CoreException {
+		for(IError error : errors) {
+			if(errorMarkerAlreadyExists(error))
+				continue;
+			createErrorMarker(document, error);
+		}
+	}
+
+	private void createErrorMarker(IDocument document, IError error) throws CoreException {
+		// no marker found, create one
+		IMarker marker = file.createMarker("presto.problem.marker");
+		marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
+		marker.setAttribute(IMarker.CHAR_START, error.getStartIndex());
+		marker.setAttribute(IMarker.CHAR_END, error.getEndIndex());
+		marker.setAttribute(IMarker.LINE_NUMBER, safeGetLineOfOffset(document, error.getStartIndex()));
+		marker.setAttribute(IMarker.MESSAGE, error.getMessage());
+	}
+
+	private int safeGetLineOfOffset(IDocument document, int startIndex) {
+		try {
+			return 1 + document.getLineOfOffset(startIndex);
+		} catch(BadLocationException e) {
+			return 1;
+		}
+	}
+
+	private boolean errorMarkerAlreadyExists(IError error) throws CoreException {
+		for(IMarker marker : file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
+			if(!marker.exists())
+				continue;
+			int start = marker.getAttribute(IMarker.CHAR_START, 0);
+			int end = marker.getAttribute(IMarker.CHAR_END, 0);
+			String msg = marker.getAttribute(IMarker.MESSAGE, "");
+			if(start==error.getStartIndex()
+				&& end==error.getEndIndex()
+				&& msg.equalsIgnoreCase(error.getMessage()))
+				return true; // marker already exists
+		}
+		return false;
+	}
+
+	private Element parseRoot(String path, InputStream input) throws Exception {
+		DeclarationList list = parser.parse(path, input);
 		return populateDeclarationList(list);
 	}
 

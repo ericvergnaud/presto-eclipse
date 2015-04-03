@@ -1,6 +1,7 @@
 package presto.editor.lang;
 
 import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -11,6 +12,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
@@ -46,11 +48,19 @@ public abstract class SourceEditorBase extends AbstractDecoratedTextEditor {
 	}
 
 	private void initializeOutliner(IEditorInput input) {
+		IFile file = getFile(input);
 		IDocument document = getDocumentProvider().getDocument(input);
-		outliner = new ContentOutliner(dialect, document);
+		outliner = new ContentOutliner(dialect, file, document);
 		outliner.addSelectionChangedListener(new OutlineSelectionChangedListener());
 	}
 	
+	private IFile getFile(IEditorInput input) {
+		if(input instanceof IFileEditorInput)
+			return ((IFileEditorInput)input).getFile();
+		else
+			return null;
+	}
+
 	class OutlineSelectionChangedListener implements ISelectionChangedListener {
 
 		@Override

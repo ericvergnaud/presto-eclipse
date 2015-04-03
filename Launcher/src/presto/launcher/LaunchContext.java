@@ -1,5 +1,6 @@
 package presto.launcher;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,6 +14,7 @@ import presto.declaration.IMethodDeclaration;
 import presto.error.SyntaxError;
 import presto.grammar.DeclarationList;
 import presto.parser.Dialect;
+import presto.parser.IParser;
 import presto.runtime.Context;
 
 public class LaunchContext {
@@ -107,7 +109,10 @@ public class LaunchContext {
 	private DeclarationList parse(IFile file) throws Exception {
 		Dialect dialect = Utils.getDialect(file);
 		try {
-			return dialect.getParserFactory().newParser(file.getFullPath().toPortableString(), file.getContents()).parse();
+			IParser parser = dialect.getParserFactory().newParser();
+			String path = file.getFullPath().toPortableString();
+			InputStream input = file.getContents();
+			return parser.parse(path, input);
 		} catch (Exception e) {
 			// TODO
 			e.printStackTrace(System.err);

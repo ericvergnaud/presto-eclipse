@@ -19,4 +19,5 @@ public class PresentationReconciler extends org.eclipse.jface.text.presentation.
 			this.setRepairer(dr, name);
 		}
 	}
+
 }

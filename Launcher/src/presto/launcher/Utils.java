@@ -1,5 +1,6 @@
 package presto.launcher;
 
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,9 +54,10 @@ public class Utils {
 		List<IMethodDeclaration> list = new LinkedList<IMethodDeclaration>();
 		if(file!=null) try {
 			Dialect dialect = getDialect(file);
-			IParser parser = dialect.getParserFactory().newParser(file.getFullPath().toPortableString(),
-					file.getContents());
-			DeclarationList all = parser.parse();
+			IParser parser = dialect.getParserFactory().newParser();
+			String path = file.getFullPath().toPortableString();
+			InputStream input = file.getContents();
+			DeclarationList all = parser.parse(path, input);
 			for(IDeclaration decl : all) {
 				if(isEligible(decl))
 					list.add((IMethodDeclaration)decl);

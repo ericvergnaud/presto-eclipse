@@ -5,7 +5,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.texteditor.ResourceMarkerAnnotationModel;
 
-import presto.debugger.Constants;
+import presto.core.Constants;
 
 public class AnnotationModel extends ResourceMarkerAnnotationModel {
 
@@ -15,7 +15,7 @@ public class AnnotationModel extends ResourceMarkerAnnotationModel {
 
 	@Override
 	protected IMarker[] retrieveMarkers() throws CoreException {
-		return getResource().findMarkers(Constants.MARKER_TYPE, true, IResource.DEPTH_ZERO);
+		return getResource().findMarkers(Constants.DEBUG_MARKER_TYPE, true, IResource.DEPTH_ZERO);
 	}
 	
 }

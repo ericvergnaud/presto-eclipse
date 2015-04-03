@@ -28,5 +28,5 @@ public class DamagerRepairer extends DefaultDamagerRepairer {
 		}
 		return fDefaultTextAttribute;
 	}
-
+	
 }

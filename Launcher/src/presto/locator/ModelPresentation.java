@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
-import presto.debugger.Constants;
+import presto.core.Constants;
 import presto.parser.Dialect;
 
 public class ModelPresentation extends LabelProvider implements IDebugModelPresentation {

@@ -1,4 +1,4 @@
-package presto.core;
+package presto.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
@@ -23,6 +23,8 @@ import org.eclipse.ui.statushandlers.IStatusAdapterConstants;
 import org.eclipse.ui.statushandlers.StatusAdapter;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
+
+import presto.core.Constants;
 
 @SuppressWarnings("restriction")
 public abstract class PrestoProjectWizard extends BasicNewResourceWizard implements INewWizard {

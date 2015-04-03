@@ -1,5 +1,6 @@
 package presto.editor.lang;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -12,10 +13,12 @@ import presto.parser.Dialect;
 public class ContentOutliner extends ContentOutlinePage implements IDocumentListener {
 
 	Dialect dialect;
+	IFile file;
 	IDocument document;
 	
-	public ContentOutliner(Dialect dialect, IDocument document) {
+	public ContentOutliner(Dialect dialect, IFile file, IDocument document) {
 		this.dialect = dialect;
+		this.file = file;
 		this.document = document;
 	}
 
@@ -23,7 +26,7 @@ public class ContentOutliner extends ContentOutlinePage implements IDocumentList
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		TreeViewer viewer = getTreeViewer();
-		viewer.setContentProvider(new ContentProvider(dialect));
+		viewer.setContentProvider(new ContentProvider(dialect, file));
 		viewer.setLabelProvider(new LabelProvider());
 		viewer.addSelectionChangedListener(this);
 		viewer.setInput(document);

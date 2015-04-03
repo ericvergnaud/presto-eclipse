@@ -1,5 +1,8 @@
 package presto.editor.lang;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.BadLocationException;
@@ -31,18 +34,25 @@ public abstract class PartitionTokenScannerBase implements IPartitionTokenScanne
 	
 	public PartitionTokenScannerBase(Dialect dialect) {
 		this.dialect = dialect;
+		this.lexer = dialect.getParserFactory().newLexer();
 	}
 
 	@Override
 	public void setRange(IDocument document, int offset, int length) {
+		this.lastToken = null;
 		this.startOffset = offset;
 		try {
 			String data = document.get(offset, length);
-			lexer = dialect.getParserFactory().newLexer(data);
-		} catch (BadLocationException e) {
+			lexer.reset(new ByteArrayInputStream(data.getBytes()));
+		} catch (BadLocationException | IOException e) {
 		}
-
 	}
+
+	@Override
+	public void setPartialRange(IDocument document, int offset, int length, String contentType, int partitionOffset) {
+		setRange(document, offset, length);
+	}
+	
 
 	protected void setLastToken(CommonToken token) {
 		this.lastToken = token;
@@ -66,9 +76,8 @@ public abstract class PartitionTokenScannerBase implements IPartitionTokenScanne
 		return 1+token.getStopIndex()-token.getStartIndex();
 	}
 
-	@Override
-	public void setPartialRange(IDocument document, int offset, int length, String contentType, int partitionOffset) {
-		setRange(document, offset, length);
-	}
+	
+
+
 
 }

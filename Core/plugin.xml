@@ -19,16 +19,24 @@
       </runtime>
       <one-of-nature id="presto.natures"/>
    </extension>
+   <extension id="presto.marker" point="org.eclipse.core.resources.markers"/>
+   <extension id="presto.problem.marker" point="org.eclipse.core.resources.markers">
+   		<super type="org.eclipse.core.resources.problemmarker"/>
+   		<super type="presto.marker"/>
+   		<persistent value="true"/>
+	</extension>
   <extension point="org.eclipse.ui.perspectiveExtensions">
     <perspectiveExtension targetID="*">
     	<newWizardShortcut id="presto.project.scripts"/> 
+    	<newWizardShortcut id="presto.project.framework"/> 
+    	<newWizardShortcut id="presto.project.application"/> 
     </perspectiveExtension>
   </extension>
   <extension point="org.eclipse.ui.newWizards">
   	<category id="presto.project" name="Presto"/>
   	<wizard
          category="presto.project"
-         class="presto.core.ScriptsProjectWizard"
+         class="presto.wizard.ScriptsProjectWizard"
          icon="images/scripts_wizard.gif"
          id="presto.project.scripts"
          name="Presto Scripts Project"
@@ -38,7 +46,7 @@
   	<category id="presto.project" name="Presto"/>
   	<wizard
          category="presto.project"
-         class="presto.core.FrameworkProjectWizard"
+         class="presto.wizard.FrameworkProjectWizard"
          icon="images/framework_wizard.gif"
          id="presto.project.framework"
          name="Presto Framework Project"
@@ -48,9 +56,9 @@
   	<category id="presto.project" name="Presto"/>
   	<wizard
          category="presto.project"
-         class="presto.core.ApplicationProjectWizard"
+         class="presto.wizard.ApplicationProjectWizard"
          icon="images/application_wizard.gif"
-         id="presto.project.framework"
+         id="presto.project.application"
          name="Presto Application Project"
          project="true"/>
   </extension>

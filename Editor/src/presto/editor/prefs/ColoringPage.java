@@ -1,5 +1,7 @@
 package presto.editor.prefs;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -293,16 +295,24 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			return ePreviewContent;
 		case O:
 			return oPreviewContent;
-		default:
+		case P:
 			return pPreviewContent;
+		default:
+			throw new RuntimeException("Unsupported dialect:" + dialect.name());
 		}
 	}
 
 	private StyleRange[] collectRanges(Dialect dialect) {
-		ILexer lexer = dialect.getParserFactory().newLexer(getPreviewContent(dialect));
-		java.util.List<StyleRange> ranges = new LinkedList<StyleRange>();
-		collectRanges(lexer, ranges);
-		return ranges.toArray(new StyleRange[ranges.size()]);
+		try {
+			ILexer lexer = dialect.getParserFactory().newLexer();
+			String content = getPreviewContent(dialect);
+			lexer.reset(new ByteArrayInputStream(content.getBytes()));
+			java.util.List<StyleRange> ranges = new LinkedList<StyleRange>();
+			collectRanges(lexer, ranges);
+			return ranges.toArray(new StyleRange[ranges.size()]);
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	private void collectRanges(ILexer lexer, java.util.List<StyleRange> ranges) {

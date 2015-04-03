@@ -1,4 +1,4 @@
-package presto.core;
+package presto.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -12,22 +12,24 @@ import org.eclipse.ui.ide.undo.CreateFileOperation;
 import org.eclipse.ui.ide.undo.CreateProjectOperation;
 import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 
-public class ApplicationProjectWizard extends PrestoProjectWizard {
+import presto.core.Constants;
+
+public class ScriptsProjectWizard extends PrestoProjectWizard {
  
 
 	@Override
 	protected String getTitle() {
-		return Constants.NEW_APPLICATION_PROJECT;
+		return Constants.NEW_SCRIPTS_PROJECT;
 	};
 	
 	@Override
 	protected String getDescription() {
-		return Constants.APPLICATION_PROJECT_DESCRIPTION;
+		return Constants.SCRIPTS_PROJECT_DESCRIPTION;
 	}
 
 	@Override
 	protected String getNatureId() {
-		return Constants.APPLICATION_NATURE_ID;
+		return Constants.SCRIPTS_NATURE_ID;
 	}
 	
 	@Override
@@ -38,8 +40,8 @@ public class ApplicationProjectWizard extends PrestoProjectWizard {
 				try {
 					CreateProjectOperation cpo = new CreateProjectOperation(description, Constants.CREATING_PROJECT);
 					cpo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-					IFile file = project.getFile("SampleApplication.ped");
-					CreateFileOperation cfo = new CreateFileOperation(file, null, null /*contents*/, Constants.CREATING_SAMPLE_APPLICATION);
+					IFile file = project.getFile("SampleScript.ped");
+					CreateFileOperation cfo = new CreateFileOperation(file, null, null /*contents*/, Constants.CREATING_SAMPLE_SCRIPT);
 					cfo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
 				} catch (ExecutionException e) {
 					throw new InvocationTargetException(e);

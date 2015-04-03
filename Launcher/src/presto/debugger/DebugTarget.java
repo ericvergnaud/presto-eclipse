@@ -12,6 +12,7 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IThread;
 
+import presto.core.Constants;
 import presto.launcher.LaunchContext;
 
 public class DebugTarget extends PlatformObject implements IDebugTarget {
@@ -42,7 +43,7 @@ public class DebugTarget extends PlatformObject implements IDebugTarget {
 
 	@Override
 	public String getModelIdentifier() {
-		return Constants.MODEL_IDENTIFIER;
+		return Constants.DEBUG_MODEL_IDENTIFIER;
 	}
 
 	@Override

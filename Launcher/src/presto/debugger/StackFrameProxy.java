@@ -16,6 +16,7 @@ import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.debug.core.sourcelookup.containers.WorkspaceSourceContainer;
 
+import presto.core.Constants;
 import presto.debug.StackFrame;
 
 public class StackFrameProxy extends PlatformObject implements IStackFrame {
@@ -30,7 +31,7 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 
 	@Override
 	public String getModelIdentifier() {
-		return Constants.MODEL_IDENTIFIER;
+		return Constants.DEBUG_MODEL_IDENTIFIER;
 	}
 
 	@Override
