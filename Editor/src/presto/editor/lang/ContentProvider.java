@@ -32,9 +32,9 @@ import presto.grammar.DeclarationList;
 import presto.grammar.IdentifierList;
 import presto.grammar.Symbol;
 import presto.parser.Dialect;
-import presto.parser.ErrorCollector;
-import presto.parser.IError;
-import presto.parser.IErrorListener;
+import presto.parser.ProblemCollector;
+import presto.parser.IProblem;
+import presto.parser.IProblemListener;
 import presto.parser.IParser;
 import presto.parser.ISection;
 import presto.statement.DeclarationInstruction;
@@ -84,14 +84,14 @@ public class ContentProvider implements ITreeContentProvider {
 	
 	Dialect dialect;
 	IFile file;
-	IErrorListener listener;
+	IProblemListener listener;
 	IParser parser;
 	Element root;
 	
 	public ContentProvider(Dialect dialect, IFile file) {
 		this.dialect = dialect;
 		this.file = file;
-		this.listener = new ErrorCollector();
+		this.listener = new ProblemCollector();
 		this.parser = dialect.getParserFactory().newParser();
 		this.parser.setErrorListener(this.listener);
 	}
@@ -116,18 +116,18 @@ public class ContentProvider implements ITreeContentProvider {
 		String data = document.get();
 		InputStream input = new ByteArrayInputStream(data.getBytes());
 		root = parseRoot(file.getName(), input);
-		resetErrorMarkers(document);
+		resetProblemMarkers(document);
 	}
 
-	private void resetErrorMarkers(final IDocument document) throws CoreException {
+	private void resetProblemMarkers(final IDocument document) throws CoreException {
 		// work on copy of error list in runnable
-		final Collection<IError> errors = new ArrayList<IError>(listener.getErrors());
+		final Collection<IProblem> problems = new ArrayList<IProblem>(listener.getProblems());
 		try { 
 			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
 				@Override
 				public void run(IProgressMonitor monitor) throws CoreException {
-					clearErrorMarkers();
-					createErrorMarkers(document, errors);
+					clearProblemMarkers();
+					createProblemMarkers(document, problems);
 				}
 			}, null);
 		} catch (CoreException e) {
@@ -136,7 +136,7 @@ public class ContentProvider implements ITreeContentProvider {
 		}
 	}
 
-	public void clearErrorMarkers() throws CoreException {
+	public void clearProblemMarkers() throws CoreException {
 		for(IMarker marker : file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
 			if(!marker.exists())
 				continue;
@@ -146,22 +146,22 @@ public class ContentProvider implements ITreeContentProvider {
 		
 	}
 
-	public void createErrorMarkers(final IDocument document, final Collection<IError> errors) throws CoreException {
-		for(IError error : errors) {
-			if(errorMarkerAlreadyExists(error))
+	public void createProblemMarkers(final IDocument document, final Collection<IProblem> problems) throws CoreException {
+		for(IProblem problem : problems) {
+			if(problemMarkerAlreadyExists(problem))
 				continue;
-			createErrorMarker(document, error);
+			createProblemMarker(document, problem);
 		}
 	}
 
-	private void createErrorMarker(IDocument document, IError error) throws CoreException {
+	private void createProblemMarker(IDocument document, IProblem problem) throws CoreException {
 		// no marker found, create one
 		IMarker marker = file.createMarker("presto.problem.marker");
-		marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
-		marker.setAttribute(IMarker.CHAR_START, error.getStartIndex());
-		marker.setAttribute(IMarker.CHAR_END, error.getEndIndex());
-		marker.setAttribute(IMarker.LINE_NUMBER, safeGetLineOfOffset(document, error.getStartIndex()));
-		marker.setAttribute(IMarker.MESSAGE, error.getMessage());
+		marker.setAttribute(IMarker.SEVERITY, problem.getType().ordinal());
+		marker.setAttribute(IMarker.CHAR_START, problem.getStartIndex());
+		marker.setAttribute(IMarker.CHAR_END, problem.getEndIndex());
+		marker.setAttribute(IMarker.LINE_NUMBER, safeGetLineOfOffset(document, problem.getStartIndex()));
+		marker.setAttribute(IMarker.MESSAGE, problem.getMessage());
 	}
 
 	private int safeGetLineOfOffset(IDocument document, int startIndex) {
@@ -172,16 +172,16 @@ public class ContentProvider implements ITreeContentProvider {
 		}
 	}
 
-	private boolean errorMarkerAlreadyExists(IError error) throws CoreException {
+	private boolean problemMarkerAlreadyExists(IProblem problem) throws CoreException {
 		for(IMarker marker : file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
 			if(!marker.exists())
 				continue;
 			int start = marker.getAttribute(IMarker.CHAR_START, 0);
 			int end = marker.getAttribute(IMarker.CHAR_END, 0);
 			String msg = marker.getAttribute(IMarker.MESSAGE, "");
-			if(start==error.getStartIndex()
-				&& end==error.getEndIndex()
-				&& msg.equalsIgnoreCase(error.getMessage()))
+			if(start==problem.getStartIndex()
+				&& end==problem.getEndIndex()
+				&& msg.equalsIgnoreCase(problem.getMessage()))
 				return true; // marker already exists
 		}
 		return false;
@@ -195,6 +195,8 @@ public class ContentProvider implements ITreeContentProvider {
 	private Element populateDeclarationList(DeclarationList list) {
 		Element root = new Element();
 		for(IDeclaration decl : list) {
+			if(decl==null)
+				continue;
 			Element elem = populateDeclaration(decl);
 			elem.parent = root;
 			root.children.add(elem);
