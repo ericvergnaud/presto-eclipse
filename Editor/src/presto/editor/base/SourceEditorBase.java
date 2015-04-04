@@ -17,7 +17,6 @@ import org.eclipse.ui.texteditor.AbstractDecoratedTextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import presto.editor.Constants;
-import presto.editor.Plugin;
 import presto.editor.base.ContentProvider.Element;
 import presto.editor.prefs.SyntaxColoring;
 // import presto.eclipse.plugin.lang.FormattingStrategy;
@@ -33,12 +32,6 @@ public abstract class SourceEditorBase extends AbstractDecoratedTextEditor {
 		this.dialect = dialect;
 	}
 	
-	@Override
-	protected void initializeEditor() {
-		super.initializeEditor();
-		setPreferenceStore(Plugin.getPreferenceStore());
-	}
-
 	@Override
 	protected void doSetInput(IEditorInput input) throws CoreException {
 		super.doSetInput(input);
