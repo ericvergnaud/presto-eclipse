@@ -2,7 +2,7 @@ package presto.editor.p;
 
 import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
 
-import presto.editor.lang.SourceEditorBase;
+import presto.editor.base.SourceEditorBase;
 import presto.parser.Dialect;
 
 public class SourceEditor extends SourceEditorBase {

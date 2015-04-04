@@ -1,4 +1,4 @@
-package presto.editor.lang;
+package presto.editor.base;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;

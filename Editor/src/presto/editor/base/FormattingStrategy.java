@@ -1,4 +1,4 @@
-package presto.editor.lang;
+package presto.editor.base;
 /*package presto.eclipse.plugin.lang;
 
 import org.eclipse.jface.text.formatter.IFormattingContext;

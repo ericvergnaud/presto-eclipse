@@ -1,8 +1,10 @@
-package presto.editor.lang;
+package presto.editor.debug;
 
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
+
+import presto.editor.base.SourceEditorBase;
 
 @SuppressWarnings("rawtypes")
 public class BreakpointAdapterFactory extends PlatformObject implements IAdapterFactory {

@@ -1,4 +1,4 @@
-package presto.editor.lang;
+package presto.editor.base;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.DocumentEvent;

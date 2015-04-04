@@ -10,6 +10,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
+import presto.core.Utils;
 import presto.declaration.IMethodDeclaration;
 import presto.error.SyntaxError;
 import presto.grammar.DeclarationList;
@@ -58,11 +59,11 @@ public class LaunchContext {
 	}
 	
 	private void readConfiguration() {
-		project = Utils.getConfiguredProject(configuration);
-		file = Utils.getConfiguredFile(configuration, project);
-		method = Utils.getConfiguredMethod(configuration, file);
-		cmdLineArgs = Utils.getConfiguredCommandLineArguments(configuration);
-		stopInMain = Utils.getConfiguredStopInMain(configuration);
+		project = LaunchUtils.getConfiguredProject(configuration);
+		file = LaunchUtils.getConfiguredFile(configuration, project);
+		method = LaunchUtils.getConfiguredMethod(configuration, file);
+		cmdLineArgs = LaunchUtils.getConfiguredCommandLineArguments(configuration);
+		stopInMain = LaunchUtils.getConfiguredStopInMain(configuration);
 	}
 
 	public ContextMap buildContextMap() throws Exception {

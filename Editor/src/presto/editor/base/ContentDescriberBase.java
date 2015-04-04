@@ -1,4 +1,4 @@
-package presto.editor.lang;
+package presto.editor.base;
 
 import java.io.IOException;
 import java.io.InputStream;

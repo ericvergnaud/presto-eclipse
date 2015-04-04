@@ -1,4 +1,4 @@
-package presto.editor.lang;
+package presto.editor.base;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -6,13 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -27,14 +20,12 @@ import presto.declaration.IEnumeratedDeclaration;
 import presto.declaration.IMethodDeclaration;
 import presto.declaration.TestMethodDeclaration;
 import presto.editor.Constants;
+import presto.editor.problem.ProblemManager;
 import presto.grammar.CategoryMethodDeclarationList;
 import presto.grammar.DeclarationList;
 import presto.grammar.IdentifierList;
 import presto.grammar.Symbol;
 import presto.parser.Dialect;
-import presto.parser.ProblemCollector;
-import presto.parser.IProblem;
-import presto.parser.IProblemListener;
 import presto.parser.IParser;
 import presto.parser.ISection;
 import presto.statement.DeclarationInstruction;
@@ -84,16 +75,13 @@ public class ContentProvider implements ITreeContentProvider {
 	
 	Dialect dialect;
 	IFile file;
-	IProblemListener listener;
 	IParser parser;
 	Element root;
 	
 	public ContentProvider(Dialect dialect, IFile file) {
 		this.dialect = dialect;
 		this.file = file;
-		this.listener = new ProblemCollector();
 		this.parser = dialect.getParserFactory().newParser();
-		this.parser.setErrorListener(this.listener);
 	}
 	
 	@Override
@@ -114,78 +102,13 @@ public class ContentProvider implements ITreeContentProvider {
 
 	private void inputChanged(IDocument document) throws Exception {
 		String data = document.get();
-		InputStream input = new ByteArrayInputStream(data.getBytes());
+		ByteArrayInputStream input = new ByteArrayInputStream(data.getBytes());
 		root = parseRoot(file.getName(), input);
-		resetProblemMarkers(document);
+		input.reset();
+		ProblemManager.processFile(file, input);
+		input.close();
 	}
 
-	private void resetProblemMarkers(final IDocument document) throws CoreException {
-		// work on copy of error list in runnable
-		final Collection<IProblem> problems = new ArrayList<IProblem>(listener.getProblems());
-		try { 
-			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
-				@Override
-				public void run(IProgressMonitor monitor) throws CoreException {
-					clearProblemMarkers();
-					createProblemMarkers(document, problems);
-				}
-			}, null);
-		} catch (CoreException e) {
-			// TODO, but what?
-			e.printStackTrace(System.err);
-		}
-	}
-
-	public void clearProblemMarkers() throws CoreException {
-		for(IMarker marker : file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
-			if(!marker.exists())
-				continue;
-			// System.out.println("Removing " + marker.toString());
-			marker.delete();
-		}
-		
-	}
-
-	public void createProblemMarkers(final IDocument document, final Collection<IProblem> problems) throws CoreException {
-		for(IProblem problem : problems) {
-			if(problemMarkerAlreadyExists(problem))
-				continue;
-			createProblemMarker(document, problem);
-		}
-	}
-
-	private void createProblemMarker(IDocument document, IProblem problem) throws CoreException {
-		// no marker found, create one
-		IMarker marker = file.createMarker("presto.problem.marker");
-		marker.setAttribute(IMarker.SEVERITY, problem.getType().ordinal());
-		marker.setAttribute(IMarker.CHAR_START, problem.getStartIndex());
-		marker.setAttribute(IMarker.CHAR_END, problem.getEndIndex());
-		marker.setAttribute(IMarker.LINE_NUMBER, safeGetLineOfOffset(document, problem.getStartIndex()));
-		marker.setAttribute(IMarker.MESSAGE, problem.getMessage());
-	}
-
-	private int safeGetLineOfOffset(IDocument document, int startIndex) {
-		try {
-			return 1 + document.getLineOfOffset(startIndex);
-		} catch(BadLocationException e) {
-			return 1;
-		}
-	}
-
-	private boolean problemMarkerAlreadyExists(IProblem problem) throws CoreException {
-		for(IMarker marker : file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
-			if(!marker.exists())
-				continue;
-			int start = marker.getAttribute(IMarker.CHAR_START, 0);
-			int end = marker.getAttribute(IMarker.CHAR_END, 0);
-			String msg = marker.getAttribute(IMarker.MESSAGE, "");
-			if(start==problem.getStartIndex()
-				&& end==problem.getEndIndex()
-				&& msg.equalsIgnoreCase(problem.getMessage()))
-				return true; // marker already exists
-		}
-		return false;
-	}
 
 	private Element parseRoot(String path, InputStream input) throws Exception {
 		DeclarationList list = parser.parse(path, input);
@@ -246,7 +169,8 @@ public class ContentProvider implements ITreeContentProvider {
 		if(decl instanceof ConcreteMethodDeclaration) 
 			populateStatements(elem, ((ConcreteMethodDeclaration)decl).getStatements());
 		return elem;
-}	
+	}	
+	
 	private void populateStatements(Element elem, StatementList statements) {
 		for(IStatement s : statements) {
 			if(s instanceof DeclarationInstruction) {

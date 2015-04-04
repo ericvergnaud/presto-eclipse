@@ -1,4 +1,4 @@
-package presto.editor.lang;
+package presto.editor.base;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;

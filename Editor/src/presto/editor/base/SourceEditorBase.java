@@ -1,4 +1,4 @@
-package presto.editor.lang;
+package presto.editor.base;
 
 import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
 import org.eclipse.core.resources.IFile;
@@ -18,7 +18,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import presto.editor.Constants;
 import presto.editor.Plugin;
-import presto.editor.lang.ContentProvider.Element;
+import presto.editor.base.ContentProvider.Element;
 import presto.editor.prefs.SyntaxColoring;
 // import presto.eclipse.plugin.lang.FormattingStrategy;
 import presto.parser.Dialect;

@@ -1,7 +1,7 @@
 package presto.editor.o;
 
-import presto.editor.lang.DocumentSetupParticipantBase;
-import presto.editor.lang.PartitionTokenScannerBase;
+import presto.editor.base.DocumentSetupParticipantBase;
+import presto.editor.base.PartitionTokenScannerBase;
 import presto.parser.Dialect;
 
 public class DocumentSetupParticipant extends DocumentSetupParticipantBase {

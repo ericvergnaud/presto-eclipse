@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
+import presto.core.Utils;
 import presto.declaration.IMethodDeclaration;
 import presto.utils.ImageUtils;
 
@@ -231,20 +232,20 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 	}
 
 	private void selectMethod(ILaunchConfiguration configuration, IFile file) {
-		IMethodDeclaration method = Utils.getConfiguredMethod(configuration, file);
+		IMethodDeclaration method = LaunchUtils.getConfiguredMethod(configuration, file);
 		if(method!=null && methodCombo.getItemCount()>0) 
 			Utils.selectInCombo(methodCombo,method.getName());
 	}
 
 	private IFile selectFile(ILaunchConfiguration configuration, IProject project) {
-		IFile file = Utils.getConfiguredFile(configuration, project);
+		IFile file = LaunchUtils.getConfiguredFile(configuration, project);
 		if(fileCombo.getItemCount()>0 && file!=null)
 			Utils.selectInCombo(fileCombo,file.getName());
 		return file;
 	}
 
 	private IProject selectProject(ILaunchConfiguration configuration) {
-		IProject project = Utils.getConfiguredProject(configuration);
+		IProject project = LaunchUtils.getConfiguredProject(configuration);
 		if(projectCombo.getItemCount()>0 && project!=null)
 			Utils.selectInCombo(projectCombo,project.getName());
 		return project;

@@ -66,7 +66,7 @@ public class ConfigArgsTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
-		String cmdLine = Utils.getConfiguredCommandLineArguments(configuration);
+		String cmdLine = LaunchUtils.getConfiguredCommandLineArguments(configuration);
 		argsText.setText(cmdLine);
 		manageControls();
 	}

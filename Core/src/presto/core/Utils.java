@@ -1,4 +1,4 @@
-package presto.launcher;
+package presto.core;
 
 import java.io.InputStream;
 import java.util.LinkedList;
@@ -11,7 +11,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.swt.widgets.Combo;
 
 import presto.declaration.IDeclaration;
@@ -20,7 +19,7 @@ import presto.grammar.DeclarationList;
 import presto.parser.Dialect;
 import presto.parser.IParser;
 
-public class Utils {
+public abstract class Utils {
 
 	public static IWorkspaceRoot getRoot() {
 		return ResourcesPlugin.getWorkspace().getRoot();
@@ -78,34 +77,8 @@ public class Utils {
 		return Dialect.valueOf(file.getFileExtension().substring(1, 2).toUpperCase());
 	}
 
-	public static IProject getConfiguredProject(ILaunchConfiguration configuration) {
-		try {
-			String name = configuration.getAttribute(Constants.PROJECT, "");
-			return name.length()>0 ? getRoot().getProject(name) : null;
-		} catch (CoreException e) {
-			e.printStackTrace(System.err);
-			return null;
-		}
-	}
-	
 	public static String getFilePath(IFile file) {
 		return file==null ? null : file.getProjectRelativePath().toPortableString();
-	}
-
-
-	public static IFile getConfiguredFile(ILaunchConfiguration configuration, IProject project) {
-		try {
-			String path = configuration.getAttribute(Constants.FILE, "");
-			if(!path.isEmpty()) {
-				for(IFile file : getEligibleFiles(project)) {
-					if(path.equals(getFilePath(file)))
-						return file;
-				}
-			}
-		} catch (CoreException e) {
-			e.printStackTrace(System.err);
-		}
-		return null;
 	}
 	
 	public static void selectInCombo(Combo combo, String name) {
@@ -120,42 +93,6 @@ public class Utils {
 	public static String getMethodSignature(IMethodDeclaration method, Dialect dialect) {
 		return method==null ? null : method.getSignature(dialect);
 	}
-
-	public static IMethodDeclaration getConfiguredMethod( ILaunchConfiguration configuration, IFile file) {
-		try {
-			String signature = configuration.getAttribute(Constants.METHOD, "");
-			if(!signature.isEmpty()) {
-				Dialect dialect = getDialect(file);
-				for(IMethodDeclaration method : Utils.getEligibleMethods(file)) {
-					if(signature.equals(method.getSignature(dialect))) 
-						return method;
-				}
-			}
-		} catch (CoreException e) {
-			e.printStackTrace(System.err);
-		}
-		return null;
-	}
-
-	public static String getConfiguredCommandLineArguments(ILaunchConfiguration configuration) {
-		try {
-			return configuration.getAttribute(Constants.ARGUMENTS, "");
-		} catch (CoreException e) {
-			e.printStackTrace(System.err);
-			return null;
-		}
-	}
-
-	public static boolean getConfiguredStopInMain(ILaunchConfiguration configuration) {
-		try {
-			return configuration.getAttribute(Constants.STOP_IN_MAIN, true);
-		} catch (CoreException e) {
-			e.printStackTrace(System.err);
-			return true;
-		}
-	}
-
-
 
 
 }

@@ -1,4 +1,4 @@
-package presto.editor.lang;
+package presto.editor.base;
 
 import org.eclipse.jface.text.formatter.ContentFormatter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;

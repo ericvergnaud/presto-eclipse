@@ -3,7 +3,7 @@ package presto.editor.o;
 import org.antlr.v4.runtime.CommonToken;
 import org.eclipse.jface.text.rules.IToken;
 
-import presto.editor.lang.PartitionTokenScannerBase;
+import presto.editor.base.PartitionTokenScannerBase;
 import presto.parser.Dialect;
 import presto.parser.OLexer;
 

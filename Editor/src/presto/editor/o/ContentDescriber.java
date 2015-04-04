@@ -1,6 +1,6 @@
 package presto.editor.o;
 
-import presto.editor.lang.ContentDescriberBase;
+import presto.editor.base.ContentDescriberBase;
 
 public class ContentDescriber extends ContentDescriberBase {
 

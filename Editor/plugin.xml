@@ -4,7 +4,7 @@
 	<extension point="org.eclipse.ui.editors.documentProviders">
     	<provider 
         	extensions="ped,pod,ppd" 
-        	class="presto.editor.lang.DocumentProvider" 
+        	class="presto.editor.base.DocumentProvider" 
         	id="presto.editor.lang.documentProvider"> 
     	</provider> 
 	</extension>
@@ -85,8 +85,8 @@
    </extension>  
    <extension point="org.eclipse.core.runtime.adapters">
 		<factory
-    		class="presto.editor.lang.BreakpointAdapterFactory"
-       		adaptableType="presto.editor.lang.SourceEditorBase">
+    		class="presto.editor.debug.BreakpointAdapterFactory"
+       		adaptableType="presto.editor.base.SourceEditorBase">
        		<adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget"/>
     	</factory>
    </extension>

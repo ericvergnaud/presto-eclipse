@@ -1,4 +1,4 @@
-package presto.editor.lang;
+package presto.editor.debug;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRunnable;
@@ -15,6 +15,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import presto.debugger.DebuggerUtils;
 import presto.debugger.LineBreakpoint;
+import presto.editor.base.SourceEditorBase;
 
 public class BreakpointAdapter implements IToggleBreakpointsTarget {
 

@@ -1,4 +1,4 @@
-package presto.editor.lang;
+package presto.editor.base;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
