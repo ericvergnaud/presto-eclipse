@@ -20,7 +20,6 @@ import presto.declaration.IEnumeratedDeclaration;
 import presto.declaration.IMethodDeclaration;
 import presto.declaration.TestMethodDeclaration;
 import presto.editor.Constants;
-import presto.editor.problem.ProblemManager;
 import presto.grammar.CategoryMethodDeclarationList;
 import presto.grammar.DeclarationList;
 import presto.grammar.IdentifierList;
@@ -28,6 +27,7 @@ import presto.grammar.Symbol;
 import presto.parser.Dialect;
 import presto.parser.IParser;
 import presto.parser.ISection;
+import presto.problem.ProblemManager;
 import presto.statement.DeclarationInstruction;
 import presto.statement.IStatement;
 import presto.statement.StatementList;
@@ -118,8 +118,6 @@ public class ContentProvider implements ITreeContentProvider {
 	private Element populateDeclarationList(DeclarationList list) {
 		Element root = new Element();
 		for(IDeclaration decl : list) {
-			if(decl==null)
-				continue;
 			Element elem = populateDeclaration(decl);
 			elem.parent = root;
 			root.children.add(elem);

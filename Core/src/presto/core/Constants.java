@@ -2,6 +2,8 @@ package presto.core;
 
 public abstract class Constants {
 
+	public static final String CORE_PLUGIN_ID = "presto.core"; 
+
 	public static final String PRESTO_NATURES_ID = "presto.natures";
 	public static final String SCRIPTS_NATURE_ID = "presto.nature.scripts";
 	public static final String FRAMEWORK_NATURE_ID = "presto.nature.framework";
@@ -22,8 +24,8 @@ public abstract class Constants {
 	public static final String PRESTO_MARKER_TYPE = "presto.marker";
 
 	public static final String PROBLEM_MARKER_TYPE = "presto.problem.marker";
-
 	public static final String DEBUG_MARKER_TYPE = "presto.debug.marker";
+
 	public static final String DEBUG_MODEL_IDENTIFIER = "presto.debug"; 
 
 	public static final String EDITOR_ID = "presto.editor.$";

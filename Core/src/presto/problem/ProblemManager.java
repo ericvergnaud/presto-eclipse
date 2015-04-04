@@ -1,4 +1,4 @@
-package presto.editor.problem;
+package presto.problem;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,19 +9,24 @@ import java.util.List;
 import org.eclipse.core.internal.resources.ResourceException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
 
+import presto.core.Constants;
 import presto.core.Utils;
+import presto.grammar.DeclarationList;
 import presto.parser.Dialect;
 import presto.parser.IParser;
 import presto.parser.IProblem;
 import presto.parser.IProblemListener;
 import presto.parser.ProblemCollector;
+import presto.runtime.Context;
 
 @SuppressWarnings("restriction")
 public class ProblemManager {
@@ -70,13 +75,17 @@ public class ProblemManager {
 		Dialect dialect = Utils.getDialect(file);
 		IParser parser = dialect.getParserFactory().newParser();
 		IProblemListener listener = new ProblemCollector();
-		parser.setErrorListener(listener);
+		parser.setProblemListener(listener);
 		String path = file.getFullPath().toPortableString();
 		InputStream input = this.input;
 		try {
 			if(input==null)
 				input = file.getContents();
-			parser.parse(path, input);
+			DeclarationList dl = parser.parse(path, input);
+			Context context = fetchContext();
+			context.setProblemListener(listener);
+			context.unregister(path);
+			dl.register(context);
 			return listener.getProblems();
 		} catch (Exception e) {
 			IProblem problem = new InternalProblem(e.getMessage());
@@ -84,7 +93,23 @@ public class ProblemManager {
 			problems.add(problem);
 			return problems;
 		} finally {
-			input.close();
+			if(this.input==null)
+				input.close();
+		}
+	}
+
+	private Context fetchContext() throws CoreException {
+		IProject project = file.getProject();
+		if(project.hasNature(Constants.SCRIPTS_NATURE_ID))
+			return Context.newGlobalContext();
+		else {
+			QualifiedName key = new QualifiedName(Constants.CORE_PLUGIN_ID, "context");
+			Context context = (Context)project.getSessionProperty(key);
+			if(context==null) {
+				context = Context.newGlobalContext();
+				project.setSessionProperty(key, context);
+			}
+			return context;
 		}
 	}
 

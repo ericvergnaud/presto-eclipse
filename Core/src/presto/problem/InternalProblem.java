@@ -1,4 +1,4 @@
-package presto.editor.problem;
+package presto.problem;
 
 import presto.parser.IProblem;
 
