@@ -9,12 +9,12 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.ITextContentDescriber;
 
-import presto.editor.Plugin;
+import presto.core.Constants;
 
 public abstract class ContentDescriberBase implements ITextContentDescriber {
 
-	public static final QualifiedName PRESTO_VALID = new QualifiedName( Plugin.PLUGIN_ID, "valid"); //$NON-NLS-1$
-
+	public static final QualifiedName PRESTO_VALID = new QualifiedName( Constants.EDITOR_PLUGIN_ID, "valid"); 
+	
 	@Override
 	public int describe(InputStream contents, IContentDescription description) throws IOException {
 		return describe(new InputStreamReader(contents), description);

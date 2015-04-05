@@ -3,6 +3,7 @@ package presto.core;
 public abstract class Constants {
 
 	public static final String CORE_PLUGIN_ID = "presto.core"; 
+	public static final String EDITOR_PLUGIN_ID = "presto.editor"; 
 
 	public static final String PRESTO_NATURES_ID = "presto.natures";
 	public static final String SCRIPTS_NATURE_ID = "presto.nature.scripts";

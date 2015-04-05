@@ -52,7 +52,7 @@ public class LibrariesRootElement extends LibraryElement {
 	
 	private Object[] getPrestoLibraries() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Object[0];
 	}
 
 	private Object[] getReferencedLibraries(IProject project) throws CoreException {
