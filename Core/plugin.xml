@@ -7,9 +7,9 @@
       </runtime>
       <one-of-nature id="presto.natures"/>
    </extension>
-	<extension id="presto.nature.framework" point="org.eclipse.core.resources.natures">
+	<extension id="presto.nature.library" point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="presto.core.FrameworkNature"/>
+         <run class="presto.core.LibraryNature"/>
       </runtime>
       <one-of-nature id="presto.natures"/>
    </extension>
@@ -29,7 +29,7 @@
   <extension point="org.eclipse.ui.perspectiveExtensions">
     <perspectiveExtension targetID="*">
     	<newWizardShortcut id="presto.project.scripts"/> 
-    	<newWizardShortcut id="presto.project.framework"/> 
+    	<newWizardShortcut id="presto.project.library"/> 
     	<newWizardShortcut id="presto.project.application"/> 
     </perspectiveExtension>
   </extension>
@@ -47,10 +47,10 @@
   	<category id="presto.project" name="Presto"/>
   	<wizard
          category="presto.project"
-         class="presto.wizard.FrameworkProjectWizard"
-         icon="images/framework_wizard.gif"
-         id="presto.project.framework"
-         name="Presto Framework Project"
+         class="presto.wizard.LibraryProjectWizard"
+         icon="images/library_wizard.gif"
+         id="presto.project.library"
+         name="Presto Library Project"
          project="true"/>
   </extension>
   <extension point="org.eclipse.ui.newWizards">
@@ -62,5 +62,34 @@
          id="presto.project.application"
          name="Presto Application Project"
          project="true"/>
+  </extension>
+  <extension point="org.eclipse.ui.navigator.viewer">
+        <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+          <includes>
+             <contentExtension pattern="presto.content.libraries"/>
+          </includes>
+       </viewerContentBinding>      
+  </extension>
+  <extension point="org.eclipse.ui.navigator.navigatorContent">
+  		<navigatorContent id="presto.content.libraries" name="Libraries"
+  		contentProvider="presto.content.ContentProvider"
+  		labelProvider="presto.content.LabelProvider"
+  		activeByDefault="true"
+  		icon="images/library.gif"
+  		priority="normal">
+  			<triggerPoints>
+				<and>
+					<instanceof value="org.eclipse.core.resources.IProject"/>
+  					<or>
+		        		<test property="org.eclipse.core.resources.projectNature" value="presto.nature.scripts"/>
+		        		<test property="org.eclipse.core.resources.projectNature" value="presto.nature.library"/>
+		        		<test property="org.eclipse.core.resources.projectNature" value="presto.nature.application"/>
+		        	</or>
+		        </and>
+  			</triggerPoints>
+  			<possibleChildren>
+  				<instanceof value="presto.content.ILibraryElement"/>
+  			</possibleChildren>
+  		</navigatorContent>
   </extension>
 </plugin>

@@ -38,14 +38,22 @@ public class ScriptsProjectWizard extends PrestoProjectWizard {
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException {
 				try {
-					CreateProjectOperation cpo = new CreateProjectOperation(description, Constants.CREATING_PROJECT);
-					cpo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-					IFile file = project.getFile("SampleScript.ped");
-					CreateFileOperation cfo = new CreateFileOperation(file, null, null /*contents*/, Constants.CREATING_SAMPLE_SCRIPT);
-					cfo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
+					createProject(monitor);
+					createSampleScript(monitor);
 				} catch (ExecutionException e) {
 					throw new InvocationTargetException(e);
 				}
+			}
+
+			private void createSampleScript(IProgressMonitor monitor) throws ExecutionException {
+				IFile file = project.getFile("SampleScript.ped");
+				CreateFileOperation cfo = new CreateFileOperation(file, null, null /*contents*/, Constants.CREATING_SAMPLE_SCRIPT);
+				cfo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
+			}
+
+			private void createProject(IProgressMonitor monitor) throws ExecutionException {
+				CreateProjectOperation cpo = new CreateProjectOperation(description, Constants.CREATING_PROJECT);
+				cpo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
 			}
 		};
 	}

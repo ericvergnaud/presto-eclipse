@@ -106,7 +106,7 @@ public abstract class PrestoProjectWizard extends BasicNewResourceWizard impleme
 
 	protected abstract IRunnableWithProgress buildCreateProjectOperation(final IProject project, final IProjectDescription description);
 	
-	private IProjectDescription buildProjectDescription(IProject project) throws CoreException {
+	protected IProjectDescription buildProjectDescription(IProject project) throws CoreException {
 		URI location = creationPage.useDefaults() ? null : creationPage.getLocationURI();
 		IProjectDescription description = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
 		description.setLocationURI(location);
