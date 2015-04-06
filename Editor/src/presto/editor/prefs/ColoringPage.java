@@ -47,7 +47,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 	Button pRadio;
 	StyledText preview;
 	
-	static final String ePreviewContent = "define id as: Integer attribute\r\n"
+	static final String previewContent_E = "define id as: Integer attribute\r\n"
 			+ "define name as: Text attribute\r\n"
 			+ "\r\n"
 			+ "define Person as: enumerated category with attributes: id and name, with symbols:\r\n"
@@ -63,7 +63,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			+ "        for each person in Person.symbols:\r\n"
 			+ "            print person.name\r\n";
 	
-	static final String oPreviewContent = "attribute id : Integer;\r\n" 
+	static final String previewContent_O = "attribute id : Integer;\r\n" 
 			+ "attribute name : Text;\r\n"
 			+ "\r\n"
 			+ "enumerated category Person(id , name) {\r\n"
@@ -82,7 +82,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			+ "    }\r\n"
 			+ "}\r\n";
 
-	static final String pPreviewContent = "attribute id : Integer;\r\n" 
+	static final String previewContent_S = "attribute id : Integer;\r\n" 
 			+ "attribute name : Text;\r\n"
 			+ "\r\n"
 			+ "enumerated category Person(id , name) {\r\n"
@@ -286,17 +286,17 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 		else if(oRadio.getSelection())
 			return Dialect.O;
 		else
-			return Dialect.P;
+			return Dialect.S;
 	}
 
 	private String getPreviewContent(Dialect dialect) {
 		switch(dialect) {
 		case E:
-			return ePreviewContent;
+			return previewContent_E;
 		case O:
-			return oPreviewContent;
-		case P:
-			return pPreviewContent;
+			return previewContent_O;
+		case S:
+			return previewContent_S;
 		default:
 			throw new RuntimeException("Unsupported dialect:" + dialect.name());
 		}
@@ -352,9 +352,9 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			return new presto.editor.e.TokenProxy(token).getData().toString();
 		case O:
 			return new presto.editor.o.TokenProxy(token).getData().toString();
-		case P:
+		case S:
 		default:
-			return new presto.editor.p.TokenProxy(token).getData().toString();
+			return new presto.editor.s.TokenProxy(token).getData().toString();
 		}
 	}
 

@@ -1,4 +1,4 @@
-package presto.editor.p;
+package presto.editor.s;
 
 import presto.editor.base.ContentDescriberBase;
 

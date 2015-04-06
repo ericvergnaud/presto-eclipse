@@ -14,6 +14,7 @@ import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.jface.dialogs.MessageDialog;
 
+import presto.core.Utils.RunType;
 import presto.debug.Debugger;
 import presto.debug.IDebugEventListener;
 import presto.debug.ResumeReason;
@@ -264,7 +265,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 
 	public void start() {
 		try {
-			map = context.buildContextMap();
+			map = context.buildContextMap(RunType.SCRIPT);
 			connectBreakpoints();
 			startThread();
 		} catch (Exception e) {

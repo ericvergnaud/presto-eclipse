@@ -1,8 +1,10 @@
 package presto.core;
 
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -25,22 +27,39 @@ public abstract class Utils {
 		return ResourcesPlugin.getWorkspace().getRoot();
 	}
 	
-	public static List<IFile> getEligibleFiles(IProject project) {
+	public static enum RunType {
+		TEST ("pec", "poc", "psc", "pes", "pos", "pss"),
+		APPLI ("pec", "poc", "psc"),
+		SCRIPT ("pes", "pos", "pss");
+		
+		Set<String> supportedExtensions = new HashSet<String>();
+		
+		RunType(String ... extensions) {
+			for(String extension : extensions)
+				supportedExtensions.add(extension);
+		}
+		
+		boolean isSupportedExtension(String ext) {
+			return supportedExtensions.contains(ext.toLowerCase());
+		}
+	}
+	
+	public static List<IFile> getEligibleFiles(IProject project, RunType type) {
 		List<IFile> files = new LinkedList<IFile>();
 		if(project!=null)
-			getEligibleFiles(project, files);
+			getEligibleFiles(project, files,type);
 		return files;
 	}
 
-	public static void getEligibleFiles(IContainer container, List<IFile> files) {
+	public static void getEligibleFiles(IContainer container, List<IFile> files, RunType type) {
 		try {
 			for(IResource member : container.members()) {
 				if(member instanceof IContainer)
-					getEligibleFiles((IContainer)member, files);
+					getEligibleFiles((IContainer)member, files,type);
 				else if(member instanceof IFile) {
 					IFile file = (IFile)member;
-					String ext = file.getFileExtension().toLowerCase();
-					if("ped".equals(ext) || "pod".equals(ext) || "ppd".equals(ext))
+					String ext = file.getFileExtension();
+					if(type.isSupportedExtension(ext))
 						files.add(file);
 				}
 			}

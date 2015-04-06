@@ -20,8 +20,8 @@ public abstract class PartitionTokenScannerBase implements IPartitionTokenScanne
 			return new presto.editor.e.PartitionTokenScanner();
 		case O:
 			return new presto.editor.o.PartitionTokenScanner();
-		case P:
-			return new presto.editor.p.PartitionTokenScanner();
+		case S:
+			return new presto.editor.s.PartitionTokenScanner();
 		default:
 			throw new RuntimeException("Unsupported");
 		}

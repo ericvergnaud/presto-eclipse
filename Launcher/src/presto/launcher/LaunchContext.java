@@ -11,6 +11,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
 import presto.core.Utils;
+import presto.core.Utils.RunType;
 import presto.declaration.IMethodDeclaration;
 import presto.error.SyntaxError;
 import presto.grammar.DeclarationList;
@@ -60,14 +61,14 @@ public class LaunchContext {
 	
 	private void readConfiguration() {
 		project = LaunchUtils.getConfiguredProject(configuration);
-		file = LaunchUtils.getConfiguredFile(configuration, project);
+		file = LaunchUtils.getConfiguredFile(configuration, project, RunType.SCRIPT);
 		method = LaunchUtils.getConfiguredMethod(configuration, file);
 		cmdLineArgs = LaunchUtils.getConfiguredCommandLineArguments(configuration);
 		stopInMain = LaunchUtils.getConfiguredStopInMain(configuration);
 	}
 
-	public ContextMap buildContextMap() throws Exception {
-		ContextMap cm = populateContextMap(project);
+	public ContextMap buildContextMap(RunType runType) throws Exception {
+		ContextMap cm = populateContextMap(project, runType);
 		registerContextMap(cm);
 		checkContextMap(cm);
 		return cm;
@@ -93,16 +94,16 @@ public class LaunchContext {
 		}
 	}
 
-	private ContextMap populateContextMap(IProject project) throws Exception {
+	private ContextMap populateContextMap(IProject project, RunType runType) throws Exception {
 		ContextMap cm = new ContextMap();
 		cm.setContext(Context.newGlobalContext());
-		cm.map = parseEligibleFiles(project);
+		cm.map = parseEligibleFiles(project, runType);
 		return cm;
 	}
 
-	private Map<IFile, DeclarationList> parseEligibleFiles(IProject project) throws Exception {
+	private Map<IFile, DeclarationList> parseEligibleFiles(IProject project, RunType runType) throws Exception {
 		Map<IFile,DeclarationList> map = new HashMap<IFile, DeclarationList>();
-		for(IFile file : Utils.getEligibleFiles(project)) 
+		for(IFile file : Utils.getEligibleFiles(project, runType)) 
 			map.put(file, parse(file));
 		return map;
 	}

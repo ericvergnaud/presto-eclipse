@@ -1,4 +1,4 @@
-package presto.editor.p;
+package presto.editor.s;
 
 import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
 
@@ -8,7 +8,7 @@ import presto.parser.Dialect;
 public class SourceEditor extends SourceEditorBase {
 
 	public SourceEditor() {
-		super(Dialect.P);
+		super(Dialect.S);
 	}
 
 	@Override

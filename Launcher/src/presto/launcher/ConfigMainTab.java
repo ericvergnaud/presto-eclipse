@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
 import presto.core.Utils;
+import presto.core.Utils.RunType;
 import presto.declaration.IMethodDeclaration;
 import presto.utils.ImageUtils;
 
@@ -74,8 +75,8 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setDirty(true);
-				fillInFiles();
-				fillInMethods();
+				fillInFiles(RunType.SCRIPT);
+				fillInMethods(RunType.SCRIPT);
 				manageControls();
 			}
 			
@@ -93,7 +94,7 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setDirty(true);
-				fillInMethods();
+				fillInMethods(RunType.SCRIPT);
 				manageControls();
 			}
 			
@@ -153,8 +154,8 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 			projectCombo.add(project.getName());
 	}
 
-	private void fillInFiles() {
-		fillInFiles(getSelectedProject());
+	private void fillInFiles(RunType runType) {
+		fillInFiles(getSelectedProject(), runType);
 	}
 	
 	private IProject getSelectedProject() {
@@ -165,15 +166,15 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 			return Utils.getRoot().getProject(projectCombo.getItem(idx));
 	}
 
-	private void fillInFiles(IProject project) {
+	private void fillInFiles(IProject project, RunType runType) {
 		fileCombo.setItems(new String[0]);
-		List<IFile> files = Utils.getEligibleFiles(project);
+		List<IFile> files = Utils.getEligibleFiles(project, runType);
 		for(IFile file : files)
 			fileCombo.add(file.getName());
 	}
 	
-	private void fillInMethods() {
-		fillInMethods(getSelectedFile(getSelectedProject()));
+	private void fillInMethods(RunType runType) {
+		fillInMethods(getSelectedFile(getSelectedProject(), runType));
 	}
 
 
@@ -185,13 +186,13 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 			methodCombo.add(method.getName());
 	}
 	
-	private IFile getSelectedFile(IProject project) {
+	private IFile getSelectedFile(IProject project, RunType runType) {
 		if(project==null)
 			return null;
 		int idx = fileCombo.getSelectionIndex();
 		if(idx<0)
 			return null;
-		return Utils.getEligibleFiles(project).get(idx);
+		return Utils.getEligibleFiles(project, runType).get(idx);
 	}
 
 	private void manageControls() {
@@ -215,8 +216,8 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		fillInProjects();
 		IProject project = selectProject(configuration);
-		fillInFiles(project);
-		IFile file = selectFile(configuration, project);
+		fillInFiles(project, RunType.SCRIPT);
+		IFile file = selectFile(configuration, project, RunType.SCRIPT);
 		fillInMethods(file);
 		selectMethod(configuration, file);
 		selectStopInMain(configuration);
@@ -237,8 +238,8 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 			Utils.selectInCombo(methodCombo,method.getName());
 	}
 
-	private IFile selectFile(ILaunchConfiguration configuration, IProject project) {
-		IFile file = LaunchUtils.getConfiguredFile(configuration, project);
+	private IFile selectFile(ILaunchConfiguration configuration, IProject project, RunType runType) {
+		IFile file = LaunchUtils.getConfiguredFile(configuration, project, runType);
 		if(fileCombo.getItemCount()>0 && file!=null)
 			Utils.selectInCombo(fileCombo,file.getName());
 		return file;
@@ -265,7 +266,7 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		IProject project = getSelectedProject();
 		configuration.setAttribute(Constants.PROJECT, getProjectName(project));
-		IFile file = getSelectedFile(project);
+		IFile file = getSelectedFile(project, RunType.SCRIPT);
 		configuration.setAttribute(Constants.FILE, file==null ? null : Utils.getFilePath(file));
 		IMethodDeclaration method = getSelectedMethod(file);
 		String signature = method==null ? null : Utils.getMethodSignature(method, Utils.getDialect(file));

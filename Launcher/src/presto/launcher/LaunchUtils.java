@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
 import presto.core.Utils;
+import presto.core.Utils.RunType;
 import presto.declaration.IMethodDeclaration;
 import presto.parser.Dialect;
 
@@ -21,11 +22,11 @@ public class LaunchUtils {
 		}
 	}
 	
-	public static IFile getConfiguredFile(ILaunchConfiguration configuration, IProject project) {
+	public static IFile getConfiguredFile(ILaunchConfiguration configuration, IProject project, RunType runType) {
 		try {
 			String path = configuration.getAttribute(Constants.FILE, "");
 			if(!path.isEmpty()) {
-				for(IFile file : Utils.getEligibleFiles(project)) {
+				for(IFile file : Utils.getEligibleFiles(project, runType)) {
 					if(path.equals(Utils.getFilePath(file)))
 						return file;
 				}
