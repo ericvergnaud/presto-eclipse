@@ -1,17 +1,16 @@
-package presto.editor.e;
+package presto.editor;
 
 import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
-import presto.editor.Constants;
 import presto.parser.ELexer;
 import static presto.parser.ELexer.*;
 
-public class TokenProxy implements IToken {
+public class ETokenProxy implements IToken {
 
 	Token token;
 
-	public TokenProxy(Token token) {
+	public ETokenProxy(Token token) {
 		this.token = token;
 	}
 

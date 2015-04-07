@@ -1,4 +1,4 @@
-package presto.editor.base;
+package presto.editor;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.source.IAnnotationModel;

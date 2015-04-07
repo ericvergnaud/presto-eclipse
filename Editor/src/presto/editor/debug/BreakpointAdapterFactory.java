@@ -4,7 +4,7 @@ import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
 
-import presto.editor.base.SourceEditorBase;
+import presto.editor.MultiPageEditor;
 
 @SuppressWarnings("rawtypes")
 public class BreakpointAdapterFactory extends PlatformObject implements IAdapterFactory {
@@ -12,7 +12,7 @@ public class BreakpointAdapterFactory extends PlatformObject implements IAdapter
 	@Override
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		if(adapterType==IToggleBreakpointsTarget.class) {
-	     if (adaptableObject instanceof SourceEditorBase) {
+	     if (adaptableObject instanceof MultiPageEditor) {
 	    	 return new BreakpointAdapter();
 	     }
 		}

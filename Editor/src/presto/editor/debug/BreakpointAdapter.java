@@ -15,7 +15,8 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import presto.debugger.DebuggerUtils;
 import presto.debugger.LineBreakpoint;
-import presto.editor.base.SourceEditorBase;
+import presto.editor.MultiPageEditor;
+import presto.editor.SourceEditor;
 
 public class BreakpointAdapter implements IToggleBreakpointsTarget {
 
@@ -25,7 +26,7 @@ public class BreakpointAdapter implements IToggleBreakpointsTarget {
 	}
 	
 	public void toggleLineBreakpoints(IWorkbenchPart part, ISelection selection) throws CoreException {
-		SourceEditorBase textEditor = getEditor(part);
+		SourceEditor textEditor = getEditor(part);
 		if (textEditor != null) {
 			final IResource resource = (IResource) textEditor.getEditorInput().getAdapter(IResource.class);
 			ITextSelection textSelection = (ITextSelection) selection;
@@ -63,9 +64,9 @@ public class BreakpointAdapter implements IToggleBreakpointsTarget {
 	public void toggleWatchpoints(IWorkbenchPart part, ISelection selection) throws CoreException {
 	}
 	
-	private SourceEditorBase getEditor(IWorkbenchPart part) {
-		if (part instanceof SourceEditorBase)
-			return (SourceEditorBase) part;
+	private SourceEditor getEditor(IWorkbenchPart part) {
+		if (part instanceof MultiPageEditor)
+			return ((MultiPageEditor) part).getActualSourceEditor();
 		else
 			return null;
 	}

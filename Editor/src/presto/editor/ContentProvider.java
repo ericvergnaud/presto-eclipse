@@ -1,4 +1,4 @@
-package presto.editor.base;
+package presto.editor;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -19,7 +19,6 @@ import presto.declaration.IDeclaration;
 import presto.declaration.IEnumeratedDeclaration;
 import presto.declaration.IMethodDeclaration;
 import presto.declaration.TestMethodDeclaration;
-import presto.editor.Constants;
 import presto.grammar.CategoryMethodDeclarationList;
 import presto.grammar.DeclarationList;
 import presto.grammar.IdentifierList;

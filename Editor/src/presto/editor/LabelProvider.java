@@ -1,10 +1,10 @@
-package presto.editor.base;
+package presto.editor;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import presto.editor.base.ContentProvider.Element;
+import presto.editor.ContentProvider.Element;
 
 public class LabelProvider extends BaseLabelProvider implements ILabelProvider {
 

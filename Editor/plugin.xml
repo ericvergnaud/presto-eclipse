@@ -4,59 +4,30 @@
 	<extension point="org.eclipse.ui.editors.documentProviders">
     	<provider 
         	extensions="pec,poc,psc,pes,pos,pss" 
-        	class="presto.editor.base.DocumentProvider" 
-        	id="presto.editor.lang.documentProvider"> 
+        	class="presto.editor.DocumentProvider" 
+        	id="presto.editor.documentProvider"> 
     	</provider> 
 	</extension>
  	<extension point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.core.runtime.text"
-            describer="presto.editor.e.ContentDescriber"
-            file-extensions="pes,pes"
-            id="presto.content-type.E"
-            name="Presto E content type"
+            describer="presto.editor.ContentDescriber"
+            file-extensions="pec,poc,psc,pes,pos,pss"
+            id="presto.content-type"
+            name="Presto content type"
             priority="high">
       </content-type>
-      <content-type
-            base-type="org.eclipse.core.runtime.text"
-            describer="presto.editor.o.ContentDescriber"
-            file-extensions="pos,pos"
-            id="presto.content-type.O"
-            name="Presto O content type"
-            priority="high">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.core.runtime.text"
-            describer="presto.editor.s.ContentDescriber"
-            file-extensions="psc,pss"
-            id="presto.content-type.S"
-            name="Presto S content type"
-            priority="high">
-      </content-type>
-    </extension>
+   </extension>
 	<extension point="org.eclipse.ui.editors">
-      <editor class="presto.editor.e.SourceEditor"
+      <editor class="presto.editor.MultiPageEditor"
+            contributorClass="presto.editor.MultiPageContributor"
             default="false"
-            icon="images/ped_obj.gif" 
-            id="presto.editor.e"
-            name="Presto E Editor">
-         <contentTypeBinding contentTypeId="presto.content-type.E"/>
+            icon="images/src_obj.gif" 
+            id="presto.editor"
+            name="Presto Editor">
+         <contentTypeBinding contentTypeId="presto.content-type"/>
       </editor>
-      <editor class="presto.editor.o.SourceEditor"
-            default="false"
-            icon="images/pod_obj.gif"
-            id="presto.editor.o"
-            name="Presto O Editor">
-         <contentTypeBinding contentTypeId="presto.content-type.O"/>
-      </editor>
-      <editor class="presto.editor.s.SourceEditor"
-            default="false"
-            icon="images/ppd_obj.gif"
-            id="presto.editor.s"
-            name="Presto P Editor">
-         <contentTypeBinding contentTypeId="presto.content-type.S"/>
-      </editor>
-    </extension>
+   </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
@@ -86,7 +57,7 @@
    <extension point="org.eclipse.core.runtime.adapters">
 		<factory
     		class="presto.editor.debug.BreakpointAdapterFactory"
-       		adaptableType="presto.editor.base.SourceEditorBase">
+       		adaptableType="presto.editor.SourceEditor">
        		<adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget"/>
     	</factory>
    </extension>

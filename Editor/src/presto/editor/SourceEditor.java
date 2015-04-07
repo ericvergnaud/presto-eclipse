@@ -1,4 +1,4 @@
-package presto.editor.base;
+package presto.editor;
 
 import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
 import org.eclipse.core.resources.IFile;
@@ -16,20 +16,53 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import presto.editor.Constants;
-import presto.editor.base.ContentProvider.Element;
+import presto.editor.ContentProvider.Element;
 import presto.editor.prefs.SyntaxColoring;
 // import presto.eclipse.plugin.lang.FormattingStrategy;
 import presto.parser.Dialect;
 import presto.parser.ISection;
 
-public abstract class SourceEditorBase extends AbstractDecoratedTextEditor {
+public class SourceEditor extends AbstractDecoratedTextEditor {
 
 	Dialect dialect;
+	MultiPageEditor parent;
 	ContentOutliner outliner;
 	
-	public SourceEditorBase(Dialect dialect) {
+	public SourceEditor(Dialect dialect, MultiPageEditor parent) {
 		this.dialect = dialect;
+		this.parent = parent;
+	}
+	
+	public Dialect getDialect() {
+		return dialect;
+	}
+	
+	public SourceEditor getActualSourceEditor() {
+		return parent.getActualSourceEditor();
+	}
+	
+	@Override
+	public boolean isEditable() {
+		if(getEditorInput() instanceof TranslatedInput)
+			return false;
+		else
+			return super.isEditable();
+	}
+	
+	@Override
+	public boolean isDirty() {
+		if(getEditorInput() instanceof TranslatedInput)
+			return false;
+		else
+			return super.isDirty();
+	}
+	
+	@Override
+	protected void setDocumentProvider(IEditorInput input) {
+		if(input instanceof TranslatedInput)
+			setDocumentProvider(new TranslatedDocumentProvider());
+		else
+			super.setDocumentProvider(input);
 	}
 	
 	@Override
@@ -105,14 +138,12 @@ public abstract class SourceEditorBase extends AbstractDecoratedTextEditor {
 		if(doc instanceof IDocumentExtension3) {
 			IDocumentExtension3 ext = (IDocumentExtension3)doc;
 			if(ext.getDocumentPartitioner(Constants.PARTITION_ID)==null) {
-				IDocumentSetupParticipant participant = newDocumentSetupParticipant();
+				IDocumentSetupParticipant participant = new DocumentSetupParticipant(dialect);
 				participant.setup(doc);
 			}
 		}
 	}
 
-	protected abstract IDocumentSetupParticipant newDocumentSetupParticipant();
-	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Object getAdapter(Class klass) {
@@ -120,6 +151,18 @@ public abstract class SourceEditorBase extends AbstractDecoratedTextEditor {
 			return outliner;
 		else
 			return super.getAdapter(klass);
+	}
+
+	public IDocument getDocument() {
+		return getDocumentProvider().getDocument(getEditorInput());
+	}
+
+	public IFile getFile() {
+		IEditorInput input = getEditorInput();
+		if(input instanceof IFileEditorInput)
+			return ((IFileEditorInput)input).getFile();
+		else
+			return null;
 	}
 
 }

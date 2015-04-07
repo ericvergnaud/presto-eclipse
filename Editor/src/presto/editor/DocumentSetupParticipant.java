@@ -1,4 +1,4 @@
-package presto.editor.base;
+package presto.editor;
 
 import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
 import org.eclipse.jface.text.IDocument;
@@ -9,11 +9,11 @@ import org.eclipse.jface.text.rules.FastPartitioner;
 import presto.editor.Constants;
 import presto.parser.Dialect;
 
-public abstract class DocumentSetupParticipantBase implements IDocumentSetupParticipant {
+public class DocumentSetupParticipant implements IDocumentSetupParticipant {
 
 	protected Dialect dialect;
 	
-	public DocumentSetupParticipantBase(Dialect dialect) {
+	public DocumentSetupParticipant(Dialect dialect) {
 		this.dialect = dialect;
 	}
 	
@@ -32,10 +32,8 @@ public abstract class DocumentSetupParticipantBase implements IDocumentSetupPart
 	}
 
 	protected IDocumentPartitioner newDocumentPartitioner() {
-		PartitionTokenScannerBase scanner = newPartitionScanner();
+		PartitionTokenScanner scanner = new PartitionTokenScanner(dialect);
 		return new FastPartitioner(scanner,Constants.PARTITION_NAMES);
 	}
-
-	protected abstract PartitionTokenScannerBase newPartitionScanner();
 
 }

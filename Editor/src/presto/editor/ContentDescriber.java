@@ -1,4 +1,4 @@
-package presto.editor.base;
+package presto.editor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +11,7 @@ import org.eclipse.core.runtime.content.ITextContentDescriber;
 
 import presto.core.Constants;
 
-public abstract class ContentDescriberBase implements ITextContentDescriber {
+public class ContentDescriber implements ITextContentDescriber {
 
 	public static final QualifiedName PRESTO_VALID = new QualifiedName( Constants.EDITOR_PLUGIN_ID, "valid"); 
 	

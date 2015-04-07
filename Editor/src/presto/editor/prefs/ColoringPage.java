@@ -30,7 +30,10 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+import presto.editor.ETokenProxy;
+import presto.editor.OTokenProxy;
 import presto.editor.Plugin;
+import presto.editor.STokenProxy;
 import presto.editor.prefs.SyntaxColoring.ColorPreference;
 import presto.parser.Dialect;
 import presto.parser.ILexer;
@@ -349,12 +352,12 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 	private String getPartition(Dialect dialect, Token token) {
 		switch(dialect) {
 		case E:
-			return new presto.editor.e.TokenProxy(token).getData().toString();
+			return new ETokenProxy(token).getData().toString();
 		case O:
-			return new presto.editor.o.TokenProxy(token).getData().toString();
+			return new OTokenProxy(token).getData().toString();
 		case S:
 		default:
-			return new presto.editor.s.TokenProxy(token).getData().toString();
+			return new STokenProxy(token).getData().toString();
 		}
 	}
 

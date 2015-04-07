@@ -1,4 +1,4 @@
-package presto.editor.base;
+package presto.editor;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
@@ -9,7 +9,7 @@ import presto.parser.Dialect;
 public class PresentationReconciler extends org.eclipse.jface.text.presentation.PresentationReconciler {
 
 	public PresentationReconciler(Dialect dialect) {
-		IPartitionTokenScanner scanner = PartitionTokenScannerBase.newPartitionTokenScanner(dialect);
+		IPartitionTokenScanner scanner = new PartitionTokenScanner(dialect);
 		this.setDocumentPartitioning(Constants.PARTITION_ID);
 		DamagerRepairer dr = new DamagerRepairer(scanner);
 		this.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);

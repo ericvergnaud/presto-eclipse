@@ -1,17 +1,17 @@
-package presto.editor.o;
-
+package presto.editor;
 
 import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
 import presto.editor.Constants;
-import static presto.parser.OLexer.*;
+import presto.parser.ELexer;
+import static presto.parser.SLexer.*;
 
-public class TokenProxy implements IToken {
+public class STokenProxy implements IToken {
 
 	Token token;
 
-	public TokenProxy(Token token) {
+	public STokenProxy(Token token) {
 		this.token = token;
 	}
 
@@ -22,7 +22,15 @@ public class TokenProxy implements IToken {
 
 	@Override
 	public boolean isWhitespace() {
-		return token.getType() == WS;
+		switch( token.getType() ) {
+		case ELexer.LF:
+		case ELexer.TAB:
+		case ELexer.LF_TAB:
+		case ELexer.WS:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	@Override
