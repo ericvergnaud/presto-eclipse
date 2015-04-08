@@ -100,12 +100,14 @@ public class ContentProvider implements ITreeContentProvider {
 	}
 
 	private void inputChanged(IDocument document) throws Exception {
-		String data = document.get();
-		ByteArrayInputStream input = new ByteArrayInputStream(data.getBytes());
-		root = parseRoot(file.getName(), input);
-		input.reset();
-		ProblemManager.processFile(file, input);
-		input.close();
+		if(file!=null) {
+			String data = document.get();
+			ByteArrayInputStream input = new ByteArrayInputStream(data.getBytes());
+			root = parseRoot(file.getName(), input);
+			input.reset();
+			ProblemManager.processFile(file, input);
+			input.close();
+		}
 	}
 
 
