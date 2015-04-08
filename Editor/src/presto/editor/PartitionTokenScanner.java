@@ -26,6 +26,7 @@ public class PartitionTokenScanner implements IPartitionTokenScanner {
 	public PartitionTokenScanner(Dialect dialect) {
 		this.dialect = dialect;
 		this.lexer = dialect.getParserFactory().newLexer();
+		this.lexer.setProblemListener(null);
 	}
 
 	@Override
