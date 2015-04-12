@@ -18,8 +18,9 @@ import presto.grammar.DeclarationList;
 import presto.parser.Dialect;
 import presto.parser.IParser;
 import presto.runtime.Context;
+import presto.store.IEclipseCodeStore;
+import presto.store.StoreUtils;
 import presto.utils.CodeWriter;
-import presto.utils.ContextUtils;
 
 /**
  * Manages the installation/deinstallation of global actions for multi-page editors.
@@ -88,7 +89,8 @@ public class MultiPageContributor extends MultiPageEditorActionBarContributor {
 
 	private String translate(String actualCode, IFile actualFile, Dialect actualDialect, Dialect targetDialect) {
 		try {
-			Context context = ContextUtils.fetchContext(actualFile);
+			IEclipseCodeStore store = StoreUtils.fetchStoreFor(actualFile);
+			Context context = store.getContext();
 			IParser parser = actualDialect.getParserFactory().newParser();
 			InputStream input = new ByteArrayInputStream(actualCode.getBytes());
 			DeclarationList dl = parser.parse(null, input);

@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
-import presto.core.Constants;
+import presto.core.CoreConstants;
 import presto.parser.Dialect;
 
 public class ModelPresentation extends LabelProvider implements IDebugModelPresentation {
@@ -35,7 +35,7 @@ public class ModelPresentation extends LabelProvider implements IDebugModelPrese
 			String extension = resource.getFileExtension();
 			try {
 				Dialect.valueOf(extension.toUpperCase());
-				return Constants.EDITOR_ID.replace("$", extension);
+				return CoreConstants.EDITOR_ID.replace("$", extension);
 			} catch(Exception e) {
 				//nothing to do
 			}

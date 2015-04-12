@@ -5,7 +5,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
-import presto.core.Constants;
+import presto.core.CoreConstants;
 import presto.parser.ISection;
 
 
@@ -26,7 +26,7 @@ public class LineBreakpoint extends org.eclipse.debug.core.model.LineBreakpoint 
 
 	@Override
 	public String getModelIdentifier() {
-		return Constants.DEBUG_MODEL_IDENTIFIER;
+		return CoreConstants.DEBUG_MODEL_IDENTIFIER;
 	}
 	
 	public String getPath() {

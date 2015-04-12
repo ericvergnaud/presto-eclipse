@@ -40,6 +40,7 @@ Export-Package: org.antlr.v4.runtime,
  presto.python,
  presto.runtime,
  presto.statement,
+ presto.store,
  presto.type,
  presto.utils,
  presto.value

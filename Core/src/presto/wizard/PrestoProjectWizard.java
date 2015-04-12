@@ -24,7 +24,7 @@ import org.eclipse.ui.statushandlers.StatusAdapter;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 
-import presto.core.Constants;
+import presto.core.CoreConstants;
 
 @SuppressWarnings("restriction")
 public abstract class PrestoProjectWizard extends BasicNewResourceWizard implements INewWizard {
@@ -67,7 +67,6 @@ public abstract class PrestoProjectWizard extends BasicNewResourceWizard impleme
 		} catch (CoreException e) {
 			return false;
 		}
-		
 	}
 
 	private IProject createNewProject() throws CoreException {
@@ -124,19 +123,19 @@ public abstract class PrestoProjectWizard extends BasicNewResourceWizard impleme
 		IStatus status = new Status( IStatus.WARNING, IDEWorkbenchPlugin.IDE_WORKBENCH, 0,
 				"Internal error: " + t.getMessage(), t);
 		StatusAdapter adapter = new StatusAdapter(status);
-		adapter.setProperty(IStatusAdapterConstants.TITLE_PROPERTY, Constants.NEW_PROJECT_ERROR);
+		adapter.setProperty(IStatusAdapterConstants.TITLE_PROPERTY, CoreConstants.NEW_PROJECT_ERROR);
 		StatusManager.getManager().handle(status, StatusManager.LOG | StatusManager.BLOCK);
 	}
 
 	private void manageCoreExceptionStatus(IProject projectHandle, CoreException cause) {
 		IStatus status;
 		if (cause.getStatus().getCode() == IResourceStatus.CASE_VARIANT_EXISTS) {
-			status = StatusUtil.newStatus(IStatus.WARNING, Constants.VARIANT_PROJECT_EXISTS, cause);
+			status = StatusUtil.newStatus(IStatus.WARNING, CoreConstants.VARIANT_PROJECT_EXISTS, cause);
 		} else {
-			status = StatusUtil.newStatus(cause.getStatus().getSeverity(), Constants.NEW_PROJECT_ERROR, cause);
+			status = StatusUtil.newStatus(cause.getStatus().getSeverity(), CoreConstants.NEW_PROJECT_ERROR, cause);
 		}
 		StatusAdapter adapter = new StatusAdapter(status);
-		adapter.setProperty(IStatusAdapterConstants.TITLE_PROPERTY, Constants.NEW_PROJECT_ERROR);
+		adapter.setProperty(IStatusAdapterConstants.TITLE_PROPERTY, CoreConstants.NEW_PROJECT_ERROR);
 		StatusManager.getManager().handle(status, StatusManager.BLOCK);
 	}
 	

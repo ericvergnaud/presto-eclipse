@@ -20,7 +20,7 @@ import org.eclipse.ui.ide.undo.CreateProjectOperation;
 import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 
-import presto.core.Constants;
+import presto.core.CoreConstants;
 
 public class LibraryProjectWizard extends PrestoProjectWizard {
  
@@ -28,17 +28,17 @@ public class LibraryProjectWizard extends PrestoProjectWizard {
 	
 	@Override
 	protected String getTitle() {
-		return Constants.NEW_LIBRARY_PROJECT;
+		return CoreConstants.NEW_LIBRARY_PROJECT;
 	}
 	
 	@Override
 	protected String getDescription() {
-		return Constants.LIBRARY_PROJECT_DESCRIPTION;
+		return CoreConstants.LIBRARY_PROJECT_DESCRIPTION;
 	}
 	
 	@Override
 	protected String getNatureId() {
-		return Constants.LIBRARY_NATURE_ID;
+		return CoreConstants.LIBRARY_NATURE_ID;
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class LibraryProjectWizard extends PrestoProjectWizard {
 		List<IProject> libraries = new ArrayList<IProject>();
 		for ( IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 			try {
-				if(project.hasNature(Constants.LIBRARY_NATURE_ID))
+				if(project.hasNature(CoreConstants.LIBRARY_NATURE_ID))
 					libraries.add(project);
 			} catch(CoreException e) {
 				// TODO: what?
@@ -80,7 +80,7 @@ public class LibraryProjectWizard extends PrestoProjectWizard {
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException {
 				try {
-					CreateProjectOperation cpo = new CreateProjectOperation(description, Constants.CREATING_PROJECT);
+					CreateProjectOperation cpo = new CreateProjectOperation(description, CoreConstants.CREATING_PROJECT);
 					cpo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
 				} catch (ExecutionException e) {
 					throw new InvocationTargetException(e);
@@ -93,8 +93,8 @@ public class LibraryProjectWizard extends PrestoProjectWizard {
 		
 		public WizardNewProjectLibrariesPage() {
 			super("basicReferenceProjectPage");
-			setTitle(Constants.LIBRARY_PROJECT_REFERENCES);
-			setDescription(Constants.SELECT_PROJECT_REFERENCES);
+			setTitle(CoreConstants.LIBRARY_PROJECT_REFERENCES);
+			setDescription(CoreConstants.SELECT_PROJECT_REFERENCES);
 		}
 		
 		@Override
@@ -114,7 +114,7 @@ public class LibraryProjectWizard extends PrestoProjectWizard {
 			super.createControl(parent);
 			Composite control = (Composite)getControl();
 			Label label = (Label)control.getChildren()[0];
-			label.setText(Constants.LIBRARY_PROJECT_REFERENCES);
+			label.setText(CoreConstants.LIBRARY_PROJECT_REFERENCES);
 		}
 	}
 

@@ -286,7 +286,17 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 				Context threadContext = map.getContext().newLocalContext();
 				threadContext.setDebugger(debugger);
 				try {
-					Interpreter.interpret(threadContext, context.getMethod().getName(), context.getCmdLineArgs());
+					switch(context.getRunType()) {
+					case APPLI:
+						Interpreter.interpretMethod(threadContext, context.getMethod().getName(), context.getCmdLineArgs());
+						break;
+					case SCRIPT:
+						Interpreter.interpretScript(threadContext, context.getCmdLineArgs());
+						break;
+					case TEST:
+						Interpreter.interpretTest(threadContext, context.getMethod().getName().toString());
+						break;
+					}
 				} catch(PrestoError error) {
 					// TODO
 				} 

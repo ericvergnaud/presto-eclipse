@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Text;
 import presto.utils.CmdLineParser;
 import presto.utils.ImageUtils;
 
-public class ConfigArgsTab extends AbstractLaunchConfigurationTab {
+public class LaunchConfigArgsTab extends AbstractLaunchConfigurationTab {
 
 	Text argsText;
 	
@@ -83,7 +83,7 @@ public class ConfigArgsTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(Constants.ARGUMENTS, argsText.getText());
+		configuration.setAttribute(LauncherConstants.ARGUMENTS, argsText.getText());
 	}
 
 	@Override

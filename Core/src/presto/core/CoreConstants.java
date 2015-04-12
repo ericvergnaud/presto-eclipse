@@ -1,6 +1,6 @@
 package presto.core;
 
-public abstract class Constants {
+public abstract class CoreConstants {
 
 	public static final String CORE_PLUGIN_ID = "presto.core"; 
 	public static final String EDITOR_PLUGIN_ID = "presto.editor"; 

@@ -12,24 +12,24 @@ import org.eclipse.ui.ide.undo.CreateFileOperation;
 import org.eclipse.ui.ide.undo.CreateProjectOperation;
 import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 
-import presto.core.Constants;
+import presto.core.CoreConstants;
 
 public class ScriptsProjectWizard extends PrestoProjectWizard {
  
 
 	@Override
 	protected String getTitle() {
-		return Constants.NEW_SCRIPTS_PROJECT;
+		return CoreConstants.NEW_SCRIPTS_PROJECT;
 	};
 	
 	@Override
 	protected String getDescription() {
-		return Constants.SCRIPTS_PROJECT_DESCRIPTION;
+		return CoreConstants.SCRIPTS_PROJECT_DESCRIPTION;
 	}
 
 	@Override
 	protected String getNatureId() {
-		return Constants.SCRIPTS_NATURE_ID;
+		return CoreConstants.SCRIPTS_NATURE_ID;
 	}
 	
 	@Override
@@ -47,12 +47,12 @@ public class ScriptsProjectWizard extends PrestoProjectWizard {
 
 			private void createSampleScript(IProgressMonitor monitor) throws ExecutionException {
 				IFile file = project.getFile("SampleScript.ped");
-				CreateFileOperation cfo = new CreateFileOperation(file, null, null /*contents*/, Constants.CREATING_SAMPLE_SCRIPT);
+				CreateFileOperation cfo = new CreateFileOperation(file, null, null /*contents*/, CoreConstants.CREATING_SAMPLE_SCRIPT);
 				cfo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
 			}
 
 			private void createProject(IProgressMonitor monitor) throws ExecutionException {
-				CreateProjectOperation cpo = new CreateProjectOperation(description, Constants.CREATING_PROJECT);
+				CreateProjectOperation cpo = new CreateProjectOperation(description, CoreConstants.CREATING_PROJECT);
 				cpo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
 			}
 		};

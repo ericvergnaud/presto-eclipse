@@ -3,8 +3,24 @@
 <plugin> 
 	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
 	   <launchConfigurationType
-	   	   id="presto.launcher"
+	   	   id="presto.launcher.application"
 		   name="Presto application"
+		   delegate="presto.launcher.LaunchDelegate"
+		   sourceLocatorId="presto.locator.sourceLocator"
+		   sourcePathComputerId="presto.locator.sourcePathComputer"
+		   modes= "run, debug">
+	   </launchConfigurationType>
+	   <launchConfigurationType
+	   	   id="presto.launcher.script"
+		   name="Presto script"
+		   delegate="presto.launcher.LaunchDelegate"
+		   sourceLocatorId="presto.locator.sourceLocator"
+		   sourcePathComputerId="presto.locator.sourcePathComputer"
+		   modes= "run, debug">
+	   </launchConfigurationType>
+	   <launchConfigurationType
+	   	   id="presto.launcher.unittest"
+		   name="Presto unit test"
 		   delegate="presto.launcher.LaunchDelegate"
 		   sourceLocatorId="presto.locator.sourceLocator"
 		   sourcePathComputerId="presto.locator.sourcePathComputer"
@@ -14,15 +30,35 @@
  	<extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
  		<launchConfigurationTypeImage
 			icon="images/launcher.png"
-			configTypeID="presto.launcher"
+			configTypeID="presto.launcher.application"
+			id="presto.launcher">
+		</launchConfigurationTypeImage>
+ 		<launchConfigurationTypeImage
+			icon="images/launcher.png"
+			configTypeID="presto.launcher.script"
+			id="presto.launcher">
+		</launchConfigurationTypeImage>
+ 		<launchConfigurationTypeImage
+			icon="images/launcher.png"
+			configTypeID="presto.launcher.unittest"
 			id="presto.launcher">
 		</launchConfigurationTypeImage>
 	</extension>
 	<extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
 	  <launchConfigurationTabGroup
-	      id="presto.launcher.tabGroup"
-	      type="presto.launcher"
-	      class="presto.launcher.ConfigTabGroup">
+	      id="presto.launcher.application.tabGroup"
+	      type="presto.launcher.application"
+	      class="presto.launcher.AppConfigTabGroup">
+	  </launchConfigurationTabGroup>
+	  <launchConfigurationTabGroup
+	      id="presto.launcher.script.tabGroup"
+	      type="presto.launcher.script"
+	      class="presto.launcher.ScriptConfigTabGroup">
+	  </launchConfigurationTabGroup>
+	  <launchConfigurationTabGroup
+	      id="presto.launcher.unittest.tabGroup"
+	      type="presto.launcher.unittest"
+	      class="presto.launcher.TestConfigTabGroup">
 	  </launchConfigurationTabGroup>
  	</extension>
 	<extension point="org.eclipse.debug.core.sourcePathComputers">

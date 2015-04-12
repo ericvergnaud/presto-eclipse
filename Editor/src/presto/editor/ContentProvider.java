@@ -21,7 +21,7 @@ import presto.declaration.IMethodDeclaration;
 import presto.declaration.TestMethodDeclaration;
 import presto.grammar.CategoryMethodDeclarationList;
 import presto.grammar.DeclarationList;
-import presto.grammar.IdentifierList;
+import presto.grammar.Identifier;
 import presto.grammar.Symbol;
 import presto.parser.Dialect;
 import presto.parser.IParser;
@@ -30,6 +30,7 @@ import presto.problem.ProblemManager;
 import presto.statement.DeclarationInstruction;
 import presto.statement.IStatement;
 import presto.statement.StatementList;
+import presto.utils.IdentifierList;
 
 public class ContentProvider implements ITreeContentProvider {
 
@@ -81,6 +82,7 @@ public class ContentProvider implements ITreeContentProvider {
 		this.dialect = dialect;
 		this.file = file;
 		this.parser = dialect.getParserFactory().newParser();
+		this.parser.setProblemListener(null);
 	}
 	
 	@Override
@@ -143,7 +145,7 @@ public class ContentProvider implements ITreeContentProvider {
 
 	private Element populateEnumerated(IEnumeratedDeclaration decl) {
 		Element elem = new Element();
-		elem.name = decl.getName();
+		elem.name = decl.getName().toString();
 		elem.section = decl;
 		elem.type = ContentType.ENUMERATED;
 		populateSymbols(elem, decl);
@@ -153,7 +155,7 @@ public class ContentProvider implements ITreeContentProvider {
 	private void populateSymbols(Element elem, IEnumeratedDeclaration decl) {
 		for(Symbol s : decl.getSymbols()) {
 			Element child = new Element();
-			child.name = s.getName();
+			child.name = s.getName().toString();
 			child.section = s;
 			child.type = ContentType.SYMBOL;
 			elem.children.add(child);
@@ -162,7 +164,7 @@ public class ContentProvider implements ITreeContentProvider {
 
 	private Element populateMethod(IMethodDeclaration decl) {
 		Element elem = new Element();
-		elem.name = decl.getName();
+		elem.name = decl.getName().toString();
 		elem.section = decl;
 		elem.type = ContentType.METHOD;
 		if(decl instanceof ConcreteMethodDeclaration) 
@@ -182,7 +184,7 @@ public class ContentProvider implements ITreeContentProvider {
 	
 	private Element populateTest(TestMethodDeclaration decl) {
 		Element elem = new Element();
-		elem.name = decl.getName();
+		elem.name = decl.getName().toString();
 		elem.section = decl;
 		elem.type = ContentType.METHOD;
 		populateStatements(elem, decl.getStatements());
@@ -191,11 +193,11 @@ public class ContentProvider implements ITreeContentProvider {
 
 	private Element populateCategory(CategoryDeclaration decl) {
 		Element elem = new Element();
-		elem.name = decl.getName();
+		elem.name = decl.getName().toString();
 		elem.section = decl;
 		elem.type = decl instanceof IEnumeratedDeclaration ? ContentType.ENUMERATED : ContentType.CATEGORY;
 		populateInherited(elem, decl.getDerivedFrom());
-		if(decl.getAttributes()!=null) for(String name : decl.getAttributes()) {
+		if(decl.getAttributes()!=null) for(Identifier name : decl.getAttributes()) {
 			Element child = populateAttribute(name);
 			child.parent = elem;
 			elem.children.add(child);
@@ -215,10 +217,10 @@ public class ContentProvider implements ITreeContentProvider {
 	}
 	
 	private void populateInherited(Element elem, IdentifierList names) {
-		if(names!=null) for(String name : names) {
+		if(names!=null) for(Identifier name : names) {
 			Element child = new Element();
-			child.name = name;
-			child.section = null; // TODO
+			child.name = name.toString();
+			child.section = name;
 			child.type = ContentType.CATEGORY;
 			elem.children.add(child);
 		}
@@ -226,16 +228,16 @@ public class ContentProvider implements ITreeContentProvider {
 
 	private Element populateAttribute(AttributeDeclaration decl) {
 		Element elem = new Element();
-		elem.name = decl.getName();
+		elem.name = decl.getName().toString();
 		elem.section = decl;
 		elem.type = ContentType.ATTRIBUTE;
 		return elem;
 	}
 	
-	private Element populateAttribute(String name) {
+	private Element populateAttribute(Identifier name) {
 		Element elem = new Element();
-		elem.name = name;
-		elem.section = null; // TODO name;
+		elem.name = name.toString();
+		elem.section = name;
 		elem.type = ContentType.ATTRIBUTE;
 		return elem;
 	}

@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Combo;
 
 import presto.declaration.IDeclaration;
 import presto.declaration.IMethodDeclaration;
+import presto.declaration.TestMethodDeclaration;
 import presto.grammar.DeclarationList;
 import presto.parser.Dialect;
 import presto.parser.IParser;
@@ -28,15 +29,21 @@ public abstract class Utils {
 	}
 	
 	public static enum RunType {
-		TEST ("pec", "poc", "psc", "pes", "pos", "pss"),
-		APPLI ("pec", "poc", "psc"),
-		SCRIPT ("pes", "pos", "pss");
+		TEST (null, "pec", "poc", "psc", "pes", "pos", "pss"),
+		APPLI (CoreConstants.APPLICATION_NATURE_ID, "pec", "poc", "psc"),
+		SCRIPT (CoreConstants.SCRIPTS_NATURE_ID, "pes", "pos", "pss");
 		
+		String nature;
 		Set<String> supportedExtensions = new HashSet<String>();
 		
-		RunType(String ... extensions) {
+		RunType(String nature, String ... extensions) {
+			this.nature = nature;
 			for(String extension : extensions)
 				supportedExtensions.add(extension);
+		}
+		
+		public String getNature() {
+			return nature;
 		}
 		
 		boolean isSupportedExtension(String ext) {
@@ -68,7 +75,7 @@ public abstract class Utils {
 		}
 	}
 
-	public static List<IMethodDeclaration> getEligibleMethods(IFile file) {
+	public static List<IMethodDeclaration> getEligibleMainMethods(IFile file) {
 		List<IMethodDeclaration> list = new LinkedList<IMethodDeclaration>();
 		if(file!=null) try {
 			Dialect dialect = getDialect(file);
@@ -77,7 +84,7 @@ public abstract class Utils {
 			InputStream input = file.getContents();
 			DeclarationList all = parser.parse(path, input);
 			for(IDeclaration decl : all) {
-				if(isEligible(decl))
+				if(isEligibleAsMain(decl))
 					list.add((IMethodDeclaration)decl);
 			}
 		} catch (Exception e) {
@@ -86,11 +93,34 @@ public abstract class Utils {
 		return list;
 	}
 	
-	public static boolean isEligible(IDeclaration declaration) {
+	public static boolean isEligibleAsMain(IDeclaration declaration) {
 		if(!(declaration instanceof IMethodDeclaration))	
 			return false;
 		return ((IMethodDeclaration)declaration).isEligibleAsMain();
 	}
+
+	public static List<TestMethodDeclaration> getEligibleTestMethods(IFile file) {
+		List<TestMethodDeclaration> list = new LinkedList<TestMethodDeclaration>();
+		if(file!=null) try {
+			Dialect dialect = getDialect(file);
+			IParser parser = dialect.getParserFactory().newParser();
+			String path = file.getFullPath().toPortableString();
+			InputStream input = file.getContents();
+			DeclarationList all = parser.parse(path, input);
+			for(IDeclaration decl : all) {
+				if(isEligibleAsTest(decl))
+					list.add((TestMethodDeclaration)decl);
+			}
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+		}
+		return list;
+	}
+	
+	public static boolean isEligibleAsTest(IDeclaration declaration) {
+		return declaration instanceof TestMethodDeclaration;
+	}
+
 
 	public static Dialect getDialect(IFile file) {
 		return Dialect.valueOf(file.getFileExtension().substring(1, 2).toUpperCase());

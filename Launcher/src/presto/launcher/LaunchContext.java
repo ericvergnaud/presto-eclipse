@@ -12,7 +12,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 
 import presto.core.Utils;
 import presto.core.Utils.RunType;
-import presto.declaration.IMethodDeclaration;
+import presto.declaration.IDeclaration;
 import presto.error.SyntaxError;
 import presto.grammar.DeclarationList;
 import presto.parser.Dialect;
@@ -23,9 +23,10 @@ public class LaunchContext {
 
 	ILaunch launch;
 	ILaunchConfiguration configuration;
+	RunType runType;
 	IProject project;
 	IFile file;
-	IMethodDeclaration method;
+	IDeclaration method;
 	String cmdLineArgs;
 	boolean stopInMain;
 	
@@ -39,6 +40,10 @@ public class LaunchContext {
 		return configuration;
 	}
 	
+	public RunType getRunType() {
+		return runType;
+	}
+
 	public IProject getProject() {
 		return project;
 	}
@@ -47,7 +52,7 @@ public class LaunchContext {
 		return launch;
 	}
 	
-	public IMethodDeclaration getMethod() {
+	public IDeclaration getMethod() {
 		return method;
 	}
 	
@@ -60,8 +65,9 @@ public class LaunchContext {
 	}
 	
 	private void readConfiguration() {
+		runType = LaunchUtils.getConfiguredRunType(configuration);
 		project = LaunchUtils.getConfiguredProject(configuration);
-		file = LaunchUtils.getConfiguredFile(configuration, project, RunType.SCRIPT);
+		file = LaunchUtils.getConfiguredFile(configuration, project);
 		method = LaunchUtils.getConfiguredMethod(configuration, file);
 		cmdLineArgs = LaunchUtils.getConfiguredCommandLineArguments(configuration);
 		stopInMain = LaunchUtils.getConfiguredStopInMain(configuration);
@@ -121,5 +127,6 @@ public class LaunchContext {
 			throw e;
 		}
 	}
+
 
 }

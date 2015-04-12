@@ -7,7 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.graphics.Image;
 
-import presto.core.Constants;
+import presto.core.CoreConstants;
 import presto.core.Plugin;
 import presto.utils.ImageUtils;
 
@@ -35,7 +35,7 @@ public class LibrariesRootElement extends LibraryElement {
 	@Override
 	public boolean hasChildren() throws CoreException {
 		IProject project = getProject();
-		if(project.hasNature(Constants.LIBRARY_NATURE_ID))
+		if(project.hasNature(CoreConstants.LIBRARY_NATURE_ID))
 			return project.getReferencedProjects().length>0;
 		else
 			return true;
@@ -44,7 +44,7 @@ public class LibrariesRootElement extends LibraryElement {
 	@Override
 	public Object[] getChildren() throws CoreException {
 		IProject project = getProject();
-		if(project.hasNature(Constants.LIBRARY_NATURE_ID))
+		if(project.hasNature(CoreConstants.LIBRARY_NATURE_ID))
 			return getReferencedLibraries(project);
 		else
 			return getPrestoLibraries();
@@ -59,7 +59,7 @@ public class LibrariesRootElement extends LibraryElement {
 		// double check that referenced projects are Presto libraries
 		List<ILibraryElement> libraries = new ArrayList<ILibraryElement>();
 		for(IProject ref : project.getReferencedProjects()) {
-			if(ref.hasNature(Constants.LIBRARY_NATURE_ID))
+			if(ref.hasNature(CoreConstants.LIBRARY_NATURE_ID))
 				libraries.add(new LibraryProjectElement(this, ref));
 		}
 		return libraries.toArray(new ILibraryElement[libraries.size()]);

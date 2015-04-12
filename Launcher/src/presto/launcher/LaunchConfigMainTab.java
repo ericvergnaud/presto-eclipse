@@ -23,15 +23,22 @@ import org.eclipse.swt.widgets.Label;
 
 import presto.core.Utils;
 import presto.core.Utils.RunType;
+import presto.declaration.IDeclaration;
 import presto.declaration.IMethodDeclaration;
+import presto.declaration.TestMethodDeclaration;
 import presto.utils.ImageUtils;
 
-public class ConfigMainTab extends AbstractLaunchConfigurationTab {
+public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 
+	RunType runType;
 	Combo projectCombo;
 	Combo fileCombo;
 	Combo methodCombo;
 	Button stopInMainButton;
+	
+	public LaunchConfigMainTab(RunType runType) {
+		this.runType = runType;
+	}
 	
 	@Override
 	public void createControl(Composite parent) {
@@ -61,8 +68,10 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 		child.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		child = createLabel(group, "Start method:");
 		child.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		child = createMethodSelector(group);
-		child.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		if(runType!=RunType.SCRIPT) {
+			child = createMethodSelector(group);
+			child.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		}
 		child = createStopInMainCheckbox(group);
 		child.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		return group;
@@ -75,8 +84,9 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setDirty(true);
-				fillInFiles(RunType.SCRIPT);
-				fillInMethods(RunType.SCRIPT);
+				fillInFiles();
+				if(runType!=RunType.SCRIPT)
+					fillInMethods();
 				manageControls();
 			}
 			
@@ -94,7 +104,8 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setDirty(true);
-				fillInMethods(RunType.SCRIPT);
+				if(runType!=RunType.SCRIPT)
+					fillInMethods();
 				manageControls();
 			}
 			
@@ -150,15 +161,27 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 
 	private void fillInProjects() {
 		projectCombo.setItems(new String[0]);
-		for(IProject project : Utils.getRoot().getProjects())
-			projectCombo.add(project.getName());
+		for(IProject project : Utils.getRoot().getProjects()) {
+			if(isEligibleProject(project))
+				projectCombo.add(project.getName());
+		}
 	}
 
-	private void fillInFiles(RunType runType) {
-		fillInFiles(getSelectedProject(), runType);
+	private boolean isEligibleProject(IProject project) {
+		try {
+			String nature = runType.getNature();
+			return nature==null || project.hasNature(nature);
+		} catch (CoreException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private void fillInFiles() {
+		fillInFiles(getSelectedProject());
 	}
 	
-	private IProject getSelectedProject() {
+	protected IProject getSelectedProject() {
 		int idx = projectCombo.getSelectionIndex();
 		if(idx<0)
 			return null;
@@ -166,27 +189,27 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 			return Utils.getRoot().getProject(projectCombo.getItem(idx));
 	}
 
-	private void fillInFiles(IProject project, RunType runType) {
+	private void fillInFiles(IProject project) {
 		fileCombo.setItems(new String[0]);
 		List<IFile> files = Utils.getEligibleFiles(project, runType);
 		for(IFile file : files)
 			fileCombo.add(file.getName());
 	}
 	
-	private void fillInMethods(RunType runType) {
-		fillInMethods(getSelectedFile(getSelectedProject(), runType));
+	private void fillInMethods() {
+		fillInMethods(getSelectedFile(getSelectedProject()));
 	}
 
 
 
 	private void fillInMethods(IFile file) {
 		methodCombo.setItems(new String[0]);
-		List<IMethodDeclaration> methods = Utils.getEligibleMethods(file);
-		for(IMethodDeclaration method : methods)
-			methodCombo.add(method.getName());
+		List<? extends IDeclaration> methods = getEligibleMethods(file);
+		for(IDeclaration method : methods)
+			methodCombo.add(method.getName().toString());
 	}
 	
-	private IFile getSelectedFile(IProject project, RunType runType) {
+	protected IFile getSelectedFile(IProject project) {
 		if(project==null)
 			return null;
 		int idx = fileCombo.getSelectionIndex();
@@ -205,10 +228,12 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 		idx = fileCombo.getSelectionIndex();
 		if(idx==-1 && getErrorMessage()==null)
 			setErrorMessage("No file selected");
-		methodCombo.setEnabled(idx>=0);
-		idx = methodCombo.getSelectionIndex();
-		if(idx==-1 && getErrorMessage()==null)
-			setErrorMessage("No method selected");
+		if(runType!=RunType.SCRIPT) {
+			methodCombo.setEnabled(idx>=0);
+			idx = methodCombo.getSelectionIndex();
+			if(idx==-1 && getErrorMessage()==null)
+				setErrorMessage("No method selected");
+		}
 		updateLaunchConfigurationDialog();
 	}
 
@@ -216,8 +241,8 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		fillInProjects();
 		IProject project = selectProject(configuration);
-		fillInFiles(project, RunType.SCRIPT);
-		IFile file = selectFile(configuration, project, RunType.SCRIPT);
+		fillInFiles(project);
+		IFile file = selectFile(configuration, project);
 		fillInMethods(file);
 		selectMethod(configuration, file);
 		selectStopInMain(configuration);
@@ -226,20 +251,20 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 	
 	private void selectStopInMain(ILaunchConfiguration configuration) {
 		try {
-			stopInMainButton.setSelection(configuration.getAttribute(Constants.STOP_IN_MAIN, true));
+			stopInMainButton.setSelection(configuration.getAttribute(LauncherConstants.STOP_IN_MAIN, true));
 		} catch (CoreException e) {
 			e.printStackTrace(System.err);
 		}
 	}
 
 	private void selectMethod(ILaunchConfiguration configuration, IFile file) {
-		IMethodDeclaration method = LaunchUtils.getConfiguredMethod(configuration, file);
+		IDeclaration method = LaunchUtils.getConfiguredMethod(configuration, file);
 		if(method!=null && methodCombo.getItemCount()>0) 
-			Utils.selectInCombo(methodCombo,method.getName());
+			Utils.selectInCombo(methodCombo,method.getName().toString());
 	}
 
-	private IFile selectFile(ILaunchConfiguration configuration, IProject project, RunType runType) {
-		IFile file = LaunchUtils.getConfiguredFile(configuration, project, runType);
+	private IFile selectFile(ILaunchConfiguration configuration, IProject project) {
+		IFile file = LaunchUtils.getConfiguredFile(configuration, project);
 		if(fileCombo.getItemCount()>0 && file!=null)
 			Utils.selectInCombo(fileCombo,file.getName());
 		return file;
@@ -262,28 +287,27 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 		// nothing to do
 	}
 
-	@Override
-	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		IProject project = getSelectedProject();
-		configuration.setAttribute(Constants.PROJECT, getProjectName(project));
-		IFile file = getSelectedFile(project, RunType.SCRIPT);
-		configuration.setAttribute(Constants.FILE, file==null ? null : Utils.getFilePath(file));
-		IMethodDeclaration method = getSelectedMethod(file);
-		String signature = method==null ? null : Utils.getMethodSignature(method, Utils.getDialect(file));
-		configuration.setAttribute(Constants.METHOD, signature);
-		configuration.setAttribute(Constants.STOP_IN_MAIN, stopInMainButton.getSelection());
-	}
-
-	private IMethodDeclaration getSelectedMethod(IFile file) {
+	protected IDeclaration getSelectedMethod(IFile file) {
 		if(file==null)
 			return null;
 		int idx = methodCombo.getSelectionIndex();
 		if(idx<0)
 			return null;
-		return Utils.getEligibleMethods(file).get(idx);
+		return getEligibleMethods(file).get(idx);
 	}
 
-	private String getProjectName(IProject project) {
+	private List<? extends IDeclaration> getEligibleMethods(IFile file) {
+		switch(runType) {
+		case APPLI:
+			return Utils.getEligibleMainMethods(file);
+		case TEST:
+			return Utils.getEligibleTestMethods(file);
+		default:
+			return null;
+		}
+	}
+
+	protected String getProjectName(IProject project) {
 		return project==null ? null : project.getName();
 	}
 
@@ -296,4 +320,31 @@ public class ConfigMainTab extends AbstractLaunchConfigurationTab {
 	public Image getImage() {
 		return ImageUtils.load(Plugin.getDefault().getBundle(),"images/configMain.png");
 	}
+	
+	@Override
+	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
+		configuration.setAttribute(LauncherConstants.RUNTYPE, runType.name());
+		IProject project = getSelectedProject();
+		configuration.setAttribute(LauncherConstants.PROJECT, getProjectName(project));
+		IFile file = getSelectedFile(project);
+		configuration.setAttribute(LauncherConstants.FILE, getFileName(file));
+		IDeclaration method = getSelectedMethod(file);
+		configuration.setAttribute(LauncherConstants.METHOD, getMethodName(file, method));
+		configuration.setAttribute(LauncherConstants.STOP_IN_MAIN, stopInMainButton.getSelection());
+	}
+
+	private String getMethodName(IFile file, IDeclaration method) {
+		if(method instanceof IMethodDeclaration)
+			return Utils.getMethodSignature((IMethodDeclaration)method, Utils.getDialect(file));
+		else if(method instanceof TestMethodDeclaration)
+			return method.getName().toString();
+		else
+			return null;
+	}
+
+	private String getFileName(IFile file) {
+		return file==null ? null : Utils.getFilePath(file);
+	}
+
+
 }

@@ -12,7 +12,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointListener;
 import org.eclipse.debug.core.model.IBreakpoint;
 
-import presto.core.Constants;
+import presto.core.CoreConstants;
 import presto.parser.ISection;
 
 public class DebuggerUtils {
@@ -105,8 +105,8 @@ public class DebuggerUtils {
 	}
 
 	public static IMarker createMarker(IResource resource, int lineNumber) throws CoreException {
-		IMarker marker = resource.createMarker(Constants.DEBUG_MARKER_TYPE);
-		marker.setAttribute(IBreakpoint.ID, Constants.DEBUG_MODEL_IDENTIFIER);
+		IMarker marker = resource.createMarker(CoreConstants.DEBUG_MARKER_TYPE);
+		marker.setAttribute(IBreakpoint.ID, CoreConstants.DEBUG_MODEL_IDENTIFIER);
 		marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
 		marker.setAttribute(IBreakpoint.ENABLED, true);
 		marker.setAttribute(IMarker.MESSAGE, "coucou");
@@ -114,7 +114,7 @@ public class DebuggerUtils {
 	}
 
 	public static IBreakpoint[] getBreakpoints() {
-		return DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(Constants.DEBUG_MODEL_IDENTIFIER);
+		return DebugPlugin.getDefault().getBreakpointManager().getBreakpoints(CoreConstants.DEBUG_MODEL_IDENTIFIER);
 	}
 
 	public static boolean deleteExistingBreakpoint(IBreakpoint breakpoint) throws CoreException {
