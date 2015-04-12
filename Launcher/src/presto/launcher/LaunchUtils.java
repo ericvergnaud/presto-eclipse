@@ -88,7 +88,7 @@ public class LaunchUtils {
 
 	private static TestMethodDeclaration getConfiguredTestMethod(IFile file, String signature) {
 		for(TestMethodDeclaration method : Utils.getEligibleTestMethods(file)) {
-			if(signature.equals(method.getName()))
+			if(signature.equals(method.getName().toString()))
 				return method;
 		}
 		return null;

@@ -1,24 +1,23 @@
 package presto.runner;
 
-import presto.core.Utils.RunType;
-import presto.launcher.ContextMap;
 import presto.launcher.LaunchContext;
 import presto.runtime.Interpreter;
+import presto.store.IEclipseCodeStore;
 
 public class RunTarget {
 
 	public static void run(LaunchContext context) {
 		try {
-			ContextMap cm = context.buildContextMap(RunType.APPLI);
+			IEclipseCodeStore store = context.getCodeStore();
 			switch(context.getRunType()) {
 			case APPLI:
-				Interpreter.interpretMethod(cm.getContext(), context.getMethod().getName(), context.getCmdLineArgs());
+				Interpreter.interpretMethod(store.getContext(), context.getMethod().getName(), context.getCmdLineArgs());
 				break;
 			case SCRIPT:
-				Interpreter.interpretScript(cm.getContext(), context.getCmdLineArgs());
+				Interpreter.interpretScript(store.getContext(), context.getCmdLineArgs());
 				break;
 			case TEST:
-				Interpreter.interpretTest(cm.getContext(), context.getMethod().getName().toString());
+				Interpreter.interpretTest(store.getContext(), context.getMethod().getName());
 				break;
 			}
 		} catch (Exception e) {

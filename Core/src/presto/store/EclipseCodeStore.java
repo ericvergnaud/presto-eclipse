@@ -9,11 +9,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 import presto.core.CoreConstants;
 import presto.core.Utils;
 import presto.core.Utils.RunType;
+import presto.parser.ISection;
 import presto.problem.ProblemManager;
 import presto.runtime.Context;
 
@@ -73,4 +75,11 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 		ProblemManager.processFile(file, null);
 	}
 
+	@Override
+	public ISection findSection(IResource resource, int lineNumber) {
+		if(!(resource instanceof IFile))
+			return null;
+		String path = ((IFile)resource).getFullPath().toPortableString();
+		return context.findSectionFor(path, lineNumber);
+	}
 }

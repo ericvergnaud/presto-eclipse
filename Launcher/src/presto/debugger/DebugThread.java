@@ -14,26 +14,25 @@ import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.jface.dialogs.MessageDialog;
 
-import presto.core.Utils.RunType;
 import presto.debug.Debugger;
 import presto.debug.IDebugEventListener;
 import presto.debug.ResumeReason;
 import presto.debug.StackFrame;
 import presto.debug.SuspendReason;
 import presto.error.PrestoError;
-import presto.launcher.ContextMap;
 import presto.launcher.LaunchContext;
 import presto.parser.ISection;
 import presto.runtime.Context;
 import presto.runtime.IContext;
 import presto.runtime.Interpreter;
+import presto.store.IEclipseCodeStore;
 import presto.utils.ShellUtils;
 
 public class DebugThread extends PlatformObject implements IThread, IDebugEventListener {
 
 	DebugTarget target;
 	LaunchContext context;
-	ContextMap map;
+	IEclipseCodeStore store;
 	IBreakpoint[] breakpoints;
 	Thread prestoThread;
 	Debugger debugger;
@@ -265,7 +264,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 
 	public void start() {
 		try {
-			map = context.buildContextMap(RunType.SCRIPT);
+			store = context.getCodeStore();
 			connectBreakpoints();
 			startThread();
 		} catch (Exception e) {
@@ -283,7 +282,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 				DebuggerUtils.fireCreationEvent(target);
 				DebuggerUtils.startListening(target);
 				DebuggerUtils.fireCreationEvent(DebugThread.this);
-				Context threadContext = map.getContext().newLocalContext();
+				Context threadContext = store.getContext().newLocalContext();
 				threadContext.setDebugger(debugger);
 				try {
 					switch(context.getRunType()) {
@@ -294,7 +293,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 						Interpreter.interpretScript(threadContext, context.getCmdLineArgs());
 						break;
 					case TEST:
-						Interpreter.interpretTest(threadContext, context.getMethod().getName().toString());
+						Interpreter.interpretTest(threadContext, context.getMethod().getName());
 						break;
 					}
 				} catch(PrestoError error) {
@@ -330,7 +329,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 	}
 
 	public void connectLineBreakpoint(LineBreakpoint breakpoint) throws CoreException {
-		ISection section = map.findSection(breakpoint.getResource(), breakpoint.getLineNumber());
+		ISection section = store.findSection(breakpoint.getResource(), breakpoint.getLineNumber());
 		if(section==null)
 			breakpoint.setEnabled(false);
 		else {
@@ -348,7 +347,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 	}
 
 	public void disconnectLineBreakpoint(LineBreakpoint breakpoint) throws CoreException {
-		ISection section = map.findSection(breakpoint.getResource(), breakpoint.getLineNumber());
+		ISection section = store.findSection(breakpoint.getResource(), breakpoint.getLineNumber());
 		if(section!=null)
 			section.setAsBreakpoint(false);
 	}

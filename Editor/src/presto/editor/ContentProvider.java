@@ -163,16 +163,22 @@ public class ContentProvider implements ITreeContentProvider {
 	}
 
 	private Element populateMethod(IMethodDeclaration decl) {
-		Element elem = new Element();
-		elem.name = decl.getName().toString();
-		elem.section = decl;
-		elem.type = ContentType.METHOD;
-		if(decl instanceof ConcreteMethodDeclaration) 
-			populateStatements(elem, ((ConcreteMethodDeclaration)decl).getStatements());
-		return elem;
+		try {
+			Element elem = new Element();
+			elem.name = decl.getName().toString();
+			elem.section = decl;
+			elem.type = ContentType.METHOD;
+			if(decl instanceof ConcreteMethodDeclaration) 
+				populateStatements(elem, ((ConcreteMethodDeclaration)decl).getStatements());
+			return elem;
+		} catch(Throwable t) {
+			return null;
+		}
 	}	
 	
 	private void populateStatements(Element elem, StatementList statements) {
+		if(statements==null)
+			return;
 		for(IStatement s : statements) {
 			if(s instanceof DeclarationInstruction) {
 				Element child = populateDeclaration(((DeclarationInstruction<?>)s).getDeclaration());
@@ -208,9 +214,11 @@ public class ContentProvider implements ITreeContentProvider {
 		if(decl instanceof ConcreteCategoryDeclaration) {
 			CategoryMethodDeclarationList methods = ((ConcreteCategoryDeclaration)decl).getMethods();
 			if(methods!=null) for(IMethodDeclaration method : methods) {
-				Element child = populateMethod((IMethodDeclaration)method);
-				child.parent = elem;
-				elem.children.add(child);
+				if(method!=null) {
+					Element child = populateMethod((IMethodDeclaration)method);
+					child.parent = elem;
+					elem.children.add(child);
+				}
 			}
 		}
 		return elem;

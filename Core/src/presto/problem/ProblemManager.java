@@ -208,7 +208,6 @@ public class ProblemManager {
 	}
 
 	private void createProblemMarker(IFile file, IProblem problem) throws CoreException {
-		System.out.println("char start:" + problem.getStartIndex());
 		IMarker marker = file.createMarker("presto.problem.marker");
 		marker.setAttribute(IMarker.SEVERITY, problem.getType().ordinal());
 		marker.setAttribute(IMarker.CHAR_START, problem.getStartIndex());
