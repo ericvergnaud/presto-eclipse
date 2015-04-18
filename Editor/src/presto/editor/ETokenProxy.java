@@ -120,6 +120,7 @@ public class ETokenProxy implements IToken {
 		case MATCHING:
 		case METHOD:
 		case METHODS:
+		case MUTABLE:
 		case MODULO:	
 		case NATIVE:
 		case NOT:
