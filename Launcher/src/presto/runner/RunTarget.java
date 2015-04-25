@@ -11,13 +11,13 @@ public class RunTarget {
 			IEclipseCodeStore store = context.getCodeStore();
 			switch(context.getRunType()) {
 			case APPLI:
-				Interpreter.interpretMethod(store.getContext(), context.getMethod().getName(), context.getCmdLineArgs());
+				Interpreter.interpretMethod(store.getContext(), context.getMethod().getIdentifier(), context.getCmdLineArgs());
 				break;
 			case SCRIPT:
 				Interpreter.interpretScript(store.getContext(), context.getCmdLineArgs());
 				break;
 			case TEST:
-				Interpreter.interpretTest(store.getContext(), context.getMethod().getName());
+				Interpreter.interpretTest(store.getContext(), context.getMethod().getIdentifier());
 				break;
 			}
 		} catch (Exception e) {

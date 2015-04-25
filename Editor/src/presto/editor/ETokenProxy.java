@@ -92,6 +92,7 @@ public class ETokenProxy implements IToken {
 		case ATTR:
 		case ATTRIBUTE:
 		case ATTRIBUTES:
+		case BINDINGS:
 		case BOOLEAN_LITERAL:
 		case CATEGORY:
 		case CLASS:
@@ -116,7 +117,6 @@ public class ETokenProxy implements IToken {
 		case IS:
 		case JAVA:
 		case JAVASCRIPT:
-		case MAPPINGS:
 		case MATCHING:
 		case METHOD:
 		case METHODS:

@@ -116,6 +116,7 @@ public class ProblemManager {
 			dl.check(context);
 			return listener.getProblems();
 		} catch (Exception e) {
+			e.printStackTrace(System.err);
 			IProblem problem = new InternalProblem(e.getMessage());
 			List<IProblem> problems = new ArrayList<IProblem>();
 			problems.add(problem);

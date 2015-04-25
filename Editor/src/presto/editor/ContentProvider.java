@@ -19,9 +19,9 @@ import presto.declaration.IDeclaration;
 import presto.declaration.IEnumeratedDeclaration;
 import presto.declaration.IMethodDeclaration;
 import presto.declaration.TestMethodDeclaration;
-import presto.grammar.CategoryMethodDeclarationList;
 import presto.grammar.DeclarationList;
 import presto.grammar.Identifier;
+import presto.grammar.MethodDeclarationList;
 import presto.grammar.Symbol;
 import presto.parser.Dialect;
 import presto.parser.IParser;
@@ -145,7 +145,7 @@ public class ContentProvider implements ITreeContentProvider {
 
 	private Element populateEnumerated(IEnumeratedDeclaration decl) {
 		Element elem = new Element();
-		elem.name = decl.getName().toString();
+		elem.name = decl.getIdentifier().getName();
 		elem.section = decl;
 		elem.type = ContentType.ENUMERATED;
 		populateSymbols(elem, decl);
@@ -155,7 +155,7 @@ public class ContentProvider implements ITreeContentProvider {
 	private void populateSymbols(Element elem, IEnumeratedDeclaration decl) {
 		for(Symbol s : decl.getSymbols()) {
 			Element child = new Element();
-			child.name = s.getName().toString();
+			child.name = s.getIdentifier().getName();
 			child.section = s;
 			child.type = ContentType.SYMBOL;
 			elem.children.add(child);
@@ -165,7 +165,7 @@ public class ContentProvider implements ITreeContentProvider {
 	private Element populateMethod(IMethodDeclaration decl) {
 		try {
 			Element elem = new Element();
-			elem.name = decl.getName().toString();
+			elem.name = decl.getIdentifier().getName();
 			elem.section = decl;
 			elem.type = ContentType.METHOD;
 			if(decl instanceof ConcreteMethodDeclaration) 
@@ -212,7 +212,7 @@ public class ContentProvider implements ITreeContentProvider {
 			populateSymbols(elem, (IEnumeratedDeclaration)decl);
 		}
 		if(decl instanceof ConcreteCategoryDeclaration) {
-			CategoryMethodDeclarationList methods = ((ConcreteCategoryDeclaration)decl).getMethods();
+			MethodDeclarationList methods = ((ConcreteCategoryDeclaration)decl).getMethods();
 			if(methods!=null) for(IMethodDeclaration method : methods) {
 				if(method!=null) {
 					Element child = populateMethod((IMethodDeclaration)method);

@@ -206,7 +206,7 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 		methodCombo.setItems(new String[0]);
 		List<? extends IDeclaration> methods = getEligibleMethods(file);
 		for(IDeclaration method : methods)
-			methodCombo.add(method.getName().toString());
+			methodCombo.add(method.getIdentifier().getName().toString());
 	}
 	
 	protected IFile getSelectedFile(IProject project) {
@@ -260,7 +260,7 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 	private void selectMethod(ILaunchConfiguration configuration, IFile file) {
 		IDeclaration method = LaunchUtils.getConfiguredMethod(configuration, file);
 		if(method!=null && methodCombo.getItemCount()>0) 
-			Utils.selectInCombo(methodCombo,method.getName().toString());
+			Utils.selectInCombo(methodCombo,method.getIdentifier().getName().toString());
 	}
 
 	private IFile selectFile(ILaunchConfiguration configuration, IProject project) {
@@ -337,7 +337,7 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 		if(method instanceof IMethodDeclaration)
 			return Utils.getMethodSignature((IMethodDeclaration)method, Utils.getDialect(file));
 		else if(method instanceof TestMethodDeclaration)
-			return method.getName().toString();
+			return method.getIdentifier().getName().toString();
 		else
 			return null;
 	}
