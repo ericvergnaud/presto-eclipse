@@ -98,6 +98,7 @@ public class MultiPageContributor extends MultiPageEditorActionBarContributor {
 			dl.toDialect(writer);
 			return writer.toString();
 		} catch(Exception e) {
+			e.printStackTrace(System.err);
 			return e.getMessage();
 		}
 	}

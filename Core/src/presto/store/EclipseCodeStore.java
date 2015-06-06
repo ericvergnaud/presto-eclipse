@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.CoreException;
 import presto.core.CoreConstants;
 import presto.core.Utils;
 import presto.core.Utils.RunType;
+import presto.declaration.IDeclaration;
 import presto.parser.ISection;
 import presto.problem.ProblemManager;
 import presto.runtime.Context;
@@ -23,7 +24,14 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 
 	Context context = Context.newGlobalContext();
 	Set<IFile> files = Collections.newSetFromMap(new ConcurrentHashMap<IFile, Boolean>()); // creates a concurrent set
-			
+	
+	@Override
+	public IDeclaration fetch(String name) {
+		// currently, an eclipse code store can only access workspace files
+		// all declarations are already registered in the context
+		return null;
+	}
+	
 	@Override
 	public Context getContext() {
 		return context;

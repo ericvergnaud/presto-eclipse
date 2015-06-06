@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 import presto.parser.ISection;
+import presto.runtime.Context;
 
 public interface IEclipseCodeStore extends ICodeStore {
 
@@ -15,4 +16,5 @@ public interface IEclipseCodeStore extends ICodeStore {
 	void setFile(IFile file) throws CoreException;
 	Collection<IFile> getFiles() throws CoreException;
 	ISection findSection(IResource resource, int lineNumber);
+	Context getContext();
 }

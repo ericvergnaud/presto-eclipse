@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui,
  presto.core;bundle-version="1.0.0",
  presto.launcher;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .
 Import-Package: org.eclipse.debug.core,
  org.eclipse.debug.core.model,

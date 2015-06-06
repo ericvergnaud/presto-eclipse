@@ -5,7 +5,7 @@ Bundle-SymbolicName: presto.launcher;singleton:=true
 Bundle-Version: 1.0.0.0
 Bundle-Activator: presto.launcher.Plugin
 Bundle-Vendor: Presto
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
