@@ -4,92 +4,92 @@
 	<extension point="org.eclipse.ui.editors.documentProviders">
     	<provider 
         	extensions="pec,poc,psc,pes,pos,pss" 
-        	class="presto.editor.DocumentProvider" 
-        	id="presto.editor.documentProvider"> 
+        	class="prompto.editor.DocumentProvider" 
+        	id="prompto.editor.documentProvider"> 
     	</provider> 
 	</extension>
  	<extension point="org.eclipse.core.contenttype.contentTypes">
       <content-type
             base-type="org.eclipse.core.runtime.text"
-            describer="presto.editor.ContentDescriber"
+            describer="prompto.editor.ContentDescriber"
             file-extensions="pec,poc,psc,pes,pos,pss"
-            id="presto.content-type"
-            name="Presto content type"
+            id="prompto.content-type"
+            name="Prompto content type"
             priority="high">
       </content-type>
    </extension>
 	<extension point="org.eclipse.ui.editors">
-      <editor class="presto.editor.MultiPageEditor"
-            contributorClass="presto.editor.MultiPageContributor"
+      <editor class="prompto.editor.MultiPageEditor"
+            contributorClass="prompto.editor.MultiPageContributor"
             default="false"
             icon="images/src_obj.gif" 
-            id="presto.editor"
-            name="Presto Editor">
-         <contentTypeBinding contentTypeId="presto.content-type"/>
+            id="prompto.editor"
+            name="Prompto Editor">
+         <contentTypeBinding contentTypeId="prompto.content-type"/>
       </editor>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="presto.editor.prefs.Initializer">
+            class="prompto.editor.prefs.Initializer">
       </initializer>
    </extension>
     <extension
       point = "org.eclipse.ui.preferencePages">
       <page
-         id="presto.prefs.root"
-         class="presto.editor.prefs.RootPage"
-         name="Presto">
+         id="prompto.prefs.root"
+         class="prompto.editor.prefs.RootPage"
+         name="Prompto">
       </page>
       <page
-         id="presto.prefs.editor"
-         class="presto.editor.prefs.EditorPage"
+         id="prompto.prefs.editor"
+         class="prompto.editor.prefs.EditorPage"
          name="Editor"
-         category="presto.prefs.root">
+         category="prompto.prefs.root">
       </page>
       <page
-         id="presto.prefs.coloring"
-         class="presto.editor.prefs.ColoringPage"
+         id="prompto.prefs.coloring"
+         class="prompto.editor.prefs.ColoringPage"
          name="Syntax coloring"
-         category="presto.prefs.editor">
+         category="prompto.prefs.editor">
       </page>
    </extension>  
    <extension point="org.eclipse.core.runtime.adapters">
 		<factory
-    		class="presto.editor.debug.BreakpointAdapterFactory"
-       		adaptableType="presto.editor.SourceEditor">
+    		class="prompto.editor.debug.BreakpointAdapterFactory"
+       		adaptableType="prompto.editor.SourceEditor">
        		<adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget"/>
     	</factory>
    </extension>
    <!--
  	<extension point="org.eclipse.ui.newWizards">
       <wizard
-            category="presto.wizard.category"
-            class="presto.wizards.project.Wizard"
+            category="prompto.wizard.category"
+            class="prompto.wizards.project.Wizard"
             icon="images/NewProject.png"
-            id="presto.project.wizard"
-            name="Presto project"
+            id="prompto.project.wizard"
+            name="Prompto project"
             project="true">
       </wizard>
-      <category id="presto.wizard.category" name="Presto" />
+      <category id="prompto.wizard.category" name="Prompto" />
    </extension>
   <extension point="org.eclipse.ui.menus">
  		<menuContribution locationURI="popup:org.eclipse.ui.projectConfigure">
- 			<command commandId="disable.presto.boa">
+ 			<command commandId="disable.prompto.boa">
 		      	<visibleWhen>
 		      		<iterate ifEmpty="false" operator="or">
 	        			<adapt type="org.eclipse.core.resources.IResource">
-		             		<test property="org.eclipse.core.resources.projectNature" value="presto.boa.nature"/>
+		             		<test property="org.eclipse.core.resources.projectNature" value="prompto.boa.nature"/>
 	         			</adapt>
 	         		</iterate>
  		      	</visibleWhen>
  			</command>
-			<command commandId="enable.presto.boa">
+			<command commandId="enable.prompto.boa">
 		      	<visibleWhen>
 		      		<iterate>
 	        			<adapt type="org.eclipse.core.resources.IResource">
 		             		<not>
-		             			<test property="org.eclipse.core.resources.projectNature" value="presto.boa.nature"/>
+		             			<test property="org.eclipse.core.resources.projectNature" value="prompto.boa.nature"/>
 		             		</not>
 	         			</adapt>
 	         		</iterate>
@@ -98,8 +98,8 @@
         </menuContribution> 
    </extension>
    <extension point="org.eclipse.ui.commands">
-      <command id="disable.presto.boa" defaultHandler="presto.boa.DisableBoaHandler" name="Remove Presto (Boa) nature" />
-      <command id="enable.presto.boa" defaultHandler="presto.boa.EnableBoaHandler" name="Convert to Presto (Boa) project" />
+      <command id="disable.prompto.boa" defaultHandler="prompto.boa.DisableBoaHandler" name="Remove Prompto (Boa) nature" />
+      <command id="enable.prompto.boa" defaultHandler="prompto.boa.EnableBoaHandler" name="Convert to Prompto (Boa) project" />
    </extension>
      -->
  </plugin>

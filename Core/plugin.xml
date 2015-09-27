@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="4.4"?>
 <plugin>
-	<extension id="presto.nature.scripts" point="org.eclipse.core.resources.natures">
+	<extension id="prompto.nature.scripts" point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="presto.core.ScriptsNature"/>
+         <run class="prompto.core.ScriptsNature"/>
       </runtime>
-      <one-of-nature id="presto.natures"/>
+      <one-of-nature id="prompto.natures"/>
    </extension>
-	<extension id="presto.nature.library" point="org.eclipse.core.resources.natures">
+	<extension id="prompto.nature.library" point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="presto.core.LibraryNature"/>
+         <run class="prompto.core.LibraryNature"/>
       </runtime>
-      <one-of-nature id="presto.natures"/>
+      <one-of-nature id="prompto.natures"/>
    </extension>
-	<extension id="presto.nature.application" point="org.eclipse.core.resources.natures">
+	<extension id="prompto.nature.application" point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="presto.core.ApplicationNature"/>
+         <run class="prompto.core.ApplicationNature"/>
       </runtime>
-      <one-of-nature id="presto.natures"/>
+      <one-of-nature id="prompto.natures"/>
    </extension>
-   <extension id="presto.marker" point="org.eclipse.core.resources.markers"/>
-   <extension id="presto.problem.marker" point="org.eclipse.core.resources.markers">
+   <extension id="prompto.marker" point="org.eclipse.core.resources.markers"/>
+   <extension id="prompto.problem.marker" point="org.eclipse.core.resources.markers">
         <super type="org.eclipse.core.resources.textmarker"/>
     	<super type="org.eclipse.core.resources.problemmarker"/>
-   		<super type="presto.marker"/>
+   		<super type="prompto.marker"/>
    		<persistent value="true"/>
 	</extension>
   <extension point="org.eclipse.ui.perspectiveExtensions">
     <perspectiveExtension targetID="*">
-    	<newWizardShortcut id="presto.project.scripts"/> 
-    	<newWizardShortcut id="presto.project.library"/> 
-    	<newWizardShortcut id="presto.project.application"/> 
+    	<newWizardShortcut id="prompto.project.scripts"/> 
+    	<newWizardShortcut id="prompto.project.library"/> 
+    	<newWizardShortcut id="prompto.project.application"/> 
     </perspectiveExtension>
   </extension>
   <extension point="org.eclipse.ui.newWizards">
-  	<category id="presto.project" name="Presto"/>
+  	<category id="prompto.project" name="Prompto"/>
   	<wizard
-         category="presto.project"
-         class="presto.wizard.ScriptsProjectWizard"
+         category="prompto.project"
+         class="prompto.wizard.ScriptsProjectWizard"
          icon="images/scripts_wizard.gif"
-         id="presto.project.scripts"
-         name="Presto Scripts Project"
+         id="prompto.project.scripts"
+         name="Prompto Scripts Project"
          project="true"/>
   </extension>
   <extension point="org.eclipse.ui.newWizards">
-  	<category id="presto.project" name="Presto"/>
+  	<category id="prompto.project" name="Prompto"/>
   	<wizard
-         category="presto.project"
-         class="presto.wizard.LibraryProjectWizard"
+         category="prompto.project"
+         class="prompto.wizard.LibraryProjectWizard"
          icon="images/library_wizard.gif"
-         id="presto.project.library"
-         name="Presto Library Project"
+         id="prompto.project.library"
+         name="Prompto Library Project"
          project="true"/>
   </extension>
   <extension point="org.eclipse.ui.newWizards">
-  	<category id="presto.project" name="Presto"/>
+  	<category id="prompto.project" name="Prompto"/>
   	<wizard
-         category="presto.project"
-         class="presto.wizard.ApplicationProjectWizard"
+         category="prompto.project"
+         class="prompto.wizard.ApplicationProjectWizard"
          icon="images/application_wizard.gif"
-         id="presto.project.application"
-         name="Presto Application Project"
+         id="prompto.project.application"
+         name="Prompto Application Project"
          project="true"/>
   </extension>
   <extension point="org.eclipse.ui.navigator.viewer">
         <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
           <includes>
-             <contentExtension pattern="presto.content.libraries"/>
+             <contentExtension pattern="prompto.content.libraries"/>
           </includes>
        </viewerContentBinding>      
   </extension>
   <extension point="org.eclipse.ui.navigator.navigatorContent">
-  		<navigatorContent id="presto.content.libraries" name="Libraries"
-  		contentProvider="presto.content.ContentProvider"
-  		labelProvider="presto.content.LabelProvider"
+  		<navigatorContent id="prompto.content.libraries" name="Libraries"
+  		contentProvider="prompto.content.ContentProvider"
+  		labelProvider="prompto.content.LabelProvider"
   		activeByDefault="true"
   		icon="images/library.gif"
   		priority="normal">
@@ -81,14 +81,14 @@
 				<and>
 					<instanceof value="org.eclipse.core.resources.IProject"/>
   					<or>
-		        		<test property="org.eclipse.core.resources.projectNature" value="presto.nature.scripts"/>
-		        		<test property="org.eclipse.core.resources.projectNature" value="presto.nature.library"/>
-		        		<test property="org.eclipse.core.resources.projectNature" value="presto.nature.application"/>
+		        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.scripts"/>
+		        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.library"/>
+		        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.application"/>
 		        	</or>
 		        </and>
   			</triggerPoints>
   			<possibleChildren>
-  				<instanceof value="presto.content.ILibraryElement"/>
+  				<instanceof value="prompto.content.ILibraryElement"/>
   			</possibleChildren>
   		</navigatorContent>
   </extension>

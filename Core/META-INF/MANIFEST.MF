@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Presto Core plugin
-Bundle-SymbolicName: presto.core;singleton:=true
+Bundle-Name: prompto Core plugin
+Bundle-SymbolicName: prompto.core;singleton:=true
 Bundle-Version: 1.0.0.0
-Bundle-Activator: presto.core.Plugin
-Bundle-Vendor: Presto
+Bundle-Activator: prompto.core.Plugin
+Bundle-Vendor: prompto
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -25,22 +25,22 @@ Export-Package: org.antlr.v4.runtime,
  org.joda.time.field,
  org.joda.time.format,
  org.joda.time.tz,
- presto.core,
- presto.csharp,
- presto.debug,
- presto.declaration,
- presto.error,
- presto.expression,
- presto.grammar,
- presto.java,
- presto.javascript,
- presto.literal,
- presto.parser,
- presto.problem,
- presto.python,
- presto.runtime,
- presto.statement,
- presto.store,
- presto.type,
- presto.utils,
- presto.value
+ prompto.csharp,
+ prompto.debug,
+ prompto.declaration,
+ prompto.error,
+ prompto.expression,
+ prompto.grammar,
+ prompto.java,
+ prompto.javascript,
+ prompto.literal,
+ prompto.parser,
+ prompto.python,
+ prompto.runtime,
+ prompto.statement,
+ prompto.type,
+ prompto.value,
+ prompto.core,
+ prompto.problem,
+ prompto.store,
+ prompto.utils

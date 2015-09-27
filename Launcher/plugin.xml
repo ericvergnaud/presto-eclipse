@@ -3,91 +3,91 @@
 <plugin> 
 	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
 	   <launchConfigurationType
-	   	   id="presto.launcher.application"
-		   name="Presto application"
-		   delegate="presto.launcher.LaunchDelegate"
-		   sourceLocatorId="presto.locator.sourceLocator"
-		   sourcePathComputerId="presto.locator.sourcePathComputer"
+	   	   id="prompto.launcher.application"
+		   name="Prompto application"
+		   delegate="prompto.launcher.LaunchDelegate"
+		   sourceLocatorId="prompto.locator.sourceLocator"
+		   sourcePathComputerId="prompto.locator.sourcePathComputer"
 		   modes= "run, debug">
 	   </launchConfigurationType>
 	   <launchConfigurationType
-	   	   id="presto.launcher.script"
-		   name="Presto script"
-		   delegate="presto.launcher.LaunchDelegate"
-		   sourceLocatorId="presto.locator.sourceLocator"
-		   sourcePathComputerId="presto.locator.sourcePathComputer"
+	   	   id="prompto.launcher.script"
+		   name="Prompto script"
+		   delegate="prompto.launcher.LaunchDelegate"
+		   sourceLocatorId="prompto.locator.sourceLocator"
+		   sourcePathComputerId="prompto.locator.sourcePathComputer"
 		   modes= "run, debug">
 	   </launchConfigurationType>
 	   <launchConfigurationType
-	   	   id="presto.launcher.unittest"
-		   name="Presto unit test"
-		   delegate="presto.launcher.LaunchDelegate"
-		   sourceLocatorId="presto.locator.sourceLocator"
-		   sourcePathComputerId="presto.locator.sourcePathComputer"
+	   	   id="prompto.launcher.unittest"
+		   name="Prompto unit test"
+		   delegate="prompto.launcher.LaunchDelegate"
+		   sourceLocatorId="prompto.locator.sourceLocator"
+		   sourcePathComputerId="prompto.locator.sourcePathComputer"
 		   modes= "run, debug">
 	   </launchConfigurationType>
 	</extension>
  	<extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
  		<launchConfigurationTypeImage
 			icon="images/launcher.png"
-			configTypeID="presto.launcher.application"
-			id="presto.launcher">
+			configTypeID="prompto.launcher.application"
+			id="prompto.launcher">
 		</launchConfigurationTypeImage>
  		<launchConfigurationTypeImage
 			icon="images/launcher.png"
-			configTypeID="presto.launcher.script"
-			id="presto.launcher">
+			configTypeID="prompto.launcher.script"
+			id="prompto.launcher">
 		</launchConfigurationTypeImage>
  		<launchConfigurationTypeImage
 			icon="images/launcher.png"
-			configTypeID="presto.launcher.unittest"
-			id="presto.launcher">
+			configTypeID="prompto.launcher.unittest"
+			id="prompto.launcher">
 		</launchConfigurationTypeImage>
 	</extension>
 	<extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
 	  <launchConfigurationTabGroup
-	      id="presto.launcher.application.tabGroup"
-	      type="presto.launcher.application"
-	      class="presto.launcher.AppConfigTabGroup">
+	      id="prompto.launcher.application.tabGroup"
+	      type="prompto.launcher.application"
+	      class="prompto.launcher.AppConfigTabGroup">
 	  </launchConfigurationTabGroup>
 	  <launchConfigurationTabGroup
-	      id="presto.launcher.script.tabGroup"
-	      type="presto.launcher.script"
-	      class="presto.launcher.ScriptConfigTabGroup">
+	      id="prompto.launcher.script.tabGroup"
+	      type="prompto.launcher.script"
+	      class="prompto.launcher.ScriptConfigTabGroup">
 	  </launchConfigurationTabGroup>
 	  <launchConfigurationTabGroup
-	      id="presto.launcher.unittest.tabGroup"
-	      type="presto.launcher.unittest"
-	      class="presto.launcher.TestConfigTabGroup">
+	      id="prompto.launcher.unittest.tabGroup"
+	      type="prompto.launcher.unittest"
+	      class="prompto.launcher.TestConfigTabGroup">
 	  </launchConfigurationTabGroup>
  	</extension>
 	<extension point="org.eclipse.debug.core.sourcePathComputers">
  		<sourcePathComputer
-    		class="presto.locator.SourcePathComputer"
-   			 id="presto.locator.sourcePathComputer">
+    		class="prompto.locator.SourcePathComputer"
+   			 id="prompto.locator.sourcePathComputer">
     	</sourcePathComputer>
 	</extension>
 	<extension point="org.eclipse.debug.core.sourceLocators">
 	    <sourceLocator
-	       name="Prestor source locator"
-	    	class="presto.locator.SourceLocator"
-	    	id="presto.locator.sourceLocator">
+	       name="Prompto source locator"
+	    	class="prompto.locator.SourceLocator"
+	    	id="prompto.locator.sourceLocator">
 	    </sourceLocator>
 	</extension>
 	<extension point="org.eclipse.debug.ui.debugModelPresentations">
  		<debugModelPresentation
-    		class="presto.locator.ModelPresentation"
-    		id="presto.debug">
+    		class="prompto.locator.ModelPresentation"
+    		id="prompto.debug">
     	</debugModelPresentation>
   	</extension>
 	<extension point="org.eclipse.debug.core.breakpoints">
  		<breakpoint
-    		markerType="presto.debug.line.marker"
-    		class="presto.debugger.LineBreakpoint"
-       		id="presto.debug.lineBreakpoint">
+    		markerType="prompto.debug.line.marker"
+    		class="prompto.debugger.LineBreakpoint"
+       		id="prompto.debug.lineBreakpoint">
     	</breakpoint>
  	</extension>
-  	<extension id="presto.debug.line.marker" point="org.eclipse.core.resources.markers">
+  	<extension id="prompto.debug.line.marker" point="org.eclipse.core.resources.markers">
        <super type="org.eclipse.debug.core.lineBreakpointMarker"/>
        <persistent value="true"/>
     </extension>

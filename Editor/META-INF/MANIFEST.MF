@@ -1,9 +1,9 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: Presto Editor plugin
-Bundle-SymbolicName: presto.editor;singleton:=true
+Bundle-Name: Prompto Editor plugin
+Bundle-SymbolicName: prompto.editor;singleton:=true
 Bundle-Version: 1.0.0.0
-Bundle-Activator: presto.editor.Plugin
-Bundle-Vendor: Presto
+Bundle-Activator: prompto.editor.Plugin
+Bundle-Vendor: Prompto
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources;bundle-version="3.9.0",
@@ -13,8 +13,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.views,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide;bundle-version="3.9.100",
- presto.core;bundle-version="1.0.0",
- presto.launcher;bundle-version="1.0.0"
+ prompto.core;bundle-version="1.0.0",
+ prompto.launcher;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .
