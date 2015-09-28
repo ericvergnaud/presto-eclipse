@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="/Users/ericvergnaud/.m2/repository/org/antlr/antlr4/4.5/antlr4-4.5.jar"/>
 	<classpathentry kind="lib" path="/Users/ericvergnaud/.m2/repository/org/prompto/Core/trunk-SNAPSHOT/Core-trunk-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="/Users/ericvergnaud/.m2/repository/joda-time/joda-time/2.0/joda-time-2.0.jar"/>
+	<classpathentry kind="lib" path="/Users/ericvergnaud/.m2/repository/org/prompto/Libraries/trunk-SNAPSHOT/Libraries-trunk-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
