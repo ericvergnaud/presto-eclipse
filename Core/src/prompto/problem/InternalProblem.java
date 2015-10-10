@@ -1,6 +1,6 @@
 package prompto.problem;
 
-import prompto.parser.IProblem;
+import prompto.problem.IProblem;
 
 public class InternalProblem implements IProblem {
 

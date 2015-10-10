@@ -2,10 +2,8 @@ package prompto.problem;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.internal.resources.ResourceException;
@@ -21,9 +19,8 @@ import org.eclipse.core.runtime.IStatus;
 import prompto.grammar.DeclarationList;
 import prompto.parser.Dialect;
 import prompto.parser.IParser;
-import prompto.parser.IProblem;
-import prompto.parser.IProblemListener;
-import prompto.parser.ProblemCollector;
+import prompto.problem.IProblem;
+import prompto.problem.ProblemCollector;
 import prompto.runtime.Context;
 import prompto.core.Utils;
 import prompto.store.IEclipseCodeStore;
@@ -109,42 +106,37 @@ public class ProblemManager {
 	}
 
 	private Collection<IProblem> checkDeclarations(IFile inputFile) {
+		ProblemCollector listener = new ProblemCollector();
+		context.setProblemListener(listener);
 		try {
-			IProblemListener listener = new ProblemCollector();
-			context.setProblemListener(listener);
 			DeclarationList dl = declarationsMap.get(inputFile);
 			dl.check(context);
-			return listener.getProblems();
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
-			IProblem problem = new InternalProblem(e.getMessage());
-			List<IProblem> problems = new ArrayList<IProblem>();
-			problems.add(problem);
-			return problems;
+			listener.getProblems().add(new InternalProblem(e.getMessage()));
 		} 
+		return listener.getProblems();
 	}
 
 	private Collection<IProblem> registerDeclarations(IFile inputFile) {
+		ProblemCollector listener = new ProblemCollector();
+		context.setProblemListener(listener);
 		try {
 			String path = inputFile.getFullPath().toPortableString();
-			IProblemListener listener = new ProblemCollector();
-			context.setProblemListener(listener);
 			context.unregister(path);
 			DeclarationList dl = declarationsMap.get(inputFile);
 			dl.register(context);
-			return listener.getProblems();
 		} catch (Exception e) {
-			IProblem problem = new InternalProblem(e.getMessage());
-			List<IProblem> problems = new ArrayList<IProblem>();
-			problems.add(problem);
-			return problems;
+			e.printStackTrace(System.err);
+			listener.getProblems().add(new InternalProblem(e.getMessage()));
 		} 
+		return listener.getProblems();
 	}
 
 	private Collection<IProblem> parseDeclarations(IFile inputFile, InputStream inputStream) {
 		Dialect dialect = Utils.getDialect(inputFile);
 		IParser parser = dialect.getParserFactory().newParser();
-		IProblemListener listener = new ProblemCollector();
+		ProblemCollector listener = new ProblemCollector();
 		parser.setProblemListener(listener);
 		String path = inputFile.getFullPath().toPortableString();
 		InputStream input = inputStream;
@@ -153,12 +145,9 @@ public class ProblemManager {
 				input = inputFile.getContents();
 			DeclarationList dl = parser.parse(path, input);
 			declarationsMap.put(inputFile, dl);
-			return listener.getProblems();
 		} catch (Exception e) {
-			IProblem problem = new InternalProblem(e.getMessage());
-			List<IProblem> problems = new ArrayList<IProblem>();
-			problems.add(problem);
-			return problems;
+			e.printStackTrace(System.err);
+			listener.getProblems().add(new InternalProblem(e.getMessage()));
 		} finally {
 			if(inputStream==null) try {
 				input.close();
@@ -166,6 +155,7 @@ public class ProblemManager {
 				e.printStackTrace(System.err);
 			}
 		}
+		return listener.getProblems();
 	}
 
 	private void manageLatestInput() throws CoreException {
