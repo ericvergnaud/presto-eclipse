@@ -17,7 +17,7 @@ import prompto.core.Utils;
 import prompto.core.Utils.RunType;
 import prompto.declaration.IDeclaration;
 import prompto.parser.ISection;
-import prompto.problem.ProblemManager;
+import prompto.problem.ProblemDetector;
 import prompto.runtime.Context;
 
 public abstract class EclipseCodeStore implements IEclipseCodeStore {
@@ -80,7 +80,7 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	@Override
 	public void setFile(IFile file) throws CoreException {
 		files.add(file);
-		ProblemManager.processFile(file, null);
+		ProblemDetector.fileAdded(file);
 	}
 
 	@Override

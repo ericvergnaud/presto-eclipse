@@ -1,7 +1,5 @@
 package prompto.editor;
 
-import java.io.ByteArrayInputStream;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -12,7 +10,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import prompto.parser.Dialect;
-import prompto.problem.ProblemManager;
 
 public class ContentOutliner extends ContentOutlinePage implements IDocumentListener {
 
@@ -48,14 +45,6 @@ public class ContentOutliner extends ContentOutlinePage implements IDocumentList
 		if(control!=null && !control.isDisposed()) {
 			viewer.setInput(event.getDocument());
 			this.getControl().redraw();
-		}
-		if(file!=null) try {
-			String data = event.getDocument().get();
-			ByteArrayInputStream input = new ByteArrayInputStream(data.getBytes());
-			ProblemManager.processFile(file, input);
-			input.close();
-		} catch(Exception e) {
-			e.printStackTrace(System.err);
 		}
 	}
 

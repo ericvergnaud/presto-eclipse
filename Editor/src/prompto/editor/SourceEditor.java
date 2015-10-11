@@ -4,8 +4,10 @@ import org.eclipse.core.filebuffers.IDocumentSetupParticipant;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.formatter.ContentFormatter;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -16,9 +18,13 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+
+
+
 // import prompto.eclipse.plugin.lang.FormattingStrategy;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;
+import prompto.problem.ProblemDetector;
 import prompto.editor.ContentProvider.Element;
 import prompto.editor.prefs.SyntaxColoring;
 
@@ -71,6 +77,7 @@ public class SourceEditor extends AbstractDecoratedTextEditor {
 		partition(input);
 		initializeViewer(input);
 		initializeOutliner(input);
+		initializeProblemDetector(input);
 	}
 
 	private void initializeOutliner(IEditorInput input) {
@@ -80,6 +87,32 @@ public class SourceEditor extends AbstractDecoratedTextEditor {
 		outliner.addSelectionChangedListener(new OutlineSelectionChangedListener());
 	}
 	
+	private void initializeProblemDetector(IEditorInput input) {
+		IFile file = getFile(input);
+		IDocument document = getDocumentProvider().getDocument(input);
+		document.addDocumentListener(new ProblemDetectorListener(file));
+	}
+	
+	static class ProblemDetectorListener implements IDocumentListener {
+
+		IFile file;
+		
+		public ProblemDetectorListener(IFile file) {
+			this.file = file;
+		}
+	
+		@Override public void documentAboutToBeChanged(DocumentEvent event) {}
+		
+		@Override
+		public void documentChanged(DocumentEvent event) {
+			if(file!=null) try {
+				ProblemDetector.documentChanged(file, event.getDocument());
+			} catch(Exception e) {
+				e.printStackTrace(System.err);
+			}
+		}
+	}
+
 	private IFile getFile(IEditorInput input) {
 		if(input instanceof IFileEditorInput)
 			return ((IFileEditorInput)input).getFile();

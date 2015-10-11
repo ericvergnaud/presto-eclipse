@@ -1,5 +1,6 @@
 package prompto.problem;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.text.IDocument;
 
 import prompto.core.Utils;
 import prompto.declaration.DeclarationList;
@@ -27,14 +29,14 @@ import prompto.store.IEclipseCodeStore;
 import prompto.store.StoreUtils;
 
 @SuppressWarnings("restriction")
-public class ProblemManager {
+public class ProblemDetector {
 
-	public static void processFile(IFile file) {
-		processFile(file, null);
+	public static void fileAdded(IFile file) {
+		documentChanged(file, null);
 	}
 
-	public static void processFile(IFile file, InputStream input) {
-		final ProblemManager pb = new ProblemManager(file, input);
+	public static void documentChanged(IFile file, IDocument document) {
+		final ProblemDetector pb = new ProblemDetector(file, document);
 		try { 
 			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
 				@Override
@@ -49,16 +51,16 @@ public class ProblemManager {
 	}
 	
 	IFile editedFile;
-	InputStream editedInput;
+	IDocument editedDocument;
 	IEclipseCodeStore store;
 	Context context;
 	Map<String, IFile> pathToFileMap = new HashMap<String, IFile>();
 	Map<IFile, DeclarationList> fileToDeclarationMap = new HashMap<IFile, DeclarationList>();
 	Map<DeclarationList, IFile> declarationToFileMap = new HashMap<DeclarationList, IFile>();
 	
-	private ProblemManager(IFile file, InputStream input) {
+	private ProblemDetector(IFile file, IDocument document) {
 		this.editedFile = file;
-		this.editedInput = input;
+		this.editedDocument = document;
 	}
 
 	private void manageProblems() throws CoreException {
@@ -91,7 +93,7 @@ public class ProblemManager {
 
 	private void checkDeclarations() throws CoreException {
 		for(IFile file : store.getFiles()) {
-			if(editedInput!=null && file.equals(editedFile))
+			if(editedDocument!=null && file.equals(editedFile))
 				continue; // already managed
 			Collection<IProblem> problems = checkDeclarations(file);
 			createProblemMarkers(file, problems);
@@ -100,7 +102,7 @@ public class ProblemManager {
 
 	private void parseDeclarations() throws CoreException {
 		for(IFile file : store.getFiles()) {
-			if(editedInput!=null && file.equals(editedFile))
+			if(editedDocument!=null && file.equals(editedFile))
 				continue; // already managed
 			ProblemCollector listener = new ProblemCollector();
 			DeclarationList dl = parseDeclarations(file, null, listener);
@@ -114,7 +116,7 @@ public class ProblemManager {
 	private void clearProblemMarkers() throws CoreException {
 		clearProblemMarkers(ResourcesPlugin.getWorkspace().getRoot());
 		for(IFile file : store.getFiles()) {
-			if(editedInput!=null && file.equals(editedFile))
+			if(editedDocument!=null && file.equals(editedFile))
 				continue; // already managed
 			clearProblemMarkers(file);
 		}
@@ -122,7 +124,7 @@ public class ProblemManager {
 
 	private void unregisterDeclarations() throws CoreException {
 		for(IFile file : store.getFiles()) {
-			if(editedInput!=null && file.equals(editedFile))
+			if(editedDocument!=null && file.equals(editedFile))
 				continue; // already managed
 			unregisterDeclarations(file);
 		}
@@ -145,7 +147,7 @@ public class ProblemManager {
 		// need to register all at once, to ensure correct sequence of types
 		DeclarationList decls = new DeclarationList();
 		for(IFile file : store.getFiles()) {
-			if(editedInput!=null && file.equals(editedFile))
+			if(editedDocument!=null && file.equals(editedFile))
 				continue; // already managed
 			decls.addAll(fileToDeclarationMap.get(file));
 		}
@@ -188,22 +190,20 @@ public class ProblemManager {
 	}
 
 
-	private DeclarationList parseDeclarations(IFile inputFile, InputStream inputStream, ProblemCollector listener) {
+	private DeclarationList parseDeclarations(IFile inputFile, IDocument document, ProblemCollector listener) throws CoreException {
 		Dialect dialect = Utils.getDialect(inputFile);
 		IParser parser = dialect.getParserFactory().newParser();
 		parser.setProblemListener(listener);
 		String path = inputFile.getFullPath().toPortableString();
 		pathToFileMap.put(path, inputFile);
-		InputStream input = inputStream;
+		InputStream input = document==null ? inputFile.getContents() : new ByteArrayInputStream(document.get().getBytes());
 		try {
-			if(input==null)
-				input = inputFile.getContents();
 			return parser.parse(path, input);
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
 			listener.getProblems().add(new InternalProblem(e.getMessage()));
 		} finally {
-			if(inputStream==null) try {
+			try {
 				input.close();
 			} catch(IOException e) {
 				e.printStackTrace(System.err);
@@ -213,14 +213,14 @@ public class ProblemManager {
 	}
 
 	private void manageLatestInput() throws CoreException {
-		if(editedInput!=null)
-			manageProblems(editedFile, editedInput);
+		if(editedDocument!=null)
+			manageProblems(editedFile, editedDocument);
 	}
 
-	private void manageProblems(IFile file, InputStream input) throws CoreException {
+	private void manageProblems(IFile file, IDocument document) throws CoreException {
 		try {
 			clearProblemMarkers(file);
-			parseDeclarations(file, input);
+			parseDeclarations(file, document);
 			unregisterDeclarations(file);
 			registerDeclarations(file);
 			checkDeclarations(file);
@@ -244,9 +244,9 @@ public class ProblemManager {
 		createProblemMarkers(file, listener.getProblems());
 	}
 
-	private void parseDeclarations(IFile file, InputStream input) throws CoreException {
+	private void parseDeclarations(IFile file, IDocument document) throws CoreException {
 		ProblemCollector listener = new ProblemCollector();
-		parseDeclarations(file, input, listener);
+		parseDeclarations(file, document, listener);
 		createProblemMarkers(file, listener.getProblems());
 	}
 

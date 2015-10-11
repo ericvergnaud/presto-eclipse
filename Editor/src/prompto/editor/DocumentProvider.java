@@ -5,7 +5,7 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.part.FileEditorInput;
 
-import prompto.problem.ProblemManager;
+import prompto.problem.ProblemDetector;
 
 public class DocumentProvider extends TextFileDocumentProvider {
 
@@ -19,8 +19,10 @@ public class DocumentProvider extends TextFileDocumentProvider {
 		/* in case a file editor is closed but not saved, we need to update errors */
 		if(element instanceof FileEditorInput) {
 			IFile file = ((FileEditorInput)element).getFile();
-			ProblemManager.processFile(file);
+			ProblemDetector.fileAdded(file);
 		}
 		super.disposeFileInfo(element, info);
 	}
+	
+	
 }
