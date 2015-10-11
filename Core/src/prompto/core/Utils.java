@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Combo;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
-import prompto.grammar.DeclarationList;
+import prompto.declaration.DeclarationList;
 import prompto.parser.Dialect;
 import prompto.parser.IParser;
 

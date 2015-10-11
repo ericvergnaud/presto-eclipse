@@ -19,7 +19,7 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
-import prompto.grammar.DeclarationList;
+import prompto.declaration.DeclarationList;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Symbol;
@@ -30,7 +30,6 @@ import prompto.statement.DeclarationInstruction;
 import prompto.statement.IStatement;
 import prompto.statement.StatementList;
 import prompto.utils.IdentifierList;
-import prompto.problem.ProblemManager;
 
 public class ContentProvider implements ITreeContentProvider {
 
@@ -106,8 +105,6 @@ public class ContentProvider implements ITreeContentProvider {
 			String data = document.get();
 			ByteArrayInputStream input = new ByteArrayInputStream(data.getBytes());
 			root = parseRoot(file.getName(), input);
-			input.reset();
-			ProblemManager.processFile(file, input);
 			input.close();
 		}
 	}

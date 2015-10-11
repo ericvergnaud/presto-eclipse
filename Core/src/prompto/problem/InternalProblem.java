@@ -11,6 +11,11 @@ public class InternalProblem implements IProblem {
 	}
 	
 	@Override
+	public String getPath() {
+		return "<INTERNAL>";
+	}
+	
+	@Override
 	public Type getType() {
 		return Type.ERROR;
 	}
