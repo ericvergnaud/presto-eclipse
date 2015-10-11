@@ -112,7 +112,7 @@ public class ProblemManager {
 	
 
 	private void clearProblemMarkers() throws CoreException {
-		// clearProblemMarkers(ResourcesPlugin.getWorkspace().getRoot());
+		clearProblemMarkers(ResourcesPlugin.getWorkspace().getRoot());
 		for(IFile file : store.getFiles()) {
 			if(editedInput!=null && file.equals(editedFile))
 				continue; // already managed
@@ -251,11 +251,9 @@ public class ProblemManager {
 	}
 
 	private void clearProblemMarkers(IResource resource) throws CoreException {
-		for(IMarker marker : resource.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
-			if(!marker.exists())
-				continue;
-			// System.out.println("Removing " + marker.toString());
-			marker.delete();
+		for(IMarker marker : resource.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO)) {
+			if(marker.exists())
+				marker.delete();
 		}
 		
 	}
