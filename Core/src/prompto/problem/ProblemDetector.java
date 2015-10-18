@@ -105,9 +105,7 @@ public class ProblemDetector {
 			if(editedDocument!=null && file.equals(editedFile))
 				continue; // already managed
 			ProblemCollector listener = new ProblemCollector();
-			DeclarationList dl = parseDeclarations(file, null, listener);
-			fileToDeclarationMap.put(file, dl);
-			declarationToFileMap.put(dl, file);
+			parseDeclarations(file, null, listener);
 			createProblemMarkers(file, listener.getProblems());
 		}
 	}
@@ -133,6 +131,11 @@ public class ProblemDetector {
 	private void unregisterDeclarations(IFile inputFile) throws CoreException {
 		ProblemCollector listener = new ProblemCollector();
 		context.setProblemListener(listener);
+		unregisterDeclarations(inputFile, listener);
+		createProblemMarkers(inputFile, listener.getProblems());
+	}
+
+	private Collection<IProblem> unregisterDeclarations(IFile inputFile, ProblemCollector listener) {
 		try {
 			String path = inputFile.getFullPath().toPortableString();
 			context.unregister(path);
@@ -140,7 +143,7 @@ public class ProblemDetector {
 			e.printStackTrace(System.err);
 			listener.getProblems().add(new InternalProblem(e.getMessage()));
 		} 
-		createProblemMarkers(inputFile, listener.getProblems());
+		return listener.getProblems();
 	}
 
 	private void registerDeclarations() throws CoreException {
@@ -177,6 +180,12 @@ public class ProblemDetector {
 
 	private Collection<IProblem> checkDeclarations(IFile inputFile) {
 		ProblemCollector listener = new ProblemCollector();
+		checkDeclarations(inputFile, listener);
+		return listener.getProblems();
+	}
+
+
+	private void checkDeclarations(IFile inputFile, ProblemCollector listener) {
 		context.setProblemListener(listener);
 		try {
 			DeclarationList dl = fileToDeclarationMap.get(inputFile);
@@ -186,9 +195,7 @@ public class ProblemDetector {
 			e.printStackTrace(System.err);
 			listener.getProblems().add(new InternalProblem(e.getMessage()));
 		} 
-		return listener.getProblems();
 	}
-
 
 	private DeclarationList parseDeclarations(IFile inputFile, IDocument document, ProblemCollector listener) throws CoreException {
 		Dialect dialect = Utils.getDialect(inputFile);
@@ -198,7 +205,10 @@ public class ProblemDetector {
 		pathToFileMap.put(path, inputFile);
 		InputStream input = document==null ? inputFile.getContents() : new ByteArrayInputStream(document.get().getBytes());
 		try {
-			return parser.parse(path, input);
+			DeclarationList dl = parser.parse(path, input);
+			fileToDeclarationMap.put(inputFile, dl);
+			declarationToFileMap.put(dl, inputFile);
+			return dl;
 		} catch (Exception e) {
 			e.printStackTrace(System.err);
 			listener.getProblems().add(new InternalProblem(e.getMessage()));
@@ -220,10 +230,12 @@ public class ProblemDetector {
 	private void manageProblems(IFile file, IDocument document) throws CoreException {
 		try {
 			clearProblemMarkers(file);
-			parseDeclarations(file, document);
-			unregisterDeclarations(file);
-			registerDeclarations(file);
-			checkDeclarations(file);
+			ProblemCollector listener = new ProblemCollector();
+			parseDeclarations(file, document, listener);
+			unregisterDeclarations(file, listener);
+			registerDeclarations(file, listener);
+			checkDeclarations(file, listener);
+			createProblemMarkers(file, listener.getProblems());
 		} catch (CoreException e) {
 			throw e;
 		} catch (Exception e) {
@@ -231,23 +243,16 @@ public class ProblemDetector {
 		}
 	}
 	
-	private void registerDeclarations(IFile file) throws CoreException {
-		DeclarationList decls = new DeclarationList();
-		ProblemCollector listener = new ProblemCollector();
+	private void registerDeclarations(IFile inputFile, ProblemCollector listener) throws CoreException {
 		context.setProblemListener(listener);
 		try {
-			decls.register(context);
+			DeclarationList dl = fileToDeclarationMap.get(inputFile);
+			if(dl!=null)
+				dl.register(context);
 		} catch(Exception e) {
 			e.printStackTrace(System.err);
 			listener.getProblems().add(new InternalProblem(e.getMessage()));
 		}
-		createProblemMarkers(file, listener.getProblems());
-	}
-
-	private void parseDeclarations(IFile file, IDocument document) throws CoreException {
-		ProblemCollector listener = new ProblemCollector();
-		parseDeclarations(file, document, listener);
-		createProblemMarkers(file, listener.getProblems());
 	}
 
 	private void clearProblemMarkers(IResource resource) throws CoreException {
