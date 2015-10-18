@@ -32,9 +32,9 @@
 			<location>/Users/ericvergnaud/.m2/repository/org/prompto/Core/trunk-SNAPSHOT/Core-trunk-SNAPSHOT.jar</location>
 		</link>
 		<link>
-			<name>libs/Libraries-trunk-SNAPSHOT.jar</name>
+			<name>libs/Runtime-trunk-SNAPSHOT.jar</name>
 			<type>1</type>
-			<location>/Users/ericvergnaud/.m2/repository/org/prompto/Libraries/trunk-SNAPSHOT/Libraries-trunk-SNAPSHOT.jar</location>
+			<location>/Users/ericvergnaud/.m2/repository/org/prompto/Runtime/trunk-SNAPSHOT/Runtime-trunk-SNAPSHOT.jar</location>
 		</link>
 		<link>
 			<name>libs/antlr4-runtime-4.5.jar</name>
