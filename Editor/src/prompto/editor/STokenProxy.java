@@ -147,6 +147,7 @@ public class STokenProxy implements IToken {
 		case THIS:
 		case THROW:
 		case TO:
+		case VERIFYING:
 		case WHERE:
 		case WITH:
 		case WRITE:
