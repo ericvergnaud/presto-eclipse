@@ -16,6 +16,7 @@ import prompto.core.CoreConstants;
 import prompto.core.Utils;
 import prompto.core.Utils.RunType;
 import prompto.declaration.IDeclaration;
+import prompto.parser.Dialect;
 import prompto.parser.ISection;
 import prompto.problem.ProblemDetector;
 import prompto.runtime.Context;
@@ -26,12 +27,40 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	Set<IFile> files = Collections.newSetFromMap(new ConcurrentHashMap<IFile, Boolean>()); // creates a concurrent set
 	
 	@Override
-	public IDeclaration fetch(String name) {
+	public IDeclaration fetchLatestVersion(String name) {
 		// currently, an eclipse code store can only access workspace files
 		// all declarations are already registered in the context
 		return null;
 	}
 	
+	@Override
+	public IDeclaration fetchSpecificVersion(String name, String version) {
+		// currently, an eclipse code store can only access workspace files
+		// all declarations are already registered in the context
+		return null;
+	}
+
+	@Override
+	public Dialect getModuleDialect() {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public String getModuleName() {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public ModuleType getModuleType() {
+		throw new UnsupportedOperationException();
+	}
+
+	
+	@Override
+	public String getModuleVersion() {
+		throw new UnsupportedOperationException();
+	}
+
 	@Override
 	public Context getContext() {
 		return context;
