@@ -34,7 +34,7 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificVersion(String name, String version) {
+	public IDeclaration fetchSpecificVersion(String name, Version version) {
 		// currently, an eclipse code store can only access workspace files
 		// all declarations are already registered in the context
 		return null;
@@ -57,7 +57,7 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 
 	
 	@Override
-	public String getModuleVersion() {
+	public Version getModuleVersion() {
 		throw new UnsupportedOperationException();
 	}
 
