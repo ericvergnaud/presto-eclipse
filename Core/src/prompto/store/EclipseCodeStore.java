@@ -12,10 +12,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
+import prompto.code.Application;
+import prompto.code.Version;
 import prompto.core.CoreConstants;
 import prompto.core.Utils;
 import prompto.core.Utils.RunType;
 import prompto.declaration.IDeclaration;
+import prompto.error.PromptoError;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;
 import prompto.problem.ProblemDetector;
@@ -25,6 +28,13 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 
 	Context context = Context.newGlobalContext();
 	Set<IFile> files = Collections.newSetFromMap(new ConcurrentHashMap<IFile, Boolean>()); // creates a concurrent set
+	
+	@Override
+	public Application fetchApplication(String name, Version version) throws PromptoError {
+		// currently, an eclipse code store can only access workspace files
+		// all declarations are already registered in the context
+		return null;
+	}
 	
 	@Override
 	public IDeclaration fetchLatestVersion(String name) {
@@ -40,6 +50,16 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 		return null;
 	}
 
+	@Override
+	public void store(Application application) throws PromptoError {
+		// all declarations are stored in workspace files
+	}
+	
+	@Override
+	public void store(IDeclaration declaration, Dialect dialect, Version version) throws PromptoError {
+		// all declarations are stored in workspace files
+	}
+	
 	@Override
 	public Dialect getModuleDialect() {
 		throw new UnsupportedOperationException();
