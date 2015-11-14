@@ -94,6 +94,7 @@ public class ETokenProxy implements IToken {
 		case ATTRIBUTES:
 		case BINDINGS:
 		case BOOLEAN_LITERAL:
+		case BY:
 		case CATEGORY:
 		case CLASS:
 		case CLOSE:
@@ -130,6 +131,7 @@ public class ETokenProxy implements IToken {
 		case OPEN:
 		case OPERATOR:
 		case OR:
+		case ORDER:
 		case PASS:
 		case PYTHON2:
 		case PYTHON3:
@@ -141,6 +143,8 @@ public class ETokenProxy implements IToken {
 		case SETTER:
 		case SINGLETON:
 		case SORTED:
+		case STORE:
+		case STORABLE:
 		case TEST:
 		case THIS:
 		case THROW:
