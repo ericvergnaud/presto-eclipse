@@ -45,12 +45,14 @@ public class ETokenProxy implements IToken {
 	@Override
 	public Object getData() {
 		switch (token.getType()) {
+		case BLOB:
 		case BOOLEAN:
 		case CHARACTER:
 		case DATE:
 		case DATETIME:
 		case DECIMAL:
 		case DOCUMENT:
+		case IMAGE:
 		case INTEGER:
 		case METHOD_T:
 		case PERIOD:
