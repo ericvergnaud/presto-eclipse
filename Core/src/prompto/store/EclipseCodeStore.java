@@ -12,11 +12,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
-import prompto.code.Application;
+import prompto.code.Module;
 import prompto.code.Version;
 import prompto.core.CoreConstants;
 import prompto.core.Utils;
 import prompto.core.Utils.RunType;
+import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
@@ -30,7 +31,7 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	Set<IFile> files = Collections.newSetFromMap(new ConcurrentHashMap<IFile, Boolean>()); // creates a concurrent set
 	
 	@Override
-	public Application fetchApplication(String name, Version version) throws PromptoError {
+	public <T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError {
 		// currently, an eclipse code store can only access workspace files
 		// all declarations are already registered in the context
 		return null;
@@ -51,7 +52,7 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	}
 
 	@Override
-	public void store(Application application) throws PromptoError {
+	public void store(Module module) throws PromptoError {
 		// all declarations are stored in workspace files
 	}
 	
@@ -138,5 +139,15 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 			return null;
 		String path = ((IFile)resource).getFullPath().toPortableString();
 		return context.findSectionFor(path, lineNumber);
+	}
+	
+	@Override
+	public void synchronizeSchema() {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void collectStorableAttributes(List<AttributeDeclaration> list) {
+		// TODO Auto-generated method stub
 	}
 }
