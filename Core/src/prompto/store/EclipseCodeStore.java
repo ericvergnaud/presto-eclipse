@@ -3,6 +3,7 @@ package prompto.store;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,14 +40,7 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchLatestVersion(String name) {
-		// currently, an eclipse code store can only access workspace files
-		// all declarations are already registered in the context
-		return null;
-	}
-	
-	@Override
-	public IDeclaration fetchSpecificVersion(String name, Version version) {
+	public Iterator<IDeclaration> fetchSpecificVersions(String name, Version version) {
 		// currently, an eclipse code store can only access workspace files
 		// all declarations are already registered in the context
 		return null;
@@ -58,7 +52,7 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	}
 	
 	@Override
-	public void storeDeclarations(Collection<IDeclaration> declaration, Dialect dialect, Version version, IValue projectId) throws PromptoError {
+	public void storeDeclarations(Iterator<IDeclaration> declaration, Dialect dialect, Version version, IValue projectId) throws PromptoError {
 		// all declarations are stored in workspace files
 	}
 	
@@ -140,11 +134,6 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 			return null;
 		String path = ((IFile)resource).getFullPath().toPortableString();
 		return context.findSectionFor(path, lineNumber);
-	}
-	
-	@Override
-	public void synchronizeSchema() {
-		// TODO Auto-generated method stub
 	}
 	
 	@Override
