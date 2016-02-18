@@ -99,6 +99,7 @@ public class OTokenProxy implements IToken {
 		case DEF:
 		case DEFAULT:
 		case DEFINE:
+		case DELETE:
 		case DOING:
 		case ENUMERATED:
 		case EXCEPT:

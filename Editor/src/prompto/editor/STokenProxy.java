@@ -107,6 +107,7 @@ public class STokenProxy implements IToken {
 		case DEF:
 		case DEFAULT:
 		case DEFINE:
+		case DELETE:
 		case DOING:
 		case ENUM:
 		case ENUMERATED:
