@@ -25,7 +25,6 @@ import prompto.parser.Dialect;
 import prompto.parser.ISection;
 import prompto.problem.ProblemDetector;
 import prompto.runtime.Context;
-import prompto.value.IValue;
 
 public abstract class EclipseCodeStore implements IEclipseCodeStore {
 
@@ -52,7 +51,8 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	}
 	
 	@Override
-	public void storeDeclarations(Iterator<IDeclaration> declaration, Dialect dialect, Version version, IValue projectId) throws PromptoError {
+	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, 
+			Version version, Object projectId) throws PromptoError {
 		// all declarations are stored in workspace files
 	}
 	

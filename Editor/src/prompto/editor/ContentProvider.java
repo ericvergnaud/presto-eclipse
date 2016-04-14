@@ -22,13 +22,13 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
-import prompto.grammar.Symbol;
+import prompto.expression.Symbol;
 import prompto.parser.Dialect;
 import prompto.parser.IParser;
 import prompto.parser.ISection;
-import prompto.statement.DeclarationInstruction;
 import prompto.statement.IStatement;
 import prompto.statement.StatementList;
+import prompto.statement.DeclarationStatement;
 import prompto.utils.IdentifierList;
 
 public class ContentProvider implements ITreeContentProvider {
@@ -131,7 +131,7 @@ public class ContentProvider implements ITreeContentProvider {
 		else if(decl instanceof CategoryDeclaration)
 			return populateCategory((CategoryDeclaration)decl);
 		else if(decl instanceof IEnumeratedDeclaration)
-			return populateEnumerated((IEnumeratedDeclaration)decl);
+			return populateEnumerated((IEnumeratedDeclaration<?>)decl);
 		else if(decl instanceof IMethodDeclaration)
 			return populateMethod((IMethodDeclaration)decl);
 		else if(decl instanceof TestMethodDeclaration)
@@ -140,19 +140,19 @@ public class ContentProvider implements ITreeContentProvider {
 			throw new RuntimeException("Unsupported:" + decl.getClass().getName());
 	}
 
-	private Element populateEnumerated(IEnumeratedDeclaration decl) {
+	private Element populateEnumerated(IEnumeratedDeclaration<?> decl) {
 		Element elem = new Element();
-		elem.name = decl.getIdentifier().getName();
+		elem.name = decl.getName();
 		elem.section = decl;
 		elem.type = ContentType.ENUMERATED;
 		populateSymbols(elem, decl);
 		return elem;
 	}
 
-	private void populateSymbols(Element elem, IEnumeratedDeclaration decl) {
+	private void populateSymbols(Element elem, IEnumeratedDeclaration<?> decl) {
 		for(Symbol s : decl.getSymbols()) {
 			Element child = new Element();
-			child.name = s.getIdentifier().getName();
+			child.name = s.getName();
 			child.section = s;
 			child.type = ContentType.SYMBOL;
 			elem.children.add(child);
@@ -162,7 +162,7 @@ public class ContentProvider implements ITreeContentProvider {
 	private Element populateMethod(IMethodDeclaration decl) {
 		try {
 			Element elem = new Element();
-			elem.name = decl.getIdentifier().getName();
+			elem.name = decl.getName();
 			elem.section = decl;
 			elem.type = ContentType.METHOD;
 			if(decl instanceof ConcreteMethodDeclaration) 
@@ -177,8 +177,8 @@ public class ContentProvider implements ITreeContentProvider {
 		if(statements==null)
 			return;
 		for(IStatement s : statements) {
-			if(s instanceof DeclarationInstruction) {
-				Element child = populateDeclaration(((DeclarationInstruction<?>)s).getDeclaration());
+			if(s instanceof DeclarationStatement<?>) {
+				Element child = populateDeclaration(((DeclarationStatement<?>)s).getDeclaration());
 				child.parent = elem;
 				elem.children.add(child);
 			}
@@ -206,7 +206,7 @@ public class ContentProvider implements ITreeContentProvider {
 			elem.children.add(child);
 		}
 		if(decl instanceof IEnumeratedDeclaration) {
-			populateSymbols(elem, (IEnumeratedDeclaration)decl);
+			populateSymbols(elem, (IEnumeratedDeclaration<?>)decl);
 		}
 		if(decl instanceof ConcreteCategoryDeclaration) {
 			MethodDeclarationList methods = ((ConcreteCategoryDeclaration)decl).getMethods();

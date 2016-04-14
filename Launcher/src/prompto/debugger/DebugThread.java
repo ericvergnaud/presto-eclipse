@@ -242,7 +242,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 		if(isTerminated())
 			sb.append("<terminated>");
 		sb.append("Thread [");
-		sb.append(context.getMethod().getIdentifier().getName());
+		sb.append(context.getMethod().getName());
 		sb.append(']');
 		if(!isTerminated()) {
 			sb.append(" (");
@@ -287,13 +287,13 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 				try {
 					switch(context.getRunType()) {
 					case APPLI:
-						Interpreter.interpretMethod(threadContext, context.getMethod().getIdentifier(), context.getCmdLineArgs());
+						Interpreter.interpretMethod(threadContext, context.getMethod().getId(), context.getCmdLineArgs());
 						break;
 					case SCRIPT:
 						Interpreter.interpretScript(threadContext, context.getCmdLineArgs());
 						break;
 					case TEST:
-						Interpreter.interpretTest(threadContext, context.getMethod().getIdentifier());
+						Interpreter.interpretTest(threadContext, context.getMethod().getId());
 						break;
 					}
 				} catch(PromptoError error) {
