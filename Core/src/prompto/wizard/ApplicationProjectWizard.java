@@ -1,5 +1,8 @@
 package prompto.wizard;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -40,10 +43,14 @@ public class ApplicationProjectWizard extends PromptoProjectWizard {
 				try {
 					CreateProjectOperation cpo = new CreateProjectOperation(description, CoreConstants.CREATING_PROJECT);
 					cpo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-					IFile file = project.getFile("SampleApplication.ped");
-					CreateFileOperation cfo = new CreateFileOperation(file, null, null /*contents*/, CoreConstants.CREATING_SAMPLE_APPLICATION);
-					cfo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-				} catch (ExecutionException e) {
+					IFile file = project.getFile("application.pec");
+					String contents = "define main as method receiving Text{} args doing:\n"
+							+ "\tprint \"Hello\"\n";
+					try(InputStream input = new ByteArrayInputStream(contents.getBytes())) {
+						CreateFileOperation cfo = new CreateFileOperation(file, null, input, CoreConstants.CREATING_SAMPLE_APPLICATION);
+						cfo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
+					}
+				} catch (ExecutionException | IOException e) {
 					throw new InvocationTargetException(e);
 				}
 			}
