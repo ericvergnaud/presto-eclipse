@@ -17,7 +17,7 @@ public class RunTarget {
 				Interpreter.interpretScript(store.getContext(), context.getCmdLineArgs());
 				break;
 			case TEST:
-				Interpreter.interpretTest(store.getContext(), context.getMethod().getId());
+				Interpreter.interpretTest(store.getContext(), context.getMethod().getId(), true);
 				break;
 			}
 		} catch (Exception e) {

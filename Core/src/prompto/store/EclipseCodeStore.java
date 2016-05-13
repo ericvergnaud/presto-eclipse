@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -137,7 +138,7 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	}
 	
 	@Override
-	public void collectStorableAttributes(List<AttributeDeclaration> list) {
+	public void collectStorableAttributes(Map<String, AttributeDeclaration> list) {
 		// TODO Auto-generated method stub
 	}
 }

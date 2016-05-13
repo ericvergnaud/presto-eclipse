@@ -293,7 +293,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 						Interpreter.interpretScript(threadContext, context.getCmdLineArgs());
 						break;
 					case TEST:
-						Interpreter.interpretTest(threadContext, context.getMethod().getId());
+						Interpreter.interpretTest(threadContext, context.getMethod().getId(), true);
 						break;
 					}
 				} catch(PromptoError error) {
