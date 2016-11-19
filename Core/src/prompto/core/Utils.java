@@ -29,9 +29,9 @@ public abstract class Utils {
 	}
 	
 	public static enum RunType {
-		TEST (null, "pec", "poc", "psc", "pes", "pos", "pss"),
-		APPLI (CoreConstants.APPLICATION_NATURE_ID, "pec", "poc", "psc"),
-		SCRIPT (CoreConstants.SCRIPTS_NATURE_ID, "pes", "pos", "pss");
+		TEST (null, "pec", "poc", "pmc", "pes", "pos", "pms"),
+		APPLI (CoreConstants.APPLICATION_NATURE_ID, "pec", "poc", "pmc"),
+		SCRIPT (CoreConstants.SCRIPTS_NATURE_ID, "pes", "pos", "pms");
 		
 		String nature;
 		Set<String> supportedExtensions = new HashSet<String>();

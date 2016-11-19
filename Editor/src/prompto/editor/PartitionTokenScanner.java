@@ -14,7 +14,7 @@ import prompto.parser.Dialect;
 import prompto.parser.ELexer;
 import prompto.parser.ILexer;
 import prompto.parser.OLexer;
-import prompto.parser.SLexer;
+import prompto.parser.MLexer;
 
 public class PartitionTokenScanner implements IPartitionTokenScanner {
 
@@ -75,8 +75,8 @@ public class PartitionTokenScanner implements IPartitionTokenScanner {
 			return nextEToken();
 		case O:
 			return nextOToken();
-		case S:
-			return nextSToken();
+		case M:
+			return nextMToken();
 		default:
 			throw new RuntimeException("Unsupported:" + dialect.name());	
 		}
@@ -105,15 +105,15 @@ public class PartitionTokenScanner implements IPartitionTokenScanner {
 		return new OTokenProxy(token);
 	}
 
-	public IToken nextSToken() {
+	public IToken nextMToken() {
 		CommonToken token = (CommonToken)lexer.nextToken();
 		switch(token.getType()) {
 			// skip tokens generated from LF_TAB, since they have inconsistent offsets 
-			case SLexer.LF:
-			case SLexer.INDENT:
-			case SLexer.DEDENT:
+			case MLexer.LF:
+			case MLexer.INDENT:
+			case MLexer.DEDENT:
 				return nextToken();
-			case SLexer.EOF:
+			case MLexer.EOF:
 				break;
 			default:
 				setLastToken(token);

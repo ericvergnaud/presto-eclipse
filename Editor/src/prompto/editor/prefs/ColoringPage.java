@@ -35,7 +35,7 @@ import prompto.parser.ILexer;
 import prompto.editor.ETokenProxy;
 import prompto.editor.OTokenProxy;
 import prompto.editor.Plugin;
-import prompto.editor.STokenProxy;
+import prompto.editor.MTokenProxy;
 import prompto.editor.prefs.SyntaxColoring.ColorPreference;
 
 public class ColoringPage extends PreferencePage implements IWorkbenchPreferencePage {
@@ -85,7 +85,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			+ "    }\r\n"
 			+ "}\r\n";
 
-	static final String previewContent_S = "attribute id : Integer;\r\n" 
+	static final String previewContent_M = "attribute id : Integer;\r\n" 
 			+ "attribute name : Text;\r\n"
 			+ "\r\n"
 			+ "enumerated category Person(id , name) {\r\n"
@@ -289,7 +289,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 		else if(oRadio.getSelection())
 			return Dialect.O;
 		else
-			return Dialect.S;
+			return Dialect.M;
 	}
 
 	private String getPreviewContent(Dialect dialect) {
@@ -298,8 +298,8 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			return previewContent_E;
 		case O:
 			return previewContent_O;
-		case S:
-			return previewContent_S;
+		case M:
+			return previewContent_M;
 		default:
 			throw new RuntimeException("Unsupported dialect:" + dialect.name());
 		}
@@ -355,9 +355,9 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			return new ETokenProxy(token).getData().toString();
 		case O:
 			return new OTokenProxy(token).getData().toString();
-		case S:
+		case M:
 		default:
-			return new STokenProxy(token).getData().toString();
+			return new MTokenProxy(token).getData().toString();
 		}
 	}
 

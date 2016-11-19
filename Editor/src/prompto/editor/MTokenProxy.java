@@ -3,15 +3,15 @@ package prompto.editor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
-import prompto.parser.SLexer;
+import prompto.parser.MLexer;
 import prompto.editor.Constants;
-import static prompto.parser.SLexer.*;
+import static prompto.parser.MLexer.*;
 
-public class STokenProxy implements IToken {
+public class MTokenProxy implements IToken {
 
 	Token token;
 
-	public STokenProxy(Token token) {
+	public MTokenProxy(Token token) {
 		this.token = token;
 	}
 
@@ -23,10 +23,10 @@ public class STokenProxy implements IToken {
 	@Override
 	public boolean isWhitespace() {
 		switch( token.getType() ) {
-		case SLexer.LF:
-		case SLexer.TAB:
-		case SLexer.LF_TAB:
-		case SLexer.WS:
+		case MLexer.LF:
+		case MLexer.TAB:
+		case MLexer.LF_TAB:
+		case MLexer.WS:
 			return true;
 		default:
 			return false;
