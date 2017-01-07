@@ -15,8 +15,8 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libs/antlr4-runtime-4.5.jar,
- libs/Core-trunk-SNAPSHOT.jar,
- libs/Runtime-trunk-SNAPSHOT.jar,
+ libs/Core-0.0.1-SNAPSHOT.jar,
+ libs/Runtime-0.0.1-SNAPSHOT.jar,
  libs/joda-time-2.0.jar,
  .
 Export-Package: org.antlr.v4.runtime,
