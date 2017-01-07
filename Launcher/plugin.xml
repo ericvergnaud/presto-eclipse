@@ -3,6 +3,14 @@
 <plugin> 
 	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
 	   <launchConfigurationType
+	   	   id="prompto.launcher.server"
+		   name="Prompto server"
+		   delegate="prompto.launcher.LaunchDelegate"
+		   sourceLocatorId="prompto.locator.sourceLocator"
+		   sourcePathComputerId="prompto.locator.sourcePathComputer"
+		   modes= "run, debug">
+	   </launchConfigurationType>
+	   <launchConfigurationType
 	   	   id="prompto.launcher.application"
 		   name="Prompto application"
 		   delegate="prompto.launcher.LaunchDelegate"
@@ -30,6 +38,11 @@
  	<extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
  		<launchConfigurationTypeImage
 			icon="images/launcher.png"
+			configTypeID="prompto.launcher.server"
+			id="prompto.launcher">
+		</launchConfigurationTypeImage>
+ 		<launchConfigurationTypeImage
+			icon="images/launcher.png"
 			configTypeID="prompto.launcher.application"
 			id="prompto.launcher">
 		</launchConfigurationTypeImage>
@@ -45,6 +58,11 @@
 		</launchConfigurationTypeImage>
 	</extension>
 	<extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+	  <launchConfigurationTabGroup
+	      id="prompto.launcher.application.tabGroup"
+	      type="prompto.launcher.server"
+	      class="prompto.launcher.ServerConfigTabGroup">
+	  </launchConfigurationTabGroup>
 	  <launchConfigurationTabGroup
 	      id="prompto.launcher.application.tabGroup"
 	      type="prompto.launcher.application"

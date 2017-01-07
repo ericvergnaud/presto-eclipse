@@ -30,6 +30,7 @@ public abstract class Utils {
 	
 	public static enum RunType {
 		TEST (null, "pec", "poc", "pmc", "pes", "pos", "pms"),
+		SERVER (CoreConstants.SERVER_NATURE_ID, "pec", "poc", "pmc"),
 		APPLI (CoreConstants.APPLICATION_NATURE_ID, "pec", "poc", "pmc"),
 		SCRIPT (CoreConstants.SCRIPTS_NATURE_ID, "pes", "pos", "pms");
 		

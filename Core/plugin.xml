@@ -19,6 +19,12 @@
       </runtime>
       <one-of-nature id="prompto.natures"/>
    </extension>
+	<extension id="prompto.nature.server" point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="prompto.core.ServerNature"/>
+      </runtime>
+      <one-of-nature id="prompto.natures"/>
+   </extension>
    <extension id="prompto.marker" point="org.eclipse.core.resources.markers"/>
    <extension id="prompto.problem.marker" point="org.eclipse.core.resources.markers">
         <super type="org.eclipse.core.resources.textmarker"/>
@@ -63,6 +69,16 @@
          name="Prompto Application Project"
          project="true"/>
   </extension>
+  <extension point="org.eclipse.ui.newWizards">
+  	<category id="prompto.project" name="Prompto"/>
+  	<wizard
+         category="prompto.project"
+         class="prompto.wizard.ServerProjectWizard"
+         icon="images/server_wizard.gif"
+         id="prompto.project.server"
+         name="Prompto Server Project"
+         project="true"/>
+  </extension>
   <extension point="org.eclipse.ui.navigator.viewer">
         <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
           <includes>
@@ -83,6 +99,7 @@
   					<or>
 		        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.scripts"/>
 		        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.library"/>
+		        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.server"/>
 		        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.application"/>
 		        	</or>
 		        </and>
@@ -92,4 +109,73 @@
   			</possibleChildren>
   		</navigatorContent>
   </extension>
+    <extension point="org.eclipse.ui.menus">
+ 		<menuContribution locationURI="popup:org.eclipse.ui.projectConfigure">
+ 			<command commandId="disable.prompto">
+		      	<visibleWhen>
+		      		<iterate ifEmpty="false" operator="or">
+	        			<adapt type="org.eclipse.core.resources.IProject">
+		  					<or>
+				        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.scripts"/>
+				        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.library"/>
+				        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.server"/>
+				        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.application"/>
+				        	</or>
+	         			</adapt>
+	         		</iterate>
+ 		      	</visibleWhen>
+ 			</command>
+			<command commandId="enable.prompto.scripts">
+		      	<visibleWhen>
+		      		<iterate>
+	        			<adapt type="org.eclipse.core.resources.IProject">
+		             		<not>
+		             			<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.scripts"/>
+		             		</not>
+	         			</adapt>
+	         		</iterate>
+ 		      	</visibleWhen>
+ 			</command>
+			<command commandId="enable.prompto.library">
+		      	<visibleWhen>
+		      		<iterate>
+	        			<adapt type="org.eclipse.core.resources.IProject">
+		             		<not>
+		             			<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.library"/>
+		             		</not>
+	         			</adapt>
+	         		</iterate>
+ 		      	</visibleWhen>
+ 			</command>
+			<command commandId="enable.prompto.server">
+		      	<visibleWhen>
+		      		<iterate>
+	        			<adapt type="org.eclipse.core.resources.IProject">
+		             		<not>
+		             			<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.server"/>
+		             		</not>
+	         			</adapt>
+	         		</iterate>
+ 		      	</visibleWhen>
+ 			</command>
+			<command commandId="enable.prompto.application">
+		      	<visibleWhen>
+		      		<iterate>
+	        			<adapt type="org.eclipse.core.resources.IProject">
+		             		<not>
+		             			<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.application"/>
+		             		</not>
+	         			</adapt>
+	         		</iterate>
+ 		      	</visibleWhen>
+ 			</command>
+        </menuContribution> 
+   </extension>
+   <extension point="org.eclipse.ui.commands">
+      <command id="disable.prompto" defaultHandler="prompto.menu.DisablePromptoNatureHandler" name="Remove Prompto nature" />
+      <command id="enable.prompto.scripts" defaultHandler="prompto.menu.EnableScriptsNatureHandler" name="Add Prompto Scripts nature" />
+      <command id="enable.prompto.library" defaultHandler="prompto.menu.EnableLibraryNatureHandler" name="Add Prompto Library nature" />
+      <command id="enable.prompto.server" defaultHandler="prompto.menu.EnableServerNatureHandler" name="Add Prompto Server nature" />
+      <command id="enable.prompto.application" defaultHandler="prompto.menu.EnableApplicationNatureHandler" name="Add Prompto Application nature" />
+   </extension>
 </plugin>

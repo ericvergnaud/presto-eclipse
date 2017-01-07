@@ -61,45 +61,4 @@
        		<adapter type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget"/>
     	</factory>
    </extension>
-   <!--
- 	<extension point="org.eclipse.ui.newWizards">
-      <wizard
-            category="prompto.wizard.category"
-            class="prompto.wizards.project.Wizard"
-            icon="images/NewProject.png"
-            id="prompto.project.wizard"
-            name="Prompto project"
-            project="true">
-      </wizard>
-      <category id="prompto.wizard.category" name="Prompto" />
-   </extension>
-  <extension point="org.eclipse.ui.menus">
- 		<menuContribution locationURI="popup:org.eclipse.ui.projectConfigure">
- 			<command commandId="disable.prompto.boa">
-		      	<visibleWhen>
-		      		<iterate ifEmpty="false" operator="or">
-	        			<adapt type="org.eclipse.core.resources.IResource">
-		             		<test property="org.eclipse.core.resources.projectNature" value="prompto.boa.nature"/>
-	         			</adapt>
-	         		</iterate>
- 		      	</visibleWhen>
- 			</command>
-			<command commandId="enable.prompto.boa">
-		      	<visibleWhen>
-		      		<iterate>
-	        			<adapt type="org.eclipse.core.resources.IResource">
-		             		<not>
-		             			<test property="org.eclipse.core.resources.projectNature" value="prompto.boa.nature"/>
-		             		</not>
-	         			</adapt>
-	         		</iterate>
- 		      	</visibleWhen>
- 			</command>
-        </menuContribution> 
-   </extension>
-   <extension point="org.eclipse.ui.commands">
-      <command id="disable.prompto.boa" defaultHandler="prompto.boa.DisableBoaHandler" name="Remove Prompto (Boa) nature" />
-      <command id="enable.prompto.boa" defaultHandler="prompto.boa.EnableBoaHandler" name="Convert to Prompto (Boa) project" />
-   </extension>
-     -->
  </plugin>

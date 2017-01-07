@@ -2,6 +2,7 @@ package prompto.runner;
 
 import prompto.runtime.Interpreter;
 import prompto.launcher.LaunchContext;
+import prompto.server.AppServer;
 import prompto.store.IEclipseCodeStore;
 
 public class RunTarget {
@@ -13,6 +14,9 @@ public class RunTarget {
 			case APPLI:
 				Interpreter.interpretMethod(store.getContext(), context.getMethod().getId(), context.getCmdLineArgs());
 				break;
+			case SERVER:
+				AppServer.main(null);
+				break;
 			case SCRIPT:
 				Interpreter.interpretScript(store.getContext(), context.getCmdLineArgs());
 				break;
@@ -20,8 +24,8 @@ public class RunTarget {
 				Interpreter.interpretTest(store.getContext(), context.getMethod().getId(), true);
 				break;
 			}
-		} catch (Exception e) {
-			e.printStackTrace(System.err);
+		} catch (Throwable t) {
+			t.printStackTrace(System.err);
 		}
 	}
 

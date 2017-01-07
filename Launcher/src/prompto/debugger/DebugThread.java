@@ -25,6 +25,7 @@ import prompto.runtime.Context;
 import prompto.runtime.IContext;
 import prompto.runtime.Interpreter;
 import prompto.launcher.LaunchContext;
+import prompto.server.AppServer;
 import prompto.store.IEclipseCodeStore;
 import prompto.utils.ShellUtils;
 
@@ -267,10 +268,10 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 			store = context.getCodeStore();
 			connectBreakpoints();
 			startThread();
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			debugger.terminated();
 			handleTerminateEvent();
-			MessageDialog.openError(ShellUtils.getShell(), "Fatal error", e.getMessage());
+			MessageDialog.openError(ShellUtils.getShell(), "Fatal error", t.getMessage());
 		} 
 	}
 
@@ -289,6 +290,9 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 					case APPLI:
 						Interpreter.interpretMethod(threadContext, context.getMethod().getId(), context.getCmdLineArgs());
 						break;
+					case SERVER:
+						AppServer.main(null);
+						break;
 					case SCRIPT:
 						Interpreter.interpretScript(threadContext, context.getCmdLineArgs());
 						break;
@@ -298,7 +302,9 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 					}
 				} catch(PromptoError error) {
 					// TODO
-				} 
+				} catch(Throwable t) {
+					t.printStackTrace(System.err);
+				}
 			}
 		}, context.getConfiguration().getName());
 		promptoThread.start();
