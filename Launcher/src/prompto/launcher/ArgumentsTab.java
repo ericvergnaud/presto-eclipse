@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Text;
 import prompto.utils.CmdLineParser;
 import prompto.utils.ImageUtils;
 
-public class LaunchConfigArgsTab extends AbstractLaunchConfigurationTab {
+public class ArgumentsTab extends AbstractLaunchConfigurationTab {
 
 	Text argsText;
 	

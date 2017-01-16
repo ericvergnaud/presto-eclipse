@@ -1,18 +1,22 @@
 package prompto.launcher;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Plugin extends AbstractUIPlugin {
+public class Plugin extends org.eclipse.core.runtime.Plugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "prompto.launcher"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Plugin plugin;
+
+	private static IPreferenceStore prefsStore = null;
 	
 	/**
 	 * The constructor
@@ -46,5 +50,12 @@ public class Plugin extends AbstractUIPlugin {
 	public static Plugin getDefault() {
 		return plugin;
 	}
+	
+	public static IPreferenceStore getPreferenceStore() {
+		if(prefsStore==null)
+			prefsStore = new ScopedPreferenceStore(InstanceScope.INSTANCE, plugin.getBundle().getSymbolicName());
+		return prefsStore;
+	}
+
 
 }

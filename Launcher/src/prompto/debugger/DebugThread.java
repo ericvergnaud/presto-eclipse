@@ -25,7 +25,6 @@ import prompto.runtime.Context;
 import prompto.runtime.IContext;
 import prompto.runtime.Interpreter;
 import prompto.launcher.LaunchContext;
-import prompto.server.AppServer;
 import prompto.store.IEclipseCodeStore;
 import prompto.utils.ShellUtils;
 
@@ -291,7 +290,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 						Interpreter.interpretMethod(threadContext, context.getMethod().getId(), context.getCmdLineArgs());
 						break;
 					case SERVER:
-						AppServer.main(null);
+						// TODO AppServer.main(null);
 						break;
 					case SCRIPT:
 						Interpreter.interpretScript(threadContext, context.getCmdLineArgs());

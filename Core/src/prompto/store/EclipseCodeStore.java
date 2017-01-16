@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -113,7 +112,7 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	}
 
 	private void collectProjectFiles(IProject project) {
-		List<IFile> files = Utils.getEligibleFiles(project, RunType.APPLI);
+		Set<IFile> files = Utils.getEligibleFiles(project, RunType.APPLI);
 		for(IFile file : files)
 			this.files.add(file);
 	}

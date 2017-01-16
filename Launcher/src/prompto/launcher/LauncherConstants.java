@@ -2,6 +2,7 @@ package prompto.launcher;
 
 public class LauncherConstants {
 
+	public static final String HTTP_PORT = "httpPort";
 	public static final String RUNTYPE = "runType";
 	public static final String PROJECT = "project";
 	public static final String FILE = "file";

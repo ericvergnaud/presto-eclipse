@@ -109,4 +109,49 @@
        <super type="org.eclipse.debug.core.lineBreakpointMarker"/>
        <persistent value="true"/>
     </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="prompto.launcher.prefs.Initializer">
+      </initializer>
+   </extension>
+       <extension
+      point = "org.eclipse.ui.preferencePages">
+      <page
+         id="prompto.prefs.launcher"
+         class="prompto.launcher.prefs.LauncherPage"
+         name="Runtime"
+         category="prompto.prefs.root">
+      </page>
+       <page
+         id="prompto.prefs.runtime.java"
+         class="prompto.launcher.prefs.JavaRuntimePage"
+         name="Java Runtime"
+         category="prompto.prefs.launcher">
+      </page>
+       <page
+         id="prompto.prefs.runtime.csharp"
+         class="prompto.launcher.prefs.CSharpRuntimePage"
+         name="C# Runtime"
+         category="prompto.prefs.launcher">
+      </page>
+       <page
+         id="prompto.prefs.runtime.javascript"
+         class="prompto.launcher.prefs.JavaScriptRuntimePage"
+         name="JavaScript Runtime"
+         category="prompto.prefs.launcher">
+      </page>
+       <page
+         id="prompto.prefs.runtime.python2"
+         class="prompto.launcher.prefs.Python2RuntimePage"
+         name="Python 2 Runtime"
+         category="prompto.prefs.launcher">
+      </page>
+       <page
+         id="prompto.prefs.runtime.python3"
+         class="prompto.launcher.prefs.Python3RuntimePage"
+         name="Python 3 Runtime"
+         category="prompto.prefs.launcher">
+      </page>
+   </extension>  
 </plugin>

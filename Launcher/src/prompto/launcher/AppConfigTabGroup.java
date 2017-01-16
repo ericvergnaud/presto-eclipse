@@ -5,15 +5,14 @@ import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 
-import prompto.core.Utils.RunType;
-
 public class AppConfigTabGroup extends AbstractLaunchConfigurationTabGroup {
 
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		setTabs( new ILaunchConfigurationTab[] {
-			new LaunchConfigMainTab(RunType.APPLI),
-			new LaunchConfigArgsTab(),
+			new LaunchAppTab(),
+			new ArgumentsTab(),
+			new RuntimeTab(),
 			new CommonTab()
 		} );
 	}

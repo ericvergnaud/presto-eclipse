@@ -52,18 +52,20 @@ public abstract class Utils {
 		}
 	}
 	
-	public static List<IFile> getEligibleFiles(IProject project, RunType type) {
-		List<IFile> files = new LinkedList<IFile>();
+	public static Set<IFile> getEligibleFiles(IProject project, RunType type) {
+		Set<IFile> files = new HashSet<IFile>();
 		if(project!=null)
 			getEligibleFiles(project, files,type);
 		return files;
 	}
 
-	public static void getEligibleFiles(IContainer container, List<IFile> files, RunType type) {
+	public static void getEligibleFiles(IContainer container, Set<IFile> files, RunType type) {
 		try {
+			if(container.getProjectRelativePath().toString().startsWith("target/"))
+				return;
 			for(IResource member : container.members()) {
 				if(member instanceof IContainer)
-					getEligibleFiles((IContainer)member, files,type);
+					getEligibleFiles((IContainer)member, files, type);
 				else if(member instanceof IFile) {
 					IFile file = (IFile)member;
 					String ext = file.getFileExtension();

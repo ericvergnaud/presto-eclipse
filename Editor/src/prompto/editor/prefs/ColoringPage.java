@@ -47,7 +47,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 	Button underlineCheckBox;
 	Button eRadio;
 	Button oRadio;
-	Button pRadio;
+	Button mRadio;
 	StyledText preview;
 	
 	static final String previewContent_E = "define id as: Integer attribute\r\n"
@@ -57,7 +57,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			+ "    JOHN with 1 as id and \"John\" as name\r\n"
 			+ "    SYLVIA with 2 as id and \"Sylvia\" as name\r\n"
 			+ "\r\n"
-			+ "/* this is a comment */\r\n"
+			+ "// this is a comment \r\n"
 			+ "define main as: method receiving: Text{} options doing:\r\n"
 			+ "    if options[\"what\"] = \"id\":\r\n"
 			+ "        for each person in Person.symbols:\r\n"
@@ -74,7 +74,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			+ "    SYLVIA ( id = 2, name = \"Sylvia\" );\r\n"
 			+ "}\r\n" 
 			+ "\r\n"
-			+ "/* this is a comment */\r\n"
+			+ "// this is a comment \r\n"
 			+ "method main ( Text{} options ) {\r\n"
 			+ "    if ( options[\"what\"] == \"id\" ) {\r\n"
 			+ "        for each ( person in Person.symbols )\r\n"
@@ -85,24 +85,21 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			+ "    }\r\n"
 			+ "}\r\n";
 
-	static final String previewContent_M = "attribute id : Integer;\r\n" 
-			+ "attribute name : Text;\r\n"
+	static final String previewContent_M = "attr id(Integer)\r\n" 
+			+ "attr name(Text)\r\n"
 			+ "\r\n"
-			+ "enumerated category Person(id , name) {\r\n"
-			+ "    JOHN ( id = 1, name = \"John\" ); \r\n"
-			+ "    SYLVIA ( id = 2, name = \"Sylvia\" );\r\n"
-			+ "}\r\n" 
+			+ "enum Person(id , name):\r\n"
+			+ "    JOHN ( id = 1, name = \"John\" )\r\n"
+			+ "    SYLVIA ( id = 2, name = \"Sylvia\" )\r\n"
 			+ "\r\n"
-			+ "/* this is a comment */\r\n"
-			+ "method main ( Text{} options ) {\r\n"
-			+ "    if ( options[\"what\"] == \"id\" ) {\r\n"
-			+ "        for each ( person in Person.symbols )\r\n"
-			+ "            print ( person.id );\r\n"
-			+ "    } else {\r\n"
-			+ "        for each ( person in Person.symbols )\r\n"
-			+ "            print ( person.name );\r\n"
-			+ "    }\r\n"
-			+ "}\r\n";
+			+ "# this is a comment\r\n"
+			+ "def main ( options:Text{} ) {\r\n"
+			+ "    if options[\"what\"] == \"id\":\r\n"
+			+ "        for each person in Person.symbols:\r\n"
+			+ "            print person.id\r\n"
+			+ "    else:\r\n"
+			+ "        for each person in Person.symbols:\r\n"
+			+ "            print person.name\r\n";
 
 
 	Map<String,TextAttribute> workingPrefs = new HashMap<String, TextAttribute>();
@@ -192,7 +189,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 		createPreviewLabel(control);
 		createPreviewE(control);
 		createPreviewO(control);
-		createPreviewP(control);
+		createPreviewM(control);
 	}
 	
 	private void createPreviewLabel(Composite parent) {
@@ -203,7 +200,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 
 	private void createPreviewE(Composite parent) {
 		eRadio = new Button(parent, SWT.RADIO);
-		eRadio.setText("E");
+		eRadio.setText("Engly");
 		eRadio.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 		eRadio.addSelectionListener(new SelectionListener() {
 			
@@ -219,7 +216,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 	
 	private void createPreviewO(Composite parent) {
 		oRadio = new Button(parent, SWT.RADIO);
-		oRadio.setText("O");
+		oRadio.setText("Objy");
 		oRadio.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 		oRadio.addSelectionListener(new SelectionListener() {
 			
@@ -233,11 +230,11 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 		});
 	}
 
-	private void createPreviewP(Composite parent) {
-		oRadio = new Button(parent, SWT.RADIO);
-		oRadio.setText("P");
-		oRadio.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-		oRadio.addSelectionListener(new SelectionListener() {
+	private void createPreviewM(Composite parent) {
+		mRadio = new Button(parent, SWT.RADIO);
+		mRadio.setText("Monty");
+		mRadio.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+		mRadio.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -272,7 +269,7 @@ public class ColoringPage extends PreferencePage implements IWorkbenchPreference
 			colorList.add(pref.toString());
 		colorList.addSelectionListener(new ColorSelectionListener());
 		oRadio.setSelection(false);
-		pRadio.setSelection(false);
+		mRadio.setSelection(false);
 		eRadio.setSelection(true);
 	}
 	

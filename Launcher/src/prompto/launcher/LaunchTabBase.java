@@ -1,6 +1,7 @@
 package prompto.launcher;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -28,17 +30,19 @@ import prompto.core.Utils;
 import prompto.core.Utils.RunType;
 import prompto.utils.ImageUtils;
 
-public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
+public abstract class LaunchTabBase extends AbstractLaunchConfigurationTab {
 
-	RunType runType;
+	Text serverText;
 	Combo projectCombo;
 	Combo fileCombo;
 	Combo methodCombo;
 	Button stopInMainButton;
 	
-	public LaunchConfigMainTab(RunType runType) {
-		this.runType = runType;
-	}
+	protected abstract RunType getRunType();
+	protected abstract boolean supportsMethodSelector();
+	protected abstract boolean requiresSelectedMethod();
+	protected boolean supportsServerPort() { return false; };
+
 	
 	@Override
 	public void createControl(Composite parent) {
@@ -49,12 +53,25 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 	private Control createRoot(Composite parent) {
 		Composite root = new Composite(parent, SWT.NONE);
 		root.setLayout(new GridLayout(1, false));
-		Control child = createSelectorGroup(root);
+		if(supportsServerPort()) {
+			Control child = createPortSelectorGroup(root);
+			child.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		}
+		Control child = createMethodSelectorGroup(root);
 		child.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		return root;
 	}
+	
+	private Control createPortSelectorGroup(Composite parent) {
+		Group group = new Group(parent, SWT.NONE);
+		group.setLayout(new GridLayout(1, false));
+		group.setText("Server port");
+		serverText = new Text(group, SWT.SINGLE | SWT.BORDER);
+		serverText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		return group;
+	}
 
-	private Control createSelectorGroup(Composite parent) {
+	private Control createMethodSelectorGroup(Composite parent) {
 		Group group = new Group(parent, SWT.NONE);
 		group.setLayout(new GridLayout(1, false));
 		group.setText("Project/File/Start method");
@@ -68,7 +85,7 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 		child.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		child = createLabel(group, "Start method:");
 		child.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		if(runType!=RunType.SCRIPT) {
+		if(supportsMethodSelector()) {
 			child = createMethodSelector(group);
 			child.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		}
@@ -85,7 +102,7 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 			public void widgetSelected(SelectionEvent e) {
 				setDirty(true);
 				fillInFiles();
-				if(runType!=RunType.SCRIPT)
+				if(supportsMethodSelector())
 					fillInMethods();
 				manageControls();
 			}
@@ -104,7 +121,7 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setDirty(true);
-				if(runType!=RunType.SCRIPT)
+				if(supportsMethodSelector())
 					fillInMethods();
 				manageControls();
 			}
@@ -156,7 +173,6 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		// nothing to do
 	}
 
 	private void fillInProjects() {
@@ -169,7 +185,7 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 
 	private boolean isEligibleProject(IProject project) {
 		try {
-			String nature = runType.getNature();
+			String nature = getRunType().getNature();
 			return nature==null || project.hasNature(nature);
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -191,7 +207,7 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 
 	private void fillInFiles(IProject project) {
 		fileCombo.setItems(new String[0]);
-		List<IFile> files = Utils.getEligibleFiles(project, runType);
+		Set<IFile> files = Utils.getEligibleFiles(project, getRunType());
 		for(IFile file : files)
 			fileCombo.add(file.getName());
 	}
@@ -203,10 +219,12 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 
 
 	private void fillInMethods(IFile file) {
-		methodCombo.setItems(new String[0]);
-		List<? extends IDeclaration> methods = getEligibleMethods(file);
-		for(IDeclaration method : methods)
-			methodCombo.add(method.getName());
+		if(methodCombo!=null) {
+			methodCombo.setItems(new String[0]);
+			List<? extends IDeclaration> methods = getEligibleMethods(file);
+			for(IDeclaration method : methods)
+				methodCombo.add(method.getName());
+		}
 	}
 	
 	protected IFile getSelectedFile(IProject project) {
@@ -215,7 +233,12 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 		int idx = fileCombo.getSelectionIndex();
 		if(idx<0)
 			return null;
-		return Utils.getEligibleFiles(project, runType).get(idx);
+		String file = fileCombo.getItem(idx);
+		return Utils.getEligibleFiles(project, getRunType())
+				.stream()
+				.filter((f)->file.equals(f.getName()))
+				.findFirst()
+				.orElse(null);
 	}
 
 	private void manageControls() {
@@ -228,17 +251,20 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 		idx = fileCombo.getSelectionIndex();
 		if(idx==-1 && getErrorMessage()==null)
 			setErrorMessage("No file selected");
-		if(runType!=RunType.SCRIPT) {
+		if(supportsMethodSelector()) {
 			methodCombo.setEnabled(idx>=0);
-			idx = methodCombo.getSelectionIndex();
-			if(idx==-1 && getErrorMessage()==null)
-				setErrorMessage("No method selected");
+			if(requiresSelectedMethod()) {
+				idx = methodCombo.getSelectionIndex();
+				if(idx==-1 && getErrorMessage()==null)
+					setErrorMessage("No method selected");
+			}
 		}
 		updateLaunchConfigurationDialog();
 	}
 
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
+		fillInServerPort(configuration);
 		fillInProjects();
 		IProject project = selectProject(configuration);
 		fillInFiles(project);
@@ -249,6 +275,14 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 		manageControls();
 	}
 	
+	private void fillInServerPort(ILaunchConfiguration configuration) {
+		if(serverText!=null) try {
+			serverText.setText(configuration.getAttribute(LauncherConstants.HTTP_PORT, "8080"));
+		} catch (CoreException e) {
+			e.printStackTrace(System.err);
+		}
+	}
+
 	private void selectStopInMain(ILaunchConfiguration configuration) {
 		try {
 			stopInMainButton.setSelection(configuration.getAttribute(LauncherConstants.STOP_IN_MAIN, true));
@@ -279,7 +313,7 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public boolean isValid(ILaunchConfiguration launchConfig) {
-		return methodCombo.getSelectionIndex()>=0;
+		return !requiresSelectedMethod() || methodCombo.getSelectionIndex()>=0;
 	}
 	
 	@Override
@@ -288,7 +322,7 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 	}
 
 	protected IDeclaration getSelectedMethod(IFile file) {
-		if(file==null)
+		if(file==null || methodCombo==null)
 			return null;
 		int idx = methodCombo.getSelectionIndex();
 		if(idx<0)
@@ -297,8 +331,9 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 	}
 
 	private List<? extends IDeclaration> getEligibleMethods(IFile file) {
-		switch(runType) {
+		switch(getRunType()) {
 		case APPLI:
+		case SERVER:
 			return Utils.getEligibleMainMethods(file);
 		case TEST:
 			return Utils.getEligibleTestMethods(file);
@@ -323,7 +358,9 @@ public class LaunchConfigMainTab extends AbstractLaunchConfigurationTab {
 	
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-		configuration.setAttribute(LauncherConstants.RUNTYPE, runType.name());
+		if(serverText!=null)
+			configuration.setAttribute(LauncherConstants.HTTP_PORT, serverText.getText());
+		configuration.setAttribute(LauncherConstants.RUNTYPE, getRunType().name());
 		IProject project = getSelectedProject();
 		configuration.setAttribute(LauncherConstants.PROJECT, getProjectName(project));
 		IFile file = getSelectedFile(project);

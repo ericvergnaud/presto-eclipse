@@ -21,6 +21,8 @@ public abstract class StoreUtils {
 				return (IEclipseCodeStore)obj;
 			if(project.hasNature(CoreConstants.LIBRARY_NATURE_ID))
 				obj = new LibraryCodeStore();
+			else if(project.hasNature(CoreConstants.SERVER_NATURE_ID))
+				obj = new ServerCodeStore();
 			else if(project.hasNature(CoreConstants.APPLICATION_NATURE_ID))
 				obj = new ApplicationCodeStore();
 			else
