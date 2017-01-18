@@ -1,11 +1,13 @@
 package prompto.launcher.prefs;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Properties;
-import java.util.TreeMap;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Consumer;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -28,18 +30,22 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.service.prefs.Preferences;
 
 import prompto.distribution.Artifact;
+import prompto.distribution.Distribution;
 import prompto.distribution.Version;
+import prompto.launcher.Plugin;
 
 public class JavaRuntimePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
 
 	TableViewer viewer;
-	Map<Version, String> installed = new TreeMap<>();
+	Set<Distribution> distributions = new TreeSet<>();
 	
 	public JavaRuntimePage() {
 	}
@@ -54,11 +60,34 @@ public class JavaRuntimePage extends PreferencePage implements
 
 	@Override
 	public void init(IWorkbench workbench) {
+		Preferences prefs = Plugin.getPreferences();
+		String pref = prefs.get(Initializer.PROMPTO_DISTRIBUTION_JAVA_LIST, "");
+		Collection<Distribution> dists = Distribution.fromPrefsString(pref);
+		distributions.addAll(dists);
 	}
 
 	@Override
 	protected Control createContents(Composite parent) {
 		return createMainControl(parent);
+	}
+	
+	@Override
+	protected void performApply() {
+		performOk();
+	}
+	
+	@Override
+	public boolean performOk() {
+		String dists = Distribution.toPrefsString(distributions);
+		Preferences prefs = Plugin.getPreferences();
+		prefs.put(Initializer.PROMPTO_DISTRIBUTION_JAVA_LIST, dists);
+		try {
+			prefs.flush();
+			return true;
+		} catch(Exception e) {
+			e.printStackTrace(System.err);
+			return false;
+		}
 	}
 
 	private Composite createMainControl(Composite parent) {
@@ -83,6 +112,12 @@ public class JavaRuntimePage extends PreferencePage implements
 	}
 
 	private void populateTableViewer() {
+		viewer.getTable().clearAll();
+		distributions.forEach((d)->{
+			TableItem item = new TableItem(viewer.getTable(), SWT.NULL);
+			item.setText(0, d.getVersion().toString());
+			item.setText(1, d.getDirectory());
+		});
 	}
 
 	private void createAddSnapshotButton(Composite parent) {
@@ -114,6 +149,7 @@ public class JavaRuntimePage extends PreferencePage implements
 			if(artifactExistsLocally(artifact)) {
 				deleteDistribution(artifact.getVersion());
 				createDistributionFromLocalPom(artifact);
+				registerDistribution(artifact.getVersion());
 				populateTableViewer();
 			} else {
 				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
@@ -134,6 +170,12 @@ public class JavaRuntimePage extends PreferencePage implements
 	}
 	
 
+	private void registerDistribution(String version) {
+		Path dest = getDistributionFolder(version);
+		Distribution dist = new Distribution(Version.parse(version), dest.toString());
+		distributions.add(dist);	
+	}
+
 	private void deleteDistribution(String version) throws Exception {
 		Path dest = getDistributionFolder(version);
 		deleteRecursive(dest.toFile());
@@ -152,9 +194,16 @@ public class JavaRuntimePage extends PreferencePage implements
 
 	private Path createDistributionFromLocalPom(Artifact artifact) throws Exception {
 		Path dest = getDistributionFolder(artifact.getVersion());
+		copyLocalArtifactToDistributionFolder(artifact, dest);
 		copyLocalArtifactDependenciesToDistributionFolder(artifact, dest);
 		return dest;
 		
+	}
+
+	private void copyLocalArtifactToDistributionFolder(Artifact artifact, Path dest) throws Exception {
+		File source = getSource(artifact);
+		dest = dest.resolve(source.toPath().getFileName());
+		Files.copy(source.toPath(), dest);
 	}
 
 	@SuppressWarnings("deprecation")
