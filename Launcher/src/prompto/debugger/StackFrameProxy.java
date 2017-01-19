@@ -11,20 +11,19 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IRegisterGroup;
-import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.debug.core.sourcelookup.containers.WorkspaceSourceContainer;
 
-import prompto.debug.StackFrame;
+import prompto.debug.IStackFrame;
 import prompto.core.CoreConstants;
 
-public class StackFrameProxy extends PlatformObject implements IStackFrame {
+public class StackFrameProxy extends PlatformObject implements org.eclipse.debug.core.model.IStackFrame {
 
 	DebugThread thread;
-	StackFrame frame;
+	IStackFrame frame;
 	
-	public StackFrameProxy(DebugThread thread, StackFrame frame) {
+	public StackFrameProxy(DebugThread thread, IStackFrame frame) {
 		this.thread = thread;
 		this.frame = frame;
 	}
@@ -49,7 +48,7 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 		return thread;
 	}
 	
-	public StackFrame getStackFrame() {
+	public IStackFrame getStackFrame() {
 		return frame;
 	}
 
@@ -72,7 +71,7 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 		if(file==null) {
 			try {
 				// need a project relative path
-				IPath path = new Path(frame.getPath()).removeFirstSegments(1);
+				IPath path = new Path(frame.getFilePath()).removeFirstSegments(1);
 				file = (IFile)new WorkspaceSourceContainer().findSourceElements(path.toPortableString())[0];
 			} catch (CoreException e) {
 			}
@@ -172,12 +171,12 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 
 	@Override
 	public int getCharStart() throws DebugException {
-		return frame.getCharStart();
+		return frame.getStartCharIndex();
 	}
 
 	@Override
 	public int getCharEnd() throws DebugException {
-		return frame.getCharEnd();
+		return frame.getEndCharIndex();
 	}
 
 	@Override

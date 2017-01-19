@@ -10,14 +10,14 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
-import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.jface.dialogs.MessageDialog;
 
-import prompto.debug.Debugger;
 import prompto.debug.IDebugEventListener;
+import prompto.debug.IDebugger;
+import prompto.debug.Debugger;
+import prompto.debug.IStackFrame;
 import prompto.debug.ResumeReason;
-import prompto.debug.StackFrame;
 import prompto.debug.SuspendReason;
 import prompto.error.PromptoError;
 import prompto.parser.ISection;
@@ -35,7 +35,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 	IEclipseCodeStore store;
 	IBreakpoint[] breakpoints;
 	Thread promptoThread;
-	Debugger debugger;
+	IDebugger debugger;
 	
 	public DebugThread(DebugTarget target) {
 		this.target = target;
@@ -219,8 +219,8 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 	}
 
 	@Override
-	public IStackFrame getTopStackFrame() throws DebugException {
-		IStackFrame[] stackFrames = getStackFrames();
+	public StackFrameProxy getTopStackFrame() throws DebugException {
+		StackFrameProxy[] stackFrames = getStackFrames();
 		if(stackFrames.length>0)
 			return stackFrames[0];
 		else
@@ -228,10 +228,10 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 	}
 
 	@Override
-	public IStackFrame[] getStackFrames() throws DebugException {
-		IStackFrame[] stackFrames = new IStackFrame[debugger.getStack().size()];
+	public StackFrameProxy[] getStackFrames() throws DebugException {
+		StackFrameProxy[] stackFrames = new StackFrameProxy[debugger.getStack().size()];
 		int i = 0;
-		for(StackFrame frame : debugger.getStack())
+		for(IStackFrame frame : debugger.getStack())
 			stackFrames[i++] = new StackFrameProxy(this, frame);
 		return stackFrames;
 	}
@@ -268,7 +268,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 			connectBreakpoints();
 			startThread();
 		} catch (Throwable t) {
-			debugger.terminated();
+			debugger.notifyTerminated();
 			handleTerminateEvent();
 			MessageDialog.openError(ShellUtils.getShell(), "Fatal error", t.getMessage());
 		} 
@@ -283,7 +283,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 				DebuggerUtils.startListening(target);
 				DebuggerUtils.fireCreationEvent(DebugThread.this);
 				Context threadContext = store.getContext().newLocalContext();
-				threadContext.setDebugger(debugger);
+				threadContext.setDebugger((Debugger)debugger);
 				try {
 					switch(context.getRunType()) {
 					case APPLI:
