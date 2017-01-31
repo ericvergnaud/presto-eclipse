@@ -183,7 +183,7 @@ public class DebugTarget extends PlatformObject implements IDebugTarget {
 		StringBuilder sb = new StringBuilder();
 		if(isTerminated())
 			sb.append("<terminated>");
-		sb.append("Interpreter");
+		sb.append("Prompto Interpreter");
 		if(!isTerminated()) {
 			sb.append(" (");
 			sb.append(debugThread.getStatusString());

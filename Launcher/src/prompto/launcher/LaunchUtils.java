@@ -9,8 +9,8 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.parser.Dialect;
+import prompto.core.RunType;
 import prompto.core.Utils;
-import prompto.core.Utils.RunType;
 
 public class LaunchUtils {
 

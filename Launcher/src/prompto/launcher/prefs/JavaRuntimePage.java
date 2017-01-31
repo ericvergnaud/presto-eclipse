@@ -234,7 +234,7 @@ public class JavaRuntimePage extends PreferencePage implements
 	}
 
 	private Path getDistributionFolder(String version) {
-		File dest = new File(System.getProperty("java.io.tmpdir"), "Java/" + version + "/");
+		File dest = new File(System.getProperty("java.io.tmpdir"), "Prompto/Java/" + version + "/");
 		dest.mkdirs();
 		return dest.toPath();
 	}

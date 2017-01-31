@@ -1,28 +1,15 @@
 package prompto.runner;
 
-import prompto.runtime.Interpreter;
 import prompto.launcher.LaunchContext;
-import prompto.store.IEclipseCodeStore;
 
 public class RunTarget {
 
 	public static void run(LaunchContext context) {
 		try {
-			IEclipseCodeStore store = context.getCodeStore();
-			switch(context.getRunType()) {
-			case APPLI:
-				Interpreter.interpretMethod(store.getContext(), context.getMethod().getId(), context.getCmdLineArgs());
-				break;
-			case SERVER:
-				// TODO AppServer.main(null);
-				break;
-			case SCRIPT:
-				Interpreter.interpretScript(store.getContext(), context.getCmdLineArgs());
-				break;
-			case TEST:
-				Interpreter.interpretTest(store.getContext(), context.getMethod().getId(), true);
-				break;
-			}
+			@SuppressWarnings("unchecked")
+			Class<IRunner> klass = (Class<IRunner>)Class.forName("prompto.runner." + context.getRunType().name() + "_Runner");
+			IRunner runner = klass.newInstance();
+			runner.run(context);
 		} catch (Throwable t) {
 			t.printStackTrace(System.err);
 		}

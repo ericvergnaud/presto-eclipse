@@ -28,30 +28,6 @@ public abstract class Utils {
 		return ResourcesPlugin.getWorkspace().getRoot();
 	}
 	
-	public static enum RunType {
-		TEST (null, "pec", "poc", "pmc", "pes", "pos", "pms"),
-		SERVER (CoreConstants.SERVER_NATURE_ID, "pec", "poc", "pmc"),
-		APPLI (CoreConstants.APPLICATION_NATURE_ID, "pec", "poc", "pmc"),
-		SCRIPT (CoreConstants.SCRIPTS_NATURE_ID, "pes", "pos", "pms");
-		
-		String nature;
-		Set<String> supportedExtensions = new HashSet<String>();
-		
-		RunType(String nature, String ... extensions) {
-			this.nature = nature;
-			for(String extension : extensions)
-				supportedExtensions.add(extension);
-		}
-		
-		public String getNature() {
-			return nature;
-		}
-		
-		boolean isSupportedExtension(String ext) {
-			return supportedExtensions.contains(ext.toLowerCase());
-		}
-	}
-	
 	public static Set<IFile> getEligibleFiles(IProject project, RunType type) {
 		Set<IFile> files = new HashSet<IFile>();
 		if(project!=null)

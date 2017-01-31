@@ -27,6 +27,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>libs/CodeStore-0.0.1-SNAPSHOT.jar</name>
+			<type>1</type>
+			<location>/Users/ericvergnaud/.m2/repository/org/prompto/CodeStore/0.0.1-SNAPSHOT/CodeStore-0.0.1-SNAPSHOT.jar</location>
+		</link>
+		<link>
 			<name>libs/Core-0.0.1-SNAPSHOT.jar</name>
 			<type>1</type>
 			<location>/Users/ericvergnaud/.m2/repository/org/prompto/Core/0.0.1-SNAPSHOT/Core-0.0.1-SNAPSHOT.jar</location>
@@ -35,6 +40,11 @@
 			<name>libs/Runtime-0.0.1-SNAPSHOT.jar</name>
 			<type>1</type>
 			<location>/Users/ericvergnaud/.m2/repository/org/prompto/Runtime/0.0.1-SNAPSHOT/Runtime-0.0.1-SNAPSHOT.jar</location>
+		</link>
+		<link>
+			<name>libs/Standalone-0.0.1-SNAPSHOT.jar</name>
+			<type>1</type>
+			<location>/Users/ericvergnaud/.m2/repository/org/prompto/Standalone/0.0.1-SNAPSHOT/Standalone-0.0.1-SNAPSHOT.jar</location>
 		</link>
 		<link>
 			<name>libs/antlr4-runtime-4.5.jar</name>

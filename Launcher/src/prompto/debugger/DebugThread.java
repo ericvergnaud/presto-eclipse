@@ -15,14 +15,13 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 import prompto.debug.IDebugEventListener;
 import prompto.debug.IDebugger;
-import prompto.debug.Debugger;
 import prompto.debug.IStackFrame;
+import prompto.debug.LocalDebugger;
 import prompto.debug.ResumeReason;
 import prompto.debug.SuspendReason;
 import prompto.error.PromptoError;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.runtime.IContext;
 import prompto.runtime.Interpreter;
 import prompto.launcher.LaunchContext;
 import prompto.store.IEclipseCodeStore;
@@ -40,7 +39,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 	public DebugThread(DebugTarget target) {
 		this.target = target;
 		this.context = target.getContext();
-		this.debugger = new Debugger();
+		this.debugger = new LocalDebugger();
 		this.debugger.setListener(this);
 	}
 
@@ -134,7 +133,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 	}
 
 	@Override
-	public void handleResumeEvent(ResumeReason reason, IContext context, ISection section) {
+	public void handleResumedEvent(ResumeReason reason) {
 		breakpoints = null;
 		DebuggerUtils.fireResumeEvent(this, debugEventFromResumeReason(reason));
 	}
@@ -155,7 +154,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 	}
 
 	@Override
-	public void handleSuspendEvent(SuspendReason reason, IContext context, ISection section) {
+	public void handleSuspendedEvent(SuspendReason reason) {
 		DebuggerUtils.fireSuspendEvent(this, debugEventFromSuspendReason(reason));
 	}
 	
@@ -173,7 +172,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 	}
 
 	@Override
-	public void handleTerminateEvent() {
+	public void handleTerminatedEvent() {
 		promptoThread = null;
 		DebuggerUtils.fireTerminateEvent(this);
 		DebuggerUtils.stopListening(target);
@@ -269,7 +268,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 			startThread();
 		} catch (Throwable t) {
 			debugger.notifyTerminated();
-			handleTerminateEvent();
+			handleTerminatedEvent();
 			MessageDialog.openError(ShellUtils.getShell(), "Fatal error", t.getMessage());
 		} 
 	}
@@ -283,7 +282,7 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 				DebuggerUtils.startListening(target);
 				DebuggerUtils.fireCreationEvent(DebugThread.this);
 				Context threadContext = store.getContext().newLocalContext();
-				threadContext.setDebugger((Debugger)debugger);
+				threadContext.setDebugger((LocalDebugger)debugger);
 				try {
 					switch(context.getRunType()) {
 					case APPLI:

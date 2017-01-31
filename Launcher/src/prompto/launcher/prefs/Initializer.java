@@ -7,14 +7,12 @@ import prompto.launcher.Plugin;
 
 public class Initializer extends AbstractPreferenceInitializer {
 	
-	static final String PROMPTO_DISTRIBUTION_JAVA_LIST = "prompto.distribution.java.list";
-	static final String PROMPTO_DISTRIBUTION_JAVA_ACTIVE = "prompto.distribution.java.active";
+	public static final String PROMPTO_DISTRIBUTION_JAVA_LIST = "prompto.distribution.java.list";
 	
 	@Override
 	public void initializeDefaultPreferences() {
 	    Preferences prefs = Plugin.getPreferences();
 	    prefs.put(PROMPTO_DISTRIBUTION_JAVA_LIST, "");
-	    prefs.put(PROMPTO_DISTRIBUTION_JAVA_ACTIVE, "");
 	}
 
 }

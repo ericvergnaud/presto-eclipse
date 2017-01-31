@@ -16,8 +16,8 @@ import org.eclipse.core.runtime.CoreException;
 import prompto.code.Module;
 import prompto.code.Version;
 import prompto.core.CoreConstants;
+import prompto.core.RunType;
 import prompto.core.Utils;
-import prompto.core.Utils.RunType;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
@@ -90,19 +90,17 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 	@Override
 	public void setProject(IProject project) throws CoreException {
 		Set<IProject> projects = new HashSet<IProject>();
-		collectPromptoLibraries();
+		collectBuiltInLibraries();
 		collectProjectLibraries(projects, project);
 		collectProjectFiles(projects);
 	}
 	
 	private void collectProjectLibraries(Set<IProject> projects, IProject project) throws CoreException {
-		if(projects.contains(project))
-			return;
-		projects.add(project);
+		if(!projects.contains(project))
+			projects.add(project);
 		for(IProject library : project.getReferencedProjects()) {
-			if(library.hasNature(CoreConstants.LIBRARY_NATURE_ID)) {
+			if(!projects.contains(library) && library.hasNature(CoreConstants.LIBRARY_NATURE_ID))
 				collectProjectLibraries(projects, library);
-			}
 		}
 	}
 
@@ -117,7 +115,7 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 			this.files.add(file);
 	}
 
-	private void collectPromptoLibraries() {
+	private void collectBuiltInLibraries() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -134,6 +132,11 @@ public abstract class EclipseCodeStore implements IEclipseCodeStore {
 			return null;
 		String path = ((IFile)resource).getFullPath().toPortableString();
 		return context.findSectionFor(path, lineNumber);
+	}
+	
+	@Override
+	public ISection findSection(ISection section) {
+		return context.findSection(section);
 	}
 	
 	@Override
