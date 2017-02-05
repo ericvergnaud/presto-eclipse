@@ -173,6 +173,7 @@ public class JavaRuntimePage extends PreferencePage implements
 	private void registerDistribution(String version) {
 		Path dest = getDistributionFolder(version);
 		Distribution dist = new Distribution(Version.parse(version), dest.toString());
+		distributions.remove(dist);
 		distributions.add(dist);	
 	}
 

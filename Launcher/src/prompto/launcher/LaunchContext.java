@@ -21,6 +21,7 @@ public class LaunchContext {
 	ILaunch launch;
 	ILaunchConfiguration configuration;
 	RunType runType;
+	String httpPort;
 	IProject project;
 	IFile file;
 	IDeclaration method;
@@ -40,6 +41,11 @@ public class LaunchContext {
 	public RunType getRunType() {
 		return runType;
 	}
+
+	public String getHttpPort() {
+		return httpPort;
+	}
+
 
 	public IProject getProject() {
 		return project;
@@ -67,6 +73,7 @@ public class LaunchContext {
 	
 	private void readConfiguration() {
 		runType = LaunchUtils.getConfiguredRunType(configuration);
+		httpPort = LaunchUtils.getConfiguredHttpPort(configuration);
 		project = LaunchUtils.getConfiguredProject(configuration);
 		file = LaunchUtils.getConfiguredFile(configuration, project);
 		method = LaunchUtils.getConfiguredMethod(configuration, file);

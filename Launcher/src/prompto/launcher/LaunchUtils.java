@@ -5,12 +5,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
-import prompto.declaration.IDeclaration;
-import prompto.declaration.IMethodDeclaration;
-import prompto.declaration.TestMethodDeclaration;
-import prompto.parser.Dialect;
 import prompto.core.RunType;
 import prompto.core.Utils;
+import prompto.declaration.IDeclaration;
 
 public class LaunchUtils {
 
@@ -26,6 +23,17 @@ public class LaunchUtils {
 			return null;
 		}
 	}
+	
+	public static String getConfiguredHttpPort(ILaunchConfiguration configuration) {
+		try {
+			String value = configuration.getAttribute(LauncherConstants.HTTP_PORT, "8080");
+			return value.isEmpty() ? null : value;
+		} catch (CoreException e) {
+			e.printStackTrace(System.err);
+			return null;
+		}
+	}
+
 	
 	public static IProject getConfiguredProject(ILaunchConfiguration configuration) {
 		try {
@@ -67,33 +75,11 @@ public class LaunchUtils {
 	}
 			
 	private static IDeclaration getConfiguredMethod(ILaunchConfiguration configuration, IFile file, String signature) {
-		switch( getConfiguredRunType(configuration)) {
-		case TEST:
-			return getConfiguredTestMethod(file, signature);
-		case APPLI:
-			return getConfiguredMainMethod(file, signature);
-		default:
-			return null; // TODO log ? throw ?
-		}
+		RunType runType = getConfiguredRunType(configuration);
+		return runType.findMethod(file, signature);
 	}
-
-	private static IMethodDeclaration getConfiguredMainMethod(IFile file, String signature) {
-		Dialect dialect = Utils.getDialect(file);
-		for(IMethodDeclaration method : Utils.getEligibleMainMethods(file)) {
-			if(signature.equals(method.getSignature(dialect))) 
-				return method;
-		}
-		return null;
-	}
-
-	private static TestMethodDeclaration getConfiguredTestMethod(IFile file, String signature) {
-		for(TestMethodDeclaration method : Utils.getEligibleTestMethods(file)) {
-			if(signature.equals(method.getName().toString()))
-				return method;
-		}
-		return null;
-	}
-
+	
+	
 	public static String getConfiguredCommandLineArguments(ILaunchConfiguration configuration) {
 		try {
 			return configuration.getAttribute(LauncherConstants.ARGUMENTS, "");

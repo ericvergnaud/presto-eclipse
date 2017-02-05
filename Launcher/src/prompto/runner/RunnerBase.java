@@ -24,8 +24,10 @@ public abstract class RunnerBase implements IRunner {
 			ProcessBuilder builder = new ProcessBuilder(commands)
 				.directory(new File(context.getDistribution().getDirectory()))
 				.inheritIO();
-			DebugPlugin.newProcess(context.getLaunch(), builder.start(), "Prompto executable");
+			String processName = context.getConfiguration().getName() + " [" + getProcessName() + "]";
+			DebugPlugin.newProcess(context.getLaunch(), builder.start(), processName);
 		} catch(IOException e) {
+			e.printStackTrace(System.err);
 			throw new CoreException(Status.CANCEL_STATUS);
 		}
 	}
@@ -35,10 +37,7 @@ public abstract class RunnerBase implements IRunner {
 		commands.add("java");
 		commands.add("-jar");
 		commands.add(getTargetJar(context));
-		commands.add("-application");
-		commands.add(getProjectName(context));
-		commands.add(getTargetType(context));
-		commands.add(getTargetValue(context));
+		commands.addAll(getTargetSpecifiers(context));
 		commands.add("-resources");
 		commands.add(getResourcesAsString(context));
 		Collection<String> args = getCommandLineArgs(context);
@@ -46,6 +45,7 @@ public abstract class RunnerBase implements IRunner {
 			commands.addAll(args);
 		return commands.toArray(new String[commands.size()]);
 	}
+
 
 	protected Collection<String> getCommandLineArgs(LaunchContext context) {
 		String args = context.getCmdLineArgs();
@@ -55,14 +55,14 @@ public abstract class RunnerBase implements IRunner {
 			return Arrays.asList(args.split(" "));
 	}
 
-	private String getProjectName(LaunchContext context) {
+	public String getProjectName(LaunchContext context) {
 		return context.getProject().getName();
 	}
 
+	protected abstract String getProcessName();
 	protected abstract Collection<IFile> getSourceFiles(LaunchContext context) throws CoreException;
 	protected abstract String getTargetJar(LaunchContext context);
-	protected abstract String getTargetType(LaunchContext context);
-	protected abstract String getTargetValue(LaunchContext context);
+	protected abstract List<String> getTargetSpecifiers(LaunchContext context);
 
 	private String getResourcesAsString(LaunchContext context) throws CoreException {
 		StringBuilder sb = new StringBuilder();

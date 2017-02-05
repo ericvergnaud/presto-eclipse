@@ -1,7 +1,9 @@
 package prompto.runner;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -10,7 +12,11 @@ import prompto.launcher.LaunchContext;
 import prompto.store.IEclipseCodeStore;
 
 public class TEST_Runner extends RunnerBase {
-	// Interpreter.interpretTest(store.getContext(), context.getMethod().getId(), true);
+
+	@Override
+	protected String getProcessName() {
+		return "Prompto Test";
+	}
 
 	@Override
 	protected String getTargetJar(LaunchContext context) {
@@ -18,13 +24,8 @@ public class TEST_Runner extends RunnerBase {
 	};
 	
 	@Override
-	protected String getTargetType(LaunchContext context) {
-		return "-test";
-	}
-	
-	@Override
-	protected String getTargetValue(LaunchContext context) {
-		return context.getMethod().getName();
+	protected List<String> getTargetSpecifiers(LaunchContext context) {
+		return Arrays.asList("-test", context.getMethod().getName());
 	}
 	
 	@Override
