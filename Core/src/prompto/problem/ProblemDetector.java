@@ -20,13 +20,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.IDocument;
 
+import prompto.code.ICodeStore;
+import prompto.code.IEclipseCodeStore;
+import prompto.code.StoreUtils;
 import prompto.core.Utils;
 import prompto.declaration.DeclarationList;
 import prompto.parser.Dialect;
 import prompto.parser.IParser;
 import prompto.runtime.Context;
-import prompto.store.IEclipseCodeStore;
-import prompto.store.StoreUtils;
 
 @SuppressWarnings("restriction")
 public class ProblemDetector {
@@ -64,9 +65,11 @@ public class ProblemDetector {
 	}
 
 	private void manageProblems() throws CoreException {
-		store = StoreUtils.fetchStoreFor(editedFile);
-		context = store.getContext();
-		synchronized(context) {
+		// need to ensure ICodeStore instance is constant, TODO use TLS
+		synchronized(ICodeStore.class) {
+			this.store = StoreUtils.fetchStoreFor(editedFile);
+			this.context = store.getContext();
+			ICodeStore.setInstance(store);
 			if(!initialized()) {
 				// need to register libraries before checking project files
 				manageImpact();

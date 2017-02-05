@@ -11,10 +11,10 @@ import org.osgi.service.prefs.Preferences;
 
 import prompto.declaration.IDeclaration;
 import prompto.distribution.Distribution;
+import prompto.code.IEclipseCodeStore;
+import prompto.code.StoreUtils;
 import prompto.core.RunType;
 import prompto.launcher.prefs.Initializer;
-import prompto.store.IEclipseCodeStore;
-import prompto.store.StoreUtils;
 
 public class LaunchContext {
 

@@ -8,8 +8,8 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
+import prompto.code.IEclipseCodeStore;
 import prompto.launcher.LaunchContext;
-import prompto.store.IEclipseCodeStore;
 
 public class TEST_Runner extends RunnerBase {
 

@@ -13,6 +13,7 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.jface.dialogs.MessageDialog;
 
+import prompto.code.IEclipseCodeStore;
 import prompto.debug.IDebugEventListener;
 import prompto.debug.IDebugger;
 import prompto.debug.IStackFrame;
@@ -24,7 +25,6 @@ import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.runtime.Interpreter;
 import prompto.launcher.LaunchContext;
-import prompto.store.IEclipseCodeStore;
 import prompto.utils.ShellUtils;
 
 public class DebugThread extends PlatformObject implements IThread, IDebugEventListener {
