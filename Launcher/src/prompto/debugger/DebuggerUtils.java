@@ -87,11 +87,11 @@ public class DebuggerUtils {
 	}
 
 	public static String getProjectRelativePath(IProject project, ISection section) {
-		String path = section.getPath();
+		String filePath = section.getFilePath();
 		String projectPath = project.getFullPath().toPortableString();
-		if (path.startsWith(projectPath))
-			path = path.substring(projectPath.length());
-		return path;
+		if (filePath.startsWith(projectPath))
+			filePath = filePath.substring(projectPath.length());
+		return filePath;
 	}
 
 	public static IMarker createMarker(IProject project, ISection section) throws CoreException {

@@ -5,7 +5,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDebugTarget;
 
 import prompto.debug.IDebugEventListener;
-import prompto.debug.Stack;
+import prompto.debug.IStack;
 import prompto.launcher.LaunchContext;
 
 public interface IPromptoDebugTarget extends IDebugTarget, IDebugEventListener {
@@ -23,6 +23,6 @@ public interface IPromptoDebugTarget extends IDebugTarget, IDebugEventListener {
 	void stepInto(DebugThread thread) throws DebugException;
 	void stepOver(DebugThread thread) throws DebugException;
 	void stepReturn(DebugThread thread) throws DebugException;
-	Stack getStack(DebugThread thread) throws DebugException;
+	IStack<?> getStack(DebugThread thread) throws DebugException;
 
 }

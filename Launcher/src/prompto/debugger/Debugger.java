@@ -25,8 +25,8 @@ import prompto.code.IEclipseCodeStore;
 import prompto.core.CoreConstants;
 import prompto.debug.DebugRequestClient;
 import prompto.debug.IDebugger;
+import prompto.debug.IStack;
 import prompto.debug.ResumeReason;
-import prompto.debug.Stack;
 import prompto.debug.SuspendReason;
 import prompto.launcher.ILaunchHelper;
 import prompto.launcher.LaunchContext;
@@ -48,16 +48,17 @@ public class Debugger extends PlatformObject implements IPromptoDebugTarget  {
 	@Override
 	public void debug(LaunchContext context) throws CoreException {
 		this.context = context;
-		context.getLaunch().addDebugTarget(this);
 		try {
 			String[] commands = buildCommands(context);
 			ProcessBuilder builder = new ProcessBuilder(commands)
 				.directory(new File(context.getDistribution().getDirectory()))
 				.inheritIO();
-			process = DebugPlugin.newProcess(context.getLaunch(), builder.start(), getName());
+			Process remote = builder.start();
+			debugger = new DebugRequestClient(remote, "localhost", 9999, this);
+			process = DebugPlugin.newProcess(context.getLaunch(), remote, getName());
 			DebuggerUtils.fireCreationEvent(this);
 			DebuggerUtils.startListening(this);
-			debugger = new DebugRequestClient(new RemoteProcess(process), "localhost", 9999, this);
+			context.getLaunch().addDebugTarget(this);
 			debugger.connect();
 			connectBreakpoints();
 			if(!context.isStopInMain())
@@ -391,7 +392,7 @@ public class Debugger extends PlatformObject implements IPromptoDebugTarget  {
 	}
 	
 	@Override
-	public Stack getStack(DebugThread thread) throws DebugException {
+	public IStack<?> getStack(DebugThread thread) throws DebugException {
 		return debugger.getStack();
 	}
 	

@@ -8,7 +8,7 @@ import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IThread;
 
-import prompto.debug.Stack;
+import prompto.debug.IStack;
 
 public class DebugThread extends PlatformObject implements IThread {
 	
@@ -143,7 +143,7 @@ public class DebugThread extends PlatformObject implements IThread {
 
 	@Override
 	public StackFrameProxy[] getStackFrames() throws DebugException {
-		Stack stack = target.getStack(this);
+		IStack<?> stack = target.getStack(this);
 		return stack.stream()
 				.map((f)->new StackFrameProxy(this, f))
 				.toArray((l)->new StackFrameProxy[l]);
