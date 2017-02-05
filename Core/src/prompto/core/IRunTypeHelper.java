@@ -20,7 +20,7 @@ public interface IRunTypeHelper {
 	static Set<String> codeExtensions = new HashSet<>(Arrays.asList("pec", "poc", "pmc"));
 	static Set<String> scriptExtensions = new HashSet<>(Arrays.asList("pes", "pos", "pms"));
 
-	static class TestHelper implements IRunTypeHelper {
+	static class Test implements IRunTypeHelper {
 
 		@Override
 		public String getNature() {
@@ -39,7 +39,7 @@ public interface IRunTypeHelper {
 
 	}
 
-	static class AppliHelper implements IRunTypeHelper {
+	static class Application implements IRunTypeHelper {
 
 		@Override
 		public String getNature() {
@@ -58,7 +58,7 @@ public interface IRunTypeHelper {
 		
 	}
 
-	static class ServerHelper implements IRunTypeHelper {
+	static class Server implements IRunTypeHelper {
 
 		@Override
 		public String getNature() {
@@ -76,7 +76,7 @@ public interface IRunTypeHelper {
 		}
 	}
 
-	static class ScriptHelper implements IRunTypeHelper {
+	static class Script implements IRunTypeHelper {
 
 		@Override
 		public String getNature() {

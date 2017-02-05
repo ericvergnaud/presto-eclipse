@@ -1,46 +1,21 @@
 package prompto.debugger;
 
-import java.lang.Thread.State;
-
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.PlatformObject;
-import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IThread;
-import org.eclipse.jface.dialogs.MessageDialog;
 
-import prompto.code.IEclipseCodeStore;
-import prompto.debug.IDebugEventListener;
-import prompto.debug.IDebugger;
-import prompto.debug.IStackFrame;
-import prompto.debug.LocalDebugger;
-import prompto.debug.ResumeReason;
-import prompto.debug.SuspendReason;
-import prompto.error.PromptoError;
-import prompto.parser.ISection;
-import prompto.runtime.Context;
-import prompto.runtime.Interpreter;
-import prompto.launcher.LaunchContext;
-import prompto.utils.ShellUtils;
+import prompto.debug.Stack;
 
-public class DebugThread extends PlatformObject implements IThread, IDebugEventListener {
-
-	DebugTarget target;
-	LaunchContext context;
-	IEclipseCodeStore store;
-	IBreakpoint[] breakpoints;
-	Thread promptoThread;
-	IDebugger debugger;
+public class DebugThread extends PlatformObject implements IThread {
 	
-	public DebugThread(DebugTarget target) {
+	IPromptoDebugTarget target;
+	
+	public DebugThread(IPromptoDebugTarget target) {
 		this.target = target;
-		this.context = target.getContext();
-		this.debugger = new LocalDebugger();
-		this.debugger.setListener(this);
 	}
 
 	@Override
@@ -71,139 +46,79 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 
 	@Override
 	public boolean canResume() {
-		return debugger.canResume();
+		return target.canResume(this);
 	}
 
 	@Override
 	public boolean canSuspend() {
-		return debugger.canSuspend();
+		return target.canSuspend(this);
 	}
 
 	@Override
 	public boolean isSuspended() {
-		return debugger.isSuspended();
+		return target.isSuspended(this);
 	}
 
 	@Override
 	public void resume() throws DebugException {
-		debugger.resume();
+		target.resume(this);
 	}
 	
 	@Override
 	public void suspend() throws DebugException {
-		debugger.suspend();
+		target.suspend(this);
 	}
 
 	@Override
 	public boolean canStepInto() {
-		return debugger.canStepInto();
+		return target.canStepInto(this);
 	}
 
 	@Override
 	public boolean canStepOver() {
-		return debugger.canStepOver();
+		return target.canStepOver(this);
 	}
 
 	@Override
 	public boolean canStepReturn() {
-		return debugger.canStepOut();
+		return target.canStepReturn(this);
 	}
 
 	@Override
 	public boolean isStepping() {
-		return debugger.isStepping();
+		return target.isStepping(this);
 	}
 
 	@Override
 	public void stepInto() throws DebugException {
-		breakpoints = null;
-		debugger.stepInto();
+		target.stepInto(this);
 	}
 
 	@Override
 	public void stepOver() throws DebugException {
-		breakpoints = null;
-		debugger.stepOver();
+		target.stepOver(this);
 	}
 
 	@Override
 	public void stepReturn() throws DebugException {
-		breakpoints = null;
-		debugger.stepOut();
+		target.stepReturn(this);
 	}
 
-	@Override
-	public void handleResumedEvent(ResumeReason reason) {
-		breakpoints = null;
-		DebuggerUtils.fireResumeEvent(this, debugEventFromResumeReason(reason));
-	}
-	
-	private int debugEventFromResumeReason(ResumeReason reason) {
-		switch(reason) {
-		case RESUMED:
-			return DebugEvent.CLIENT_REQUEST;
-		case STEP_INTO:
-			return DebugEvent.STEP_INTO;
-		case STEP_OVER:
-			return DebugEvent.STEP_OVER;
-		case STEP_OUT:
-			return DebugEvent.STEP_RETURN;
-		default:
-			return 0;
-		}
-	}
 
-	@Override
-	public void handleSuspendedEvent(SuspendReason reason) {
-		DebuggerUtils.fireSuspendEvent(this, debugEventFromSuspendReason(reason));
-	}
-	
-	private int debugEventFromSuspendReason(SuspendReason reason) {
-		switch(reason) {
-		case STEPPING:
-			return DebugEvent.STEP_END;
-		case BREAKPOINT :
-			return DebugEvent.BREAKPOINT;
-		case SUSPENDED:
-			return DebugEvent.CLIENT_REQUEST;
-		default:
-			return 0;
-		}
-	}
-
-	@Override
-	public void handleTerminatedEvent() {
-		promptoThread = null;
-		DebuggerUtils.fireTerminateEvent(this);
-		DebuggerUtils.stopListening(target);
-		DebuggerUtils.fireTerminateEvent(target);
-	}
-	
 	@Override
 	public boolean canTerminate() {
-		return !debugger.isTerminated();
+		return target.canTerminate();
 	}
 
 	@Override
 	public boolean isTerminated() {
-		return debugger.isTerminated();
+		return target.isTerminated();
 	}
 
 
 	@Override
 	public void terminate() throws DebugException {
-		if(promptoThread==null)
-			return;
-		Thread t = promptoThread;
-		promptoThread = null;
-		debugger.terminate();
-		if(isSuspended())
-			resume();
-		try {
-			t.join();
-		} catch(InterruptedException e) {
-			
-		}
+		target.terminate();
 	}
 
 	@Override
@@ -228,132 +143,25 @@ public class DebugThread extends PlatformObject implements IThread, IDebugEventL
 
 	@Override
 	public StackFrameProxy[] getStackFrames() throws DebugException {
-		StackFrameProxy[] stackFrames = new StackFrameProxy[debugger.getStack().size()];
-		int i = 0;
-		for(IStackFrame frame : debugger.getStack())
-			stackFrames[i++] = new StackFrameProxy(this, frame);
-		return stackFrames;
+		Stack stack = target.getStack(this);
+		return stack.stream()
+				.map((f)->new StackFrameProxy(this, f))
+				.toArray((l)->new StackFrameProxy[l]);
 	}
 
 	@Override
-	public String getName() {
-		StringBuilder sb = new StringBuilder();
-		if(isTerminated())
-			sb.append("<terminated>");
-		sb.append("Thread [");
-		sb.append(context.getMethod().getName());
-		sb.append(']');
-		if(!isTerminated()) {
-			sb.append(" (");
-			sb.append(getStatusString());
-			sb.append(')');
-		}
-		return sb.toString();
-	}
-	
-	@Override
-	public String toString() {
-		return getName();
+	public String getName() throws DebugException {
+		return "<anonymous>";
 	}
 
 	@Override
 	public IBreakpoint[] getBreakpoints() {
-		return breakpoints;
+		return DebuggerUtils.getBreakpoints();
 	}
 
-	public void start() {
-		try {
-			store = context.getCodeStore();
-			connectBreakpoints();
-			startThread();
-		} catch (Throwable t) {
-			debugger.notifyTerminated();
-			handleTerminatedEvent();
-			MessageDialog.openError(ShellUtils.getShell(), "Fatal error", t.getMessage());
-		} 
-	}
 
-	private void startThread() {
-		promptoThread = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				DebuggerUtils.fireCreationEvent(target);
-				DebuggerUtils.startListening(target);
-				DebuggerUtils.fireCreationEvent(DebugThread.this);
-				Context threadContext = store.getContext().newLocalContext();
-				threadContext.setDebugger((LocalDebugger)debugger);
-				try {
-					switch(context.getRunType()) {
-					case APPLI:
-						Interpreter.interpretMethod(threadContext, context.getMethod().getId(), context.getCmdLineArgs());
-						break;
-					case SERVER:
-						// TODO AppServer.main(null);
-						break;
-					case SCRIPT:
-						Interpreter.interpretScript(threadContext, context.getCmdLineArgs());
-						break;
-					case TEST:
-						Interpreter.interpretTest(threadContext, context.getMethod().getId(), true);
-						break;
-					}
-				} catch(PromptoError error) {
-					// TODO
-				} catch(Throwable t) {
-					t.printStackTrace(System.err);
-				}
-			}
-		}, context.getConfiguration().getName());
-		promptoThread.start();
-		if(!context.isStopInMain()) {
-			while(promptoThread.getState()!=State.WAITING) try {
-				Thread.sleep(1);
-			} catch (Exception e) {};
-			debugger.resume();
-		}
-	}
 
-	public String getStatusString() {
-		return debugger.getStatus().toString();
-	}
-	
-	public void connectBreakpoints() throws CoreException {
-		IBreakpoint[] breakpoints = DebuggerUtils.getBreakpoints();
-		for(IBreakpoint breakpoint : breakpoints)
-			connectBreakpoint(breakpoint);
-	}
 
-	public void connectBreakpoint(IBreakpoint breakpoint) throws CoreException {
-		if(breakpoint instanceof LineBreakpoint)
-			connectLineBreakpoint((LineBreakpoint)breakpoint);
-		else
-			throw new RuntimeException("Unsupported");
-		
-	}
-
-	public void connectLineBreakpoint(LineBreakpoint breakpoint) throws CoreException {
-		ISection section = store.findSection(breakpoint.getResource(), breakpoint.getLineNumber());
-		if(section==null)
-			breakpoint.setEnabled(false);
-		else {
-			breakpoint.setEnabled(true);
-			section.setAsBreakpoint(true);
-		}
-	}
-
-	public void disconnectBreakpoint(IBreakpoint breakpoint) throws CoreException {
-		if(breakpoint instanceof LineBreakpoint)
-			disconnectLineBreakpoint((LineBreakpoint)breakpoint);
-		else
-			throw new RuntimeException("Unsupported");
-		
-	}
-
-	public void disconnectLineBreakpoint(LineBreakpoint breakpoint) throws CoreException {
-		ISection section = store.findSection(breakpoint.getResource(), breakpoint.getLineNumber());
-		if(section!=null)
-			section.setAsBreakpoint(false);
-	}
 
 }
+

@@ -8,23 +8,23 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 
+import prompto.launcher.ILaunchHelper;
 import prompto.launcher.LaunchContext;
 
-public abstract class RunnerBase implements IRunner {
+public abstract class Runner {
 
-	@Override
-	public void run(LaunchContext context) throws CoreException {
+	public static void run(LaunchContext context) throws CoreException {
 		try {
+			ILaunchHelper helper = context.getLaunchHelper();
 			String[] commands = buildCommands(context);
 			ProcessBuilder builder = new ProcessBuilder(commands)
 				.directory(new File(context.getDistribution().getDirectory()))
 				.inheritIO();
-			String processName = context.getConfiguration().getName() + " [" + getProcessName() + "]";
+			String processName = context.getConfiguration().getName() + " [" + helper.getProcessName() + "]";
 			DebugPlugin.newProcess(context.getLaunch(), builder.start(), processName);
 		} catch(IOException e) {
 			e.printStackTrace(System.err);
@@ -32,22 +32,23 @@ public abstract class RunnerBase implements IRunner {
 		}
 	}
 
-	private String[] buildCommands(LaunchContext context) throws CoreException {
+	private static String[] buildCommands(LaunchContext context) throws CoreException {
+		ILaunchHelper helper = context.getLaunchHelper();
 		List<String> commands = new ArrayList<>();
 		commands.add("java");
 		commands.add("-jar");
-		commands.add(getTargetJar(context));
-		commands.addAll(getTargetSpecifiers(context));
+		commands.add(helper.getTargetJar(context));
+		commands.addAll(helper.getTargetSpecifiers(context));
 		commands.add("-resources");
 		commands.add(getResourcesAsString(context));
-		Collection<String> args = getCommandLineArgs(context);
+		Collection<String> args = helper.getCommandLineArgs(context);
 		if(args!=null && !args.isEmpty())
 			commands.addAll(args);
 		return commands.toArray(new String[commands.size()]);
 	}
 
 
-	protected Collection<String> getCommandLineArgs(LaunchContext context) {
+	public static Collection<String> getCommandLineArgs(LaunchContext context) {
 		String args = context.getCmdLineArgs();
 		if(args==null || args.trim().isEmpty())
 			return Collections.emptyList();
@@ -55,19 +56,15 @@ public abstract class RunnerBase implements IRunner {
 			return Arrays.asList(args.split(" "));
 	}
 
-	public String getProjectName(LaunchContext context) {
+	public static String getProjectName(LaunchContext context) {
 		return context.getProject().getName();
 	}
 
-	protected abstract String getProcessName();
-	protected abstract Collection<IFile> getSourceFiles(LaunchContext context) throws CoreException;
-	protected abstract String getTargetJar(LaunchContext context);
-	protected abstract List<String> getTargetSpecifiers(LaunchContext context);
-
-	private String getResourcesAsString(LaunchContext context) throws CoreException {
+	public static String getResourcesAsString(LaunchContext context) throws CoreException {
+		ILaunchHelper helper = context.getLaunchHelper();
 		StringBuilder sb = new StringBuilder();
 		sb.append('"');
-		getSourceFiles(context).forEach((file)->{
+		helper.getSourceFiles(context).forEach((file)->{
 			sb.append(file.getLocation().toOSString());
 			sb.append(',');
 		});

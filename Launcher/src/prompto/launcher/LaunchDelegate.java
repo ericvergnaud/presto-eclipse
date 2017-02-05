@@ -8,9 +8,9 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
-import prompto.debugger.DebugTarget;
-import prompto.profiler.ProfileTarget;
-import prompto.runner.RunTarget;
+import prompto.debugger.Debugger;
+import prompto.profiler.Profiler;
+import prompto.runner.Runner;
 
 public class LaunchDelegate implements ILaunchConfigurationDelegate {
 
@@ -19,13 +19,13 @@ public class LaunchDelegate implements ILaunchConfigurationDelegate {
 		LaunchContext context = new LaunchContext(configuration, launch);
 		switch(mode) {
 		case ILaunchManager.RUN_MODE:
-			RunTarget.run(context);
+			Runner.run(context);
 			break;
 		case ILaunchManager.DEBUG_MODE:
-			DebugTarget.debug(context);
+			Debugger.run(context);
 			break;
 		case ILaunchManager.PROFILE_MODE:
-			ProfileTarget.profile(context);
+			Profiler.run(context);
 			break;
 		default:
 			throw new CoreException(Status.CANCEL_STATUS);

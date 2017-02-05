@@ -96,5 +96,20 @@ public class LaunchContext {
 			return dists.iterator().next();
 	}
 
+	public ILaunchHelper getLaunchHelper() {
+		switch(getRunType()) {
+		case APPLI:
+			return new ILaunchHelper.Application();
+		case TEST:
+			return new ILaunchHelper.Test();
+		case SCRIPT:
+			return new ILaunchHelper.Script();
+		case SERVER:
+			return new ILaunchHelper.Server();
+		default:
+			throw new UnsupportedOperationException(getRunType().toString());
+		}
+	}
+
 
 }

@@ -5,10 +5,10 @@ import org.eclipse.core.resources.IFile;
 import prompto.declaration.IDeclaration;
 
 public enum RunType {
-	TEST (new IRunTypeHelper.TestHelper()),
-	SERVER (new IRunTypeHelper.ServerHelper()),
-	APPLI (new IRunTypeHelper.AppliHelper()),
-	SCRIPT (new IRunTypeHelper.ScriptHelper());
+	TEST (new IRunTypeHelper.Test()),
+	SERVER (new IRunTypeHelper.Server()),
+	APPLI (new IRunTypeHelper.Application()),
+	SCRIPT (new IRunTypeHelper.Script());
 	
 	IRunTypeHelper helper;
 	
