@@ -52,6 +52,21 @@
 			<location>/Users/ericvergnaud/.m2/repository/org/antlr/antlr4-runtime/4.5/antlr4-runtime-4.5.jar</location>
 		</link>
 		<link>
+			<name>libs/jackson-annotations-2.6.0.jar</name>
+			<type>1</type>
+			<location>/Users/ericvergnaud/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.6.0/jackson-annotations-2.6.0.jar</location>
+		</link>
+		<link>
+			<name>libs/jackson-core-2.6.2.jar</name>
+			<type>1</type>
+			<location>/Users/ericvergnaud/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.6.2/jackson-core-2.6.2.jar</location>
+		</link>
+		<link>
+			<name>libs/jackson-databind-2.6.2.jar</name>
+			<type>1</type>
+			<location>/Users/ericvergnaud/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.6.2/jackson-databind-2.6.2.jar</location>
+		</link>
+		<link>
 			<name>libs/joda-time-2.0.jar</name>
 			<type>1</type>
 			<location>/Users/ericvergnaud/.m2/repository/joda-time/joda-time/2.0/joda-time-2.0.jar</location>

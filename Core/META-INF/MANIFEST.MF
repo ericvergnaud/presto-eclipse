@@ -16,6 +16,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libs/joda-time-2.0.jar,
  libs/antlr4-runtime-4.5.jar,
+ libs/jackson-core-2.6.2.jar,
+ libs/jackson-databind-2.6.2.jar,
+ libs/jackson-annotations-2.6.0.jar,
  libs/Core-0.0.1-SNAPSHOT.jar,
  libs/CodeStore-0.0.1-SNAPSHOT.jar,
  libs/Runtime-0.0.1-SNAPSHOT.jar,
