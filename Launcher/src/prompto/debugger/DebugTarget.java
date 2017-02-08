@@ -46,6 +46,7 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	IDebugEventListener listener;
 	IProcess process;
 	IDebugger debugger;
+	DebugThread thread; // until Prompto supports Workers
 	
 	public DebugTarget(LaunchContext context) {
 		this.context = context;
@@ -96,6 +97,7 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 			listener = new DebugEventListener(this);
 			debugger = new DebugRequestClient(remote, "localhost", 9999, listener);
 			process = DebugPlugin.newProcess(context.getLaunch(), remote, processName);
+			thread = new DebugThread(this, new prompto.debug.IThread() {}); 
 			context.getLaunch().addDebugTarget(this);
 			debugger.connect();
 			connectBreakpoints();
@@ -228,11 +230,11 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	public boolean hasThreads() throws DebugException {
 		return true;
 	}
-
+	
 	
 	@Override
 	public IThread[] getThreads() throws DebugException {
-		return new IThread[] { new DebugThread(this, new prompto.debug.IThread() {}) };
+		return new IThread[] { thread };
 	}
 	
 	@Override
