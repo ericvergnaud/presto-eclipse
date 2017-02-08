@@ -20,7 +20,7 @@ public enum RunType {
 		return helper.getNature();
 	}
 	
-	boolean isSupportedExtension(String ext) {
+	public boolean isSupportedExtension(String ext) {
 		return helper.isSupportedExtension(ext);
 	}
 

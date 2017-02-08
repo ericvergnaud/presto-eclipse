@@ -3,27 +3,26 @@ package prompto.debugger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IRegisterGroup;
+import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.debug.core.sourcelookup.containers.WorkspaceSourceContainer;
 
-import prompto.debug.IStackFrame;
 import prompto.core.CoreConstants;
 
-public class StackFrameProxy extends PlatformObject implements org.eclipse.debug.core.model.IStackFrame {
+public class StackFrameProxy extends PlatformObject implements IStackFrame {
 
 	DebugThread thread;
-	IStackFrame frame;
+	prompto.debug.IStackFrame frame;
+	IFile file = null;
+
 	
-	public StackFrameProxy(DebugThread thread, IStackFrame frame) {
+	public StackFrameProxy(DebugThread thread, prompto.debug.IStackFrame frame) {
 		this.thread = thread;
 		this.frame = frame;
 	}
@@ -48,7 +47,7 @@ public class StackFrameProxy extends PlatformObject implements org.eclipse.debug
 		return thread;
 	}
 	
-	public IStackFrame getStackFrame() {
+	public prompto.debug.IStackFrame getStackFrame() {
 		return frame;
 	}
 
@@ -62,19 +61,15 @@ public class StackFrameProxy extends PlatformObject implements org.eclipse.debug
 			return getLaunch();
 		else if(adapter==IResource.class)
 			return getFile();
-		return super.getAdapter(adapter);
+		else
+			return super.getAdapter(adapter);
 	}
 	
-	IFile file = null;
-
-	private IFile getFile() {
-		if(file==null) {
-			try {
-				// need a project relative path
-				IPath path = new Path(frame.getFilePath()).removeFirstSegments(1);
-				file = (IFile)new WorkspaceSourceContainer().findSourceElements(path.toPortableString())[0];
-			} catch (CoreException e) {
-			}
+	public IFile getFile() {
+		if(file==null) try {
+			file = thread.getTarget().resolveFile(frame.getFilePath());
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
 		return file;
 	}

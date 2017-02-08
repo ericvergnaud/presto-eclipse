@@ -13,7 +13,7 @@ import prompto.runner.Runner;
 
 public interface ILaunchHelper {
 
-	String getProcessName();
+	String getRunTypeName();
 	Collection<IFile> getSourceFiles(LaunchContext context) throws CoreException;
 	String getTargetJar(LaunchContext context);
 	List<String> getTargetSpecifiers(LaunchContext context);
@@ -24,7 +24,7 @@ public interface ILaunchHelper {
 	static class Test implements ILaunchHelper {
 		
 		@Override
-		public String getProcessName() {
+		public String getRunTypeName() {
 			return "Prompto Test";
 		}
 
@@ -53,7 +53,7 @@ public interface ILaunchHelper {
 	static class Application implements ILaunchHelper {
 		
 		@Override
-		public String getProcessName() {
+		public String getRunTypeName() {
 			return "Prompto Application";
 		}
 
@@ -79,7 +79,7 @@ public interface ILaunchHelper {
 	static class Script implements ILaunchHelper {
 		
 		@Override
-		public String getProcessName() {
+		public String getRunTypeName() {
 			return "Prompto Script";
 		}
 
@@ -103,7 +103,7 @@ public interface ILaunchHelper {
 	static class Server implements ILaunchHelper {
 		
 		@Override
-		public String getProcessName() {
+		public String getRunTypeName() {
 			return "Prompto Server";
 		}
 

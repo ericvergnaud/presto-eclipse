@@ -24,7 +24,7 @@ public abstract class Runner {
 			ProcessBuilder builder = new ProcessBuilder(commands)
 				.directory(new File(context.getDistribution().getDirectory()))
 				.inheritIO();
-			String processName = context.getConfiguration().getName() + " [" + helper.getProcessName() + "]";
+			String processName = context.getConfiguration().getName() + " [" + helper.getRunTypeName() + "]";
 			DebugPlugin.newProcess(context.getLaunch(), builder.start(), processName);
 		} catch(IOException e) {
 			e.printStackTrace(System.err);

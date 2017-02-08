@@ -8,7 +8,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
-import prompto.debugger.Debugger;
+import prompto.debugger.DebugTarget;
 import prompto.profiler.Profiler;
 import prompto.runner.Runner;
 
@@ -22,7 +22,7 @@ public class LaunchDelegate implements ILaunchConfigurationDelegate {
 			Runner.run(context);
 			break;
 		case ILaunchManager.DEBUG_MODE:
-			Debugger.run(context);
+			DebugTarget.run(context);
 			break;
 		case ILaunchManager.PROFILE_MODE:
 			Profiler.run(context);

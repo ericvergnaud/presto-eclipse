@@ -1,4 +1,4 @@
-package prompto.core;
+package prompto.utils;
 
 import java.io.InputStream;
 import java.util.HashSet;
@@ -10,11 +10,9 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.swt.widgets.Combo;
 
+import prompto.core.RunType;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
@@ -22,12 +20,8 @@ import prompto.declaration.DeclarationList;
 import prompto.parser.Dialect;
 import prompto.parser.IParser;
 
-public abstract class Utils {
+public abstract class CoreUtils {
 
-	public static IWorkspaceRoot getRoot() {
-		return ResourcesPlugin.getWorkspace().getRoot();
-	}
-	
 	public static Set<IFile> getEligibleFiles(IProject project, RunType type) {
 		Set<IFile> files = new HashSet<IFile>();
 		if(project!=null)
@@ -103,19 +97,6 @@ public abstract class Utils {
 
 	public static Dialect getDialect(IFile file) {
 		return Dialect.valueOf(file.getFileExtension().substring(1, 2).toUpperCase());
-	}
-
-	public static String getFilePath(IFile file) {
-		return file==null ? null : file.getProjectRelativePath().toPortableString();
-	}
-	
-	public static void selectInCombo(Combo combo, String name) {
-		if(!name.isEmpty()) for(int i=0; i<combo.getItems().length; i++) {
-			if(name.equals(combo.getItem(i))) {
-				combo.select(i);
-				return;
-			}
-		}
 	}
 
 	public static String getMethodSignature(IMethodDeclaration method, Dialect dialect) {

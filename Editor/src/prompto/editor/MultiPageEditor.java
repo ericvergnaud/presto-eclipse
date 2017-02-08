@@ -9,7 +9,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
 import prompto.parser.Dialect;
-import prompto.core.Utils;
+import prompto.utils.CoreUtils;
 
 public class MultiPageEditor extends MultiPageEditorPart {
 
@@ -21,7 +21,7 @@ public class MultiPageEditor extends MultiPageEditorPart {
 		if (!(input instanceof IFileEditorInput))
 			throw new PartInitException("Unsupported input:" + input.getClass().getSimpleName());
 		IFile file = ((IFileEditorInput)input).getFile();
-		dialect = Utils.getDialect(file);
+		dialect = CoreUtils.getDialect(file);
 		setPartName(file.getName());
 		super.init(site, input);
 	}

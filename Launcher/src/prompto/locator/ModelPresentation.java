@@ -34,8 +34,8 @@ public class ModelPresentation extends LabelProvider implements IDebugModelPrese
 		if(resource!=null) {
 			String extension = resource.getFileExtension();
 			try {
-				Dialect.valueOf(extension.toUpperCase());
-				return CoreConstants.EDITOR_ID.replace("$", extension);
+				Dialect.valueOf(extension.substring(1, 2).toUpperCase());
+				return CoreConstants.EDITOR_GENERIC_ID;
 			} catch(Exception e) {
 				//nothing to do
 			}

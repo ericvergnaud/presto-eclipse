@@ -78,11 +78,11 @@ public class DebuggerUtils {
 		fireEvent(new DebugEvent(source, DebugEvent.TERMINATE));
 	}
 
-	public static void startListening(IBreakpointListener listener) {
+	public static void startListeningToBreakpoints(IBreakpointListener listener) {
 		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(listener);
 	}
 
-	public static void stopListening(IBreakpointListener listener) {
+	public static void stopListeningToBreakpoints(IBreakpointListener listener) {
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(listener);
 	}
 

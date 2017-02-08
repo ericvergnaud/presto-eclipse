@@ -32,7 +32,7 @@ public abstract class CoreConstants {
 
 	public static final String DEBUG_MODEL_IDENTIFIER = "prompto.debug"; 
 
-	public static final String EDITOR_ID = "prompto.editor.$";
+	public static final String EDITOR_GENERIC_ID = "prompto.editor";
 
 	public static final String LIBRARY_PROJECT_REFERENCES = "Referenced libraries";
 	public static final String SELECT_PROJECT_REFERENCES = "Select libraries required by this project";

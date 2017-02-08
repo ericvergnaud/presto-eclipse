@@ -1,28 +1,16 @@
 package prompto.debugger;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDebugTarget;
 
 import prompto.debug.IDebugEventListener;
-import prompto.debug.IStack;
-import prompto.launcher.LaunchContext;
+import prompto.debug.IDebugger;
 
-public interface IPromptoDebugTarget extends IDebugTarget, IDebugEventListener {
+public interface IPromptoDebugTarget extends IDebugTarget {
 
-	void debug(LaunchContext context) throws CoreException;
-	boolean isSuspended(DebugThread thread);
-	boolean canResume(DebugThread thread);
-	boolean canSuspend(DebugThread thread);
-	void resume(DebugThread thread) throws DebugException;
-	void suspend(DebugThread thread) throws DebugException;
-	boolean isStepping(DebugThread thread);
-	boolean canStepInto(DebugThread thread);
-	boolean canStepOver(DebugThread thread);
-	boolean canStepReturn(DebugThread thread);
-	void stepInto(DebugThread thread) throws DebugException;
-	void stepOver(DebugThread thread) throws DebugException;
-	void stepReturn(DebugThread thread) throws DebugException;
-	IStack<?> getStack(DebugThread thread) throws DebugException;
-
+	void debug() throws CoreException;
+	IFile resolveFile(String filePath) throws CoreException;
+	IDebugger getDebugger();
+	IDebugEventListener getDebugEventListener();
 }

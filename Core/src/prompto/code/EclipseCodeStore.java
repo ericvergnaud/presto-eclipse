@@ -14,13 +14,13 @@ import org.eclipse.core.runtime.CoreException;
 
 import prompto.core.CoreConstants;
 import prompto.core.RunType;
-import prompto.core.Utils;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;
 import prompto.problem.ProblemDetector;
 import prompto.runtime.Context;
+import prompto.utils.CoreUtils;
 
 public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipseCodeStore {
 
@@ -84,7 +84,7 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 
 	private void collectProjectFiles(IProject project) {
-		Set<IFile> files = Utils.getEligibleFiles(project, RunType.APPLI);
+		Set<IFile> files = CoreUtils.getEligibleFiles(project, RunType.APPLI);
 		for(IFile file : files)
 			this.files.add(file);
 	}

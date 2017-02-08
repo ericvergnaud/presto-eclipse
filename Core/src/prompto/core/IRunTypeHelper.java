@@ -10,6 +10,7 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.parser.Dialect;
+import prompto.utils.CoreUtils;
 
 public interface IRunTypeHelper {
 
@@ -96,8 +97,8 @@ public interface IRunTypeHelper {
 
 
 	static IMethodDeclaration findRegularMethod(IFile file, String signature) {
-		Dialect dialect = Utils.getDialect(file);
-		for(IMethodDeclaration method : Utils.getEligibleMainMethods(file)) {
+		Dialect dialect = CoreUtils.getDialect(file);
+		for(IMethodDeclaration method : CoreUtils.getEligibleMainMethods(file)) {
 			if(signature.equals(method.getSignature(dialect))) 
 				return method;
 		}
@@ -105,7 +106,7 @@ public interface IRunTypeHelper {
 	}
 	
 	static TestMethodDeclaration findTestMethod(IFile file, String signature) {
-		for(TestMethodDeclaration method : Utils.getEligibleTestMethods(file)) {
+		for(TestMethodDeclaration method : CoreUtils.getEligibleTestMethods(file)) {
 			if(signature.equals(method.getName().toString()))
 				return method;
 		}

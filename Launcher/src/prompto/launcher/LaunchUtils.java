@@ -6,8 +6,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
 import prompto.core.RunType;
-import prompto.core.Utils;
 import prompto.declaration.IDeclaration;
+import prompto.utils.CoreUtils;
+import prompto.utils.ShellUtils;
 
 public class LaunchUtils {
 
@@ -38,7 +39,7 @@ public class LaunchUtils {
 	public static IProject getConfiguredProject(ILaunchConfiguration configuration) {
 		try {
 			String name = configuration.getAttribute(LauncherConstants.PROJECT, "");
-			return name.length()>0 ? Utils.getRoot().getProject(name) : null;
+			return name.length()>0 ? ShellUtils.getRoot().getProject(name) : null;
 		} catch (CoreException e) {
 			e.printStackTrace(System.err);
 			return null;
@@ -50,8 +51,8 @@ public class LaunchUtils {
 			String path = configuration.getAttribute(LauncherConstants.FILE, "");
 			if(!path.isEmpty()) {
 				RunType runType = getConfiguredRunType(configuration);
-				for(IFile file : Utils.getEligibleFiles(project, runType)) {
-					if(path.equals(Utils.getFilePath(file)))
+				for(IFile file : CoreUtils.getEligibleFiles(project, runType)) {
+					if(path.equals(ShellUtils.getFilePath(file)))
 						return file;
 				}
 			}

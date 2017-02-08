@@ -8,7 +8,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="libs/antlr4-runtime-4.5.jar"/>
 	<classpathentry kind="lib" path="libs/joda-time-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/Core-0.0.1-SNAPSHOT.jar" sourcepath="/Users/ericvergnaud/.m2/repository/org/prompto/Core/0.0.1-SNAPSHOT/Core-0.0.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="libs/Core-0.0.1-SNAPSHOT.jar" sourcepath="/Users/ericvergnaud/Development/prompto/prompto-platform/prompto-java/Core/src/main/java"/>
 	<classpathentry kind="lib" path="libs/Runtime-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="libs/CodeStore-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="libs/Standalone-0.0.1-SNAPSHOT.jar"/>

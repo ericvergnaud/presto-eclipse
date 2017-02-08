@@ -13,9 +13,20 @@ import prompto.debug.IStack;
 public class DebugThread extends PlatformObject implements IThread {
 	
 	IPromptoDebugTarget target;
+	prompto.debug.IThread thread;
 	
-	public DebugThread(IPromptoDebugTarget target) {
+	public DebugThread(IPromptoDebugTarget target, prompto.debug.IThread thread) {
 		this.target = target;
+		this.thread = thread;
+	}
+	
+	public IPromptoDebugTarget getTarget() {
+		return target;
+	}
+	
+	@Override
+	public String toString() {
+		return "Prompto main";
 	}
 
 	@Override
@@ -43,65 +54,70 @@ public class DebugThread extends PlatformObject implements IThread {
 		else
 			return super.getAdapter(adapter);
 	}
+	
+	@Override
+	public IBreakpoint[] getBreakpoints() {
+		return DebuggerUtils.getBreakpoints();
+	}
 
 	@Override
 	public boolean canResume() {
-		return target.canResume(this);
-	}
-
-	@Override
-	public boolean canSuspend() {
-		return target.canSuspend(this);
-	}
-
-	@Override
-	public boolean isSuspended() {
-		return target.isSuspended(this);
+		return target.getDebugger().canResume(thread);
 	}
 
 	@Override
 	public void resume() throws DebugException {
-		target.resume(this);
+		target.getDebugger().resume(thread);
 	}
 	
 	@Override
+	public boolean canSuspend() {
+		return target.getDebugger().canSuspend(thread);
+	}
+
+	@Override
+	public boolean isSuspended() {
+		return target.getDebugger().isSuspended(thread);
+	}
+
+	@Override
 	public void suspend() throws DebugException {
-		target.suspend(this);
+		target.getDebugger().suspend(thread);
 	}
 
 	@Override
 	public boolean canStepInto() {
-		return target.canStepInto(this);
+		return target.getDebugger().canStepInto(thread);
 	}
 
 	@Override
 	public boolean canStepOver() {
-		return target.canStepOver(this);
+		return target.getDebugger().canStepOver(thread);
 	}
 
 	@Override
 	public boolean canStepReturn() {
-		return target.canStepReturn(this);
+		return target.getDebugger().canStepOut(thread);
 	}
 
 	@Override
 	public boolean isStepping() {
-		return target.isStepping(this);
+		return target.getDebugger().isStepping(thread);
 	}
 
 	@Override
 	public void stepInto() throws DebugException {
-		target.stepInto(this);
+		target.getDebugger().stepInto(thread);
 	}
 
 	@Override
 	public void stepOver() throws DebugException {
-		target.stepOver(this);
+		target.getDebugger().stepOver(thread);
 	}
 
 	@Override
 	public void stepReturn() throws DebugException {
-		target.stepReturn(this);
+		target.getDebugger().stepOut(thread);
 	}
 
 
@@ -143,7 +159,7 @@ public class DebugThread extends PlatformObject implements IThread {
 
 	@Override
 	public StackFrameProxy[] getStackFrames() throws DebugException {
-		IStack<?> stack = target.getStack(this);
+		IStack<?> stack = target.getDebugger().getStack(thread);
 		return stack.stream()
 				.map((f)->new StackFrameProxy(this, f))
 				.toArray((l)->new StackFrameProxy[l]);
@@ -153,14 +169,6 @@ public class DebugThread extends PlatformObject implements IThread {
 	public String getName() throws DebugException {
 		return "<anonymous>";
 	}
-
-	@Override
-	public IBreakpoint[] getBreakpoints() {
-		return DebuggerUtils.getBreakpoints();
-	}
-
-
-
 
 
 }

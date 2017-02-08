@@ -23,11 +23,11 @@ import org.eclipse.jface.text.IDocument;
 import prompto.code.ICodeStore;
 import prompto.code.IEclipseCodeStore;
 import prompto.code.StoreUtils;
-import prompto.core.Utils;
 import prompto.declaration.DeclarationList;
 import prompto.parser.Dialect;
 import prompto.parser.IParser;
 import prompto.runtime.Context;
+import prompto.utils.CoreUtils;
 
 @SuppressWarnings("restriction")
 public class ProblemDetector {
@@ -201,7 +201,7 @@ public class ProblemDetector {
 	}
 
 	private DeclarationList parseDeclarations(IFile inputFile, IDocument document, ProblemCollector listener) throws CoreException {
-		Dialect dialect = Utils.getDialect(inputFile);
+		Dialect dialect = CoreUtils.getDialect(inputFile);
 		IParser parser = dialect.getParserFactory().newParser();
 		parser.setProblemListener(listener);
 		String path = inputFile.getFullPath().toPortableString();

@@ -27,8 +27,10 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.core.RunType;
-import prompto.core.Utils;
 import prompto.utils.ImageUtils;
+import prompto.utils.CoreUtils;
+import prompto.utils.RcpUtils;
+import prompto.utils.ShellUtils;
 
 public abstract class LaunchTabBase extends AbstractLaunchConfigurationTab {
 
@@ -177,7 +179,7 @@ public abstract class LaunchTabBase extends AbstractLaunchConfigurationTab {
 
 	private void fillInProjects() {
 		projectCombo.setItems(new String[0]);
-		for(IProject project : Utils.getRoot().getProjects()) {
+		for(IProject project : ShellUtils.getRoot().getProjects()) {
 			if(isEligibleProject(project))
 				projectCombo.add(project.getName());
 		}
@@ -202,12 +204,12 @@ public abstract class LaunchTabBase extends AbstractLaunchConfigurationTab {
 		if(idx<0)
 			return null;
 		else
-			return Utils.getRoot().getProject(projectCombo.getItem(idx));
+			return ShellUtils.getRoot().getProject(projectCombo.getItem(idx));
 	}
 
 	private void fillInFiles(IProject project) {
 		fileCombo.setItems(new String[0]);
-		Set<IFile> files = Utils.getEligibleFiles(project, getRunType());
+		Set<IFile> files = CoreUtils.getEligibleFiles(project, getRunType());
 		for(IFile file : files)
 			fileCombo.add(file.getName());
 	}
@@ -234,7 +236,7 @@ public abstract class LaunchTabBase extends AbstractLaunchConfigurationTab {
 		if(idx<0)
 			return null;
 		String file = fileCombo.getItem(idx);
-		return Utils.getEligibleFiles(project, getRunType())
+		return CoreUtils.getEligibleFiles(project, getRunType())
 				.stream()
 				.filter((f)->file.equals(f.getName()))
 				.findFirst()
@@ -294,20 +296,20 @@ public abstract class LaunchTabBase extends AbstractLaunchConfigurationTab {
 	private void selectMethod(ILaunchConfiguration configuration, IFile file) {
 		IDeclaration method = LaunchUtils.getConfiguredMethod(configuration, file);
 		if(method!=null && methodCombo.getItemCount()>0) 
-			Utils.selectInCombo(methodCombo, getMethodSignature(file, method));
+			RcpUtils.selectInCombo(methodCombo, getMethodSignature(file, method));
 	}
 
 	private IFile selectFile(ILaunchConfiguration configuration, IProject project) {
 		IFile file = LaunchUtils.getConfiguredFile(configuration, project);
 		if(fileCombo.getItemCount()>0 && file!=null)
-			Utils.selectInCombo(fileCombo,file.getName());
+			RcpUtils.selectInCombo(fileCombo,file.getName());
 		return file;
 	}
 
 	private IProject selectProject(ILaunchConfiguration configuration) {
 		IProject project = LaunchUtils.getConfiguredProject(configuration);
 		if(projectCombo.getItemCount()>0 && project!=null)
-			Utils.selectInCombo(projectCombo,project.getName());
+			RcpUtils.selectInCombo(projectCombo,project.getName());
 		return project;
 	}
 
@@ -334,9 +336,9 @@ public abstract class LaunchTabBase extends AbstractLaunchConfigurationTab {
 		switch(getRunType()) {
 		case APPLI:
 		case SERVER:
-			return Utils.getEligibleMainMethods(file);
+			return CoreUtils.getEligibleMainMethods(file);
 		case TEST:
-			return Utils.getEligibleTestMethods(file);
+			return CoreUtils.getEligibleTestMethods(file);
 		default:
 			return null;
 		}
@@ -372,7 +374,7 @@ public abstract class LaunchTabBase extends AbstractLaunchConfigurationTab {
 
 	private String getMethodSignature(IFile file, IDeclaration method) {
 		if(method instanceof IMethodDeclaration)
-			return Utils.getMethodSignature((IMethodDeclaration)method, Utils.getDialect(file));
+			return CoreUtils.getMethodSignature((IMethodDeclaration)method, CoreUtils.getDialect(file));
 		else if(method instanceof TestMethodDeclaration)
 			return method.getName();
 		else
@@ -380,7 +382,7 @@ public abstract class LaunchTabBase extends AbstractLaunchConfigurationTab {
 	}
 
 	private String getFileName(IFile file) {
-		return file==null ? null : Utils.getFilePath(file);
+		return file==null ? null : ShellUtils.getFilePath(file);
 	}
 
 
