@@ -52,6 +52,10 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 		this.context = context;
 	}
 	
+	public DebugThread getThread() {
+		return thread;
+	}
+	
 	@Override
 	public IDebugEventListener getDebugEventListener() {
 		return listener;
@@ -228,13 +232,13 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	
 	@Override
 	public boolean hasThreads() throws DebugException {
-		return true;
+		return !isTerminated();
 	}
 	
 	
 	@Override
 	public IThread[] getThreads() throws DebugException {
-		return new IThread[] { thread };
+		return isTerminated() ? new IThread[0] : new IThread[] { thread };
 	}
 	
 	@Override
@@ -316,6 +320,11 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	@Override
 	public IMemoryBlock getMemoryBlock(long startAddress, long length) throws DebugException {
 		return null;
+	}
+
+	public void notifyTerminated() {
+		debugger.notifyTerminated();
+		process = null;
 	}
 	
 }

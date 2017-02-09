@@ -17,7 +17,7 @@ public class DebugEventListener implements IDebugEventListener {
 
 	@Override
 	public void handleResumedEvent(ResumeReason reason) {
-		DebuggerUtils.fireResumeEvent(target, debugEventFromResumeReason(reason));
+		DebuggerUtils.fireResumeEvent(target.getThread(), debugEventFromResumeReason(reason));
 	}
 
 	private int debugEventFromResumeReason(ResumeReason reason) {
@@ -37,7 +37,7 @@ public class DebugEventListener implements IDebugEventListener {
 
 	@Override
 	public void handleSuspendedEvent(SuspendReason reason) {
-		DebuggerUtils.fireSuspendEvent(target, debugEventFromSuspendReason(reason));
+		DebuggerUtils.fireSuspendEvent(target.getThread(), debugEventFromSuspendReason(reason));
 	}
 
 	private int debugEventFromSuspendReason(SuspendReason reason) {
@@ -55,7 +55,7 @@ public class DebugEventListener implements IDebugEventListener {
 
 	@Override
 	public void handleTerminatedEvent() {
-		target.getDebugger().notifyTerminated();
+		target.notifyTerminated();
 		DebuggerUtils.fireTerminateEvent(target);
 	}
 
