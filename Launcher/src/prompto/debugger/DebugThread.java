@@ -159,10 +159,16 @@ public class DebugThread extends PlatformObject implements IThread {
 
 	@Override
 	public StackFrameProxy[] getStackFrames() throws DebugException {
+		if(target.isTerminated())
+			return new StackFrameProxy[0];
+		int index = 0;
 		IStack<?> stack = target.getDebugger().getStack(thread);
-		return stack.stream()
-				.map((f)->new StackFrameProxy(this, f))
-				.toArray((l)->new StackFrameProxy[l]);
+		StackFrameProxy[] result = new StackFrameProxy[stack.size()];
+		for(prompto.debug.IStackFrame frame : stack) {
+			result[index] = new StackFrameProxy(this, index, frame);
+			index++;
+		}
+		return result;	
 	}
 
 	@Override

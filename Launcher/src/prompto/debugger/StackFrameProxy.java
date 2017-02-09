@@ -18,12 +18,14 @@ import prompto.core.CoreConstants;
 public class StackFrameProxy extends PlatformObject implements IStackFrame {
 
 	DebugThread thread;
+	int index;
 	prompto.debug.IStackFrame frame;
 	IFile file = null;
 
 	
-	public StackFrameProxy(DebugThread thread, prompto.debug.IStackFrame frame) {
+	public StackFrameProxy(DebugThread thread, int index, prompto.debug.IStackFrame frame) {
 		this.thread = thread;
+		this.index = index;
 		this.frame = frame;
 	}
 
@@ -202,7 +204,7 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 			return false;
 		StackFrameProxy sfp = (StackFrameProxy)obj;
 		return this.thread.equals(sfp.thread)
-				&& this.frame.equals(sfp.frame);
+				&& this.index==sfp.index;
 	}
 
 }
