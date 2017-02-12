@@ -34,12 +34,10 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.service.prefs.Preferences;
 
 import prompto.distribution.Artifact;
 import prompto.distribution.Distribution;
 import prompto.distribution.Version;
-import prompto.launcher.Plugin;
 
 public class JavaRuntimePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
@@ -60,9 +58,7 @@ public class JavaRuntimePage extends PreferencePage implements
 
 	@Override
 	public void init(IWorkbench workbench) {
-		Preferences prefs = Plugin.getPreferences();
-		String pref = prefs.get(Initializer.PROMPTO_DISTRIBUTION_JAVA_LIST, "");
-		Collection<Distribution> dists = Distribution.fromPrefsString(pref);
+		Collection<Distribution> dists = Distribution.loadAll();
 		distributions.addAll(dists);
 	}
 
@@ -78,16 +74,7 @@ public class JavaRuntimePage extends PreferencePage implements
 	
 	@Override
 	public boolean performOk() {
-		String dists = Distribution.toPrefsString(distributions);
-		Preferences prefs = Plugin.getPreferences();
-		prefs.put(Initializer.PROMPTO_DISTRIBUTION_JAVA_LIST, dists);
-		try {
-			prefs.flush();
-			return true;
-		} catch(Exception e) {
-			e.printStackTrace(System.err);
-			return false;
-		}
+		return Distribution.storeAll(distributions);
 	}
 
 	private Composite createMainControl(Composite parent) {

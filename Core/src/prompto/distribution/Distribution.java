@@ -5,8 +5,43 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.osgi.service.prefs.Preferences;
+
+import prompto.core.Plugin;
+import prompto.core.prefs.Initializer;
+
 public class Distribution implements Comparable<Distribution>{
 
+	public static boolean storeAll(Collection<Distribution> distributions) {
+		String dists = Distribution.toPrefsString(distributions);
+		Preferences prefs = Plugin.getPreferences();
+		prefs.put(Initializer.PROMPTO_DISTRIBUTION_JAVA_LIST, dists);
+		try {
+			prefs.flush();
+			return true;
+		} catch(Exception e) {
+			e.printStackTrace(System.err);
+			return false;
+		}
+	}
+
+	public static Collection<Distribution> loadAll() {
+		Preferences prefs = Plugin.getPreferences();
+		String pref = prefs.get(prompto.core.prefs.Initializer.PROMPTO_DISTRIBUTION_JAVA_LIST, "");
+		return Distribution.fromPrefsString(pref);
+	}
+
+	
+	public static Distribution getDefaultDistribution() {
+		Preferences prefs = Plugin.getPreferences();
+		String pref = prefs.get(Initializer.PROMPTO_DISTRIBUTION_JAVA_LIST, "");
+		Collection<Distribution> dists = fromPrefsString(pref);
+		if(dists.isEmpty())
+			return null;
+		else
+			return dists.iterator().next();
+	}
+	
 	public static String toPrefsString(Collection<Distribution> list) {
 		StringBuilder sb = new StringBuilder();
 		list.forEach((d)->{
@@ -73,4 +108,6 @@ public class Distribution implements Comparable<Distribution>{
 	public String toString() {
 		return version.toString() + '@' + directory;
 	}
+
+
 }

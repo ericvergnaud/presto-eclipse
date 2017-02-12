@@ -79,6 +79,34 @@
          name="Prompto Server Project"
          project="true"/>
   </extension>
+  <extension
+        point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="prompto.core.prefs.Initializer">
+      </initializer>
+  </extension>
+     <extension
+      point = "org.eclipse.ui.preferencePages">
+      <page
+         id="prompto.prefs.root"
+         class="prompto.core.prefs.RootPage"
+         name="Prompto">
+      </page>
+   </extension>  
+  <extension point="org.eclipse.ui.propertyPages"> 
+  	<page id="prompto.core.libraries" 
+  		name="Prompto Libraries"
+  		class="prompto.core.props.LibrariesPage">
+         <enabledWhen>
+			<and>
+				<instanceof value="org.eclipse.core.resources.IProject"/>
+				<or>
+	        		<test property="org.eclipse.core.resources.projectNature" value="prompto.nature.library"/>
+	        	</or>
+	        </and>
+         </enabledWhen>
+  	</page>	
+  </extension>
   <extension point="org.eclipse.ui.navigator.viewer">
         <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
           <includes>
@@ -178,4 +206,5 @@
       <command id="enable.prompto.server" defaultHandler="prompto.menu.EnableServerNatureHandler" name="Add Prompto Server nature" />
       <command id="enable.prompto.application" defaultHandler="prompto.menu.EnableApplicationNatureHandler" name="Add Prompto Application nature" />
    </extension>
+   
 </plugin>

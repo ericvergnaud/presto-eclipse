@@ -1,0 +1,2 @@
+define main as method receiving Text{} args doing:
+    print "Hello"

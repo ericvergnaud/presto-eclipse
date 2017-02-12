@@ -9,7 +9,7 @@ public abstract class CoreConstants {
 	public static final String LIBRARY_NATURE_ID = "prompto.nature.library";
 	public static final String SERVER_NATURE_ID = "prompto.nature.server";
 	public static final String APPLICATION_NATURE_ID = "prompto.nature.application";
-
+	
 	public static final String NEW_SCRIPTS_PROJECT = "New Prompto Scripts Project";
 	public static final String NEW_LIBRARY_PROJECT = "New Prompto Library Project";
 	public static final String NEW_SERVER_PROJECT = "New Prompto Server Project";

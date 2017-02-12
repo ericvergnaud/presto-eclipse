@@ -1,12 +1,17 @@
 package prompto.core;
 
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.prefs.Preferences;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Plugin extends AbstractUIPlugin {
+
+	// The plug-in ID
+	public static final String PLUGIN_ID = "prompto.core"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Plugin plugin;
@@ -42,6 +47,10 @@ public class Plugin extends AbstractUIPlugin {
 	 */
 	public static Plugin getDefault() {
 		return plugin;
+	}
+	
+	public static Preferences getPreferences() {
+		return ConfigurationScope.INSTANCE.getNode(PLUGIN_ID);
 	}
 
 }

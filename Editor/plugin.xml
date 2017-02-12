@@ -37,11 +37,6 @@
     <extension
       point = "org.eclipse.ui.preferencePages">
       <page
-         id="prompto.prefs.root"
-         class="prompto.editor.prefs.RootPage"
-         name="Prompto">
-      </page>
-      <page
          id="prompto.prefs.editor"
          class="prompto.editor.prefs.EditorPage"
          name="Editor"

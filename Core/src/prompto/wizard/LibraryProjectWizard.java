@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
@@ -13,14 +12,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.dialogs.WizardNewProjectReferencePage;
-import org.eclipse.ui.ide.undo.CreateProjectOperation;
-import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 
 import prompto.core.CoreConstants;
+import prompto.core.LibraryNature;
 
 public class LibraryProjectWizard extends PromptoProjectWizard {
  
@@ -44,18 +44,14 @@ public class LibraryProjectWizard extends PromptoProjectWizard {
 	@Override
 	public void addPages() {
 		super.addPages();
-		// only add page if there are already projects in the workspace
-		if(getExistingLibraryProjects().length > 0) {
-			referencePage = new WizardNewProjectLibrariesPage();
-			this.addPage(referencePage);
-		}
+		referencePage = new WizardNewProjectLibrariesPage();
+		this.addPage(referencePage);
 	}
 	
 	@Override
 	protected IProjectDescription buildProjectDescription(IProject project) throws CoreException {
 		IProjectDescription description = super.buildProjectDescription(project);
-		if(referencePage!=null)
-			description.setReferencedProjects(referencePage.getReferencedProjects());
+		description.setReferencedProjects(referencePage.getReferencedProjects());
 		return description;
 	}
 	
@@ -79,17 +75,25 @@ public class LibraryProjectWizard extends PromptoProjectWizard {
 		return new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException {
-				try {
-					CreateProjectOperation cpo = new CreateProjectOperation(description, CoreConstants.CREATING_PROJECT);
-					cpo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-				} catch (ExecutionException e) {
-					throw new InvocationTargetException(e);
-				}
+				createProject(project, description, monitor);
+				excludeRuntime(project, referencePage.excludeRuntime.getSelection(), monitor);
 			}
+
 		};
 	}
 	
+	private void excludeRuntime(IProject project, boolean selection, IProgressMonitor monitor) throws InvocationTargetException {
+		try {
+			project.setPersistentProperty(LibraryNature.EXCLUDE_RUNTIME_PROPERTY, String.valueOf(selection));
+		} catch(CoreException e) {
+			throw new InvocationTargetException(e);
+		}
+		
+	}
+
 	class WizardNewProjectLibrariesPage extends WizardNewProjectReferencePage {
+		
+		Button excludeRuntime;
 		
 		public WizardNewProjectLibrariesPage() {
 			super("basicReferenceProjectPage");
@@ -115,6 +119,8 @@ public class LibraryProjectWizard extends PromptoProjectWizard {
 			Composite control = (Composite)getControl();
 			Label label = (Label)control.getChildren()[0];
 			label.setText(CoreConstants.LIBRARY_PROJECT_REFERENCES);
+			excludeRuntime = new Button(control, SWT.CHECK);
+			excludeRuntime.setText("Exclude Prompto Runtime Library");
 		}
 	}
 

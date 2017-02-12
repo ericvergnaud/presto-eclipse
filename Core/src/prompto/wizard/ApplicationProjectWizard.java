@@ -1,19 +1,11 @@
 package prompto.wizard;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.ui.ide.undo.CreateFileOperation;
-import org.eclipse.ui.ide.undo.CreateProjectOperation;
-import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 
 import prompto.core.CoreConstants;
 
@@ -40,21 +32,9 @@ public class ApplicationProjectWizard extends PromptoProjectWizard {
 		return new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException {
-				try {
-					CreateProjectOperation cpo = new CreateProjectOperation(description, CoreConstants.CREATING_PROJECT);
-					cpo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-					IFile file = project.getFile("application.pec");
-					String contents = "define main as method receiving Text{} args doing:\n"
-							+ "\tprint \"Hello\"\n";
-					try(InputStream input = new ByteArrayInputStream(contents.getBytes())) {
-						CreateFileOperation cfo = new CreateFileOperation(file, null, input, CoreConstants.CREATING_SAMPLE_APPLICATION);
-						cfo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
-					}
-				} catch (ExecutionException | IOException e) {
-					throw new InvocationTargetException(e);
-				}
+				createProject(project, description, monitor);
+				createSample(project, monitor, "application.pec", CoreConstants.CREATING_SAMPLE_APPLICATION);
 			}
 		};
 	}
-
 }

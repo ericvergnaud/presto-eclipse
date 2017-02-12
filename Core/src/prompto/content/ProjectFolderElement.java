@@ -5,11 +5,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.graphics.Image;
 
-public class LibraryFolderElement extends LibraryElement {
+public class ProjectFolderElement extends LibraryElement {
 
 	IFolder folder;
 	
-	public LibraryFolderElement(ILibraryElement parent, IFolder folder) {
+	public ProjectFolderElement(ILibraryElement parent, IFolder folder) {
 		super(parent);
 		this.folder = folder;
 	}

@@ -11,9 +11,9 @@ import prompto.core.CoreConstants;
 import prompto.core.Plugin;
 import prompto.utils.ImageUtils;
 
-public class LibrariesRootElement extends LibraryElement {
+public class ReferencedProjectsElement extends LibraryElement {
 
-	public LibrariesRootElement(IProject parent) {
+	public ReferencedProjectsElement(IProject parent) {
 		super(parent);
 	}
 	
@@ -24,7 +24,7 @@ public class LibrariesRootElement extends LibraryElement {
 	
 	@Override
 	public String getText() {
-		return "Prompto Libraries";
+		return "Referenced Libraries";
 	}	
 	
 	@Override
@@ -44,23 +44,15 @@ public class LibrariesRootElement extends LibraryElement {
 	@Override
 	public Object[] getChildren() throws CoreException {
 		IProject project = getProject();
-		if(project.hasNature(CoreConstants.LIBRARY_NATURE_ID))
-			return getReferencedLibraries(project);
-		else
-			return getPromptoLibraries();
+		return getReferencedLibraries(project);
 	}
 	
-	private Object[] getPromptoLibraries() {
-		// TODO Auto-generated method stub
-		return new Object[0];
-	}
-
 	private Object[] getReferencedLibraries(IProject project) throws CoreException {
-		// double check that referenced projects are Prompto libraries
+		// double check that referenced projects are indeed Prompto libraries
 		List<ILibraryElement> libraries = new ArrayList<ILibraryElement>();
 		for(IProject ref : project.getReferencedProjects()) {
 			if(ref.hasNature(CoreConstants.LIBRARY_NATURE_ID))
-				libraries.add(new LibraryProjectElement(this, ref));
+				libraries.add(new ReferencedProjectElement(this, ref));
 		}
 		return libraries.toArray(new ILibraryElement[libraries.size()]);
 	}

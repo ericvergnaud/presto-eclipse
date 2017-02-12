@@ -13,11 +13,11 @@ import org.eclipse.swt.graphics.Image;
 import prompto.core.Plugin;
 import prompto.utils.ImageUtils;
 
-public class LibraryProjectElement extends LibraryElement {
+public class ReferencedProjectElement extends LibraryElement {
 
 	IProject project;
 	
-	public LibraryProjectElement(LibrariesRootElement root, IProject project) {
+	public ReferencedProjectElement(ReferencedProjectsElement root, IProject project) {
 		super(root);
 		this.project = project;
 	}
@@ -29,11 +29,11 @@ public class LibraryProjectElement extends LibraryElement {
 			if(member.getName().startsWith("."))
 				continue;
 			if(member instanceof IFile)
-				elements.add(new LibraryFileElement(this, (IFile)member));
+				elements.add(new ProjectFileElement(this, (IFile)member));
 			else if(member instanceof IFolder) {
 				IFolder folder = (IFolder)member;
 				if(folder.members().length>0)
-					elements.add(new LibraryFolderElement(this, folder));
+					elements.add(new ProjectFolderElement(this, folder));
 			}
 		}
 		return elements.toArray(new ILibraryElement[elements.size()]);

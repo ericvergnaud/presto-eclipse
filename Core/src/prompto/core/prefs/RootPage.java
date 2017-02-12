@@ -1,4 +1,4 @@
-package prompto.editor.prefs;
+package prompto.core.prefs;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;

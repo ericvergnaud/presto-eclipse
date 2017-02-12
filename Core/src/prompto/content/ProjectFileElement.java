@@ -7,11 +7,11 @@ import org.eclipse.swt.graphics.Image;
 import prompto.core.Plugin;
 import prompto.utils.ImageUtils;
 
-public class LibraryFileElement extends LibraryElement {
+public class ProjectFileElement extends LibraryElement {
 
 	IFile file;
 	
-	public LibraryFileElement(LibraryProjectElement project, IFile file) {
+	public ProjectFileElement(ReferencedProjectElement project, IFile file) {
 		super(project);
 		this.file = file;
 	}
@@ -29,13 +29,11 @@ public class LibraryFileElement extends LibraryElement {
 
 	@Override
 	public Object[] getChildren() throws CoreException {
-		// TODO Auto-generated method stub
 		return new Object[0];
 	}
 
 	@Override
 	public boolean hasChildren() throws CoreException {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

@@ -1,14 +1,18 @@
 package prompto.wizard;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResourceStatus;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -17,6 +21,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
+import org.eclipse.ui.ide.undo.CreateFileOperation;
+import org.eclipse.ui.ide.undo.CreateProjectOperation;
+import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.ide.StatusUtil;
 import org.eclipse.ui.statushandlers.IStatusAdapterConstants;
@@ -138,5 +145,28 @@ public abstract class PromptoProjectWizard extends BasicNewResourceWizard implem
 		adapter.setProperty(IStatusAdapterConstants.TITLE_PROPERTY, CoreConstants.NEW_PROJECT_ERROR);
 		StatusManager.getManager().handle(status, StatusManager.BLOCK);
 	}
+
+	protected void createProject(final IProject project, final IProjectDescription description, IProgressMonitor monitor) throws InvocationTargetException {
+		try {
+			CreateProjectOperation cpo = new CreateProjectOperation(description, CoreConstants.CREATING_PROJECT);
+			cpo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
+		} catch (ExecutionException e) {
+			throw new InvocationTargetException(e);
+		}
+		
+	}
+
+	protected void createSample(IProject project, IProgressMonitor monitor, String resourceName, String message) throws InvocationTargetException {
+		try {
+			IFile file = project.getFile(resourceName);
+			try(InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/" + resourceName)) {
+				CreateFileOperation cfo = new CreateFileOperation(file, null, input, message);
+				cfo.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
+			}
+		} catch (ExecutionException | IOException e) {
+			throw new InvocationTargetException(e);
+		}
+	}
+
 	
 }

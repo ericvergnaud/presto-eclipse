@@ -103,5 +103,4 @@ public abstract class CoreUtils {
 		return method==null ? null : method.getSignature(dialect);
 	}
 
-
 }
