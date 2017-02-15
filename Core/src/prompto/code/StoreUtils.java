@@ -1,24 +1,26 @@
 package prompto.code;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Collection;
+import java.io.InputStream;
+import java.nio.file.Paths;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.Version;
 
-import prompto.code.ICodeStore;
-import prompto.code.UpdatableCodeStore;
+import prompto.code.ICodeStore.ModuleType;
 import prompto.core.CoreConstants;
+import prompto.distribution.Distribution;
 import prompto.nullstore.NullStoreFactory;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory.Type;
-import prompto.utils.ResourceUtils;
 
 public abstract class StoreUtils {
 
@@ -47,11 +49,38 @@ public abstract class StoreUtils {
 	private static ICodeStore runtimeCodeStore = null;
 	
 	private static ICodeStore getRuntimeCodeStore(IProject project) throws CoreException {
-		if(runtimeCodeStore==null) {
-			ResourceUtils.registerResourceLister("bundleresource", StoreUtils::listBundleResourcesAt);
-			runtimeCodeStore = new UpdatableCodeStore(getNullStore(), project.getName(), Version.emptyVersion.toString());
-		}
+		if(runtimeCodeStore==null)
+			runtimeCodeStore = new UpdatableCodeStore(getNullStore(), project.getName(), Version.emptyVersion.toString()) {
+				@Override protected ICodeStore bootstrapRuntime() {
+					return bootstrapRuntimeFromDistribution();
+				}
+			};
 		return runtimeCodeStore;
+	}
+	
+	private static ICodeStore bootstrapRuntimeFromDistribution() {
+		Distribution dist = Distribution.getDefaultDistribution();
+		if(dist==null)
+			return null;
+		File jarFile = Paths.get(dist.getDirectory(), "Runtime-0.0.1-SNAPSHOT.jar").toFile();
+		if(!jarFile.exists())
+			return null;
+		ICodeStore runtime = null;
+		try(InputStream input = new FileInputStream(jarFile)) {
+			try(ZipInputStream zip = new ZipInputStream(input)) {
+				ZipEntry entry = zip.getNextEntry();
+				while(entry!=null) {
+					if(entry.getName().startsWith("libraries/") && !entry.getName().endsWith("/")) {
+						String jarUrl = "jar:" + jarFile.toURI().toURL() + "!/" + entry.getName();
+						runtime = new ResourceCodeStore(runtime, ModuleType.LIBRARY, jarUrl, "1.0.0");
+					}
+					entry = zip.getNextEntry();
+				}
+			}
+		} catch(IOException e) {
+			e.printStackTrace(System.err);
+		}
+		return runtime;
 	}
 	
 	private static IStore getNullStore() throws CoreException {
@@ -60,11 +89,6 @@ public abstract class StoreUtils {
 		} catch(Throwable t) {
 			throw new CoreException(Status.CANCEL_STATUS);
 		}
-	}
-
-	private static Collection<String> listBundleResourcesAt(URL url) throws IOException {
-		url = FileLocator.resolve(url);
-		return ResourceUtils.listResourcesAt(url);
 	}
 
 }

@@ -6,8 +6,6 @@
 	<classpathentry kind="lib" path="/Core/libs/antlr4-runtime-4.5.jar"/>
 	<classpathentry kind="lib" path="/Core/libs/Core-0.0.1-SNAPSHOT.jar" sourcepath="/Users/ericvergnaud/.m2/repository/org/prompto/Core/trunk-SNAPSHOT/Core-trunk-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="/Core/libs/joda-time-2.0.jar"/>
-	<classpathentry kind="lib" path="/Core/libs/Runtime-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="/Core/libs/CodeStore-0.0.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/Core/libs/Standalone-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
