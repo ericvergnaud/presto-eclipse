@@ -26,7 +26,27 @@ public class LibrariesPage extends PropertyPage {
 		control.setLayout(layout);
 		excludeRuntime = new Button(control, SWT.CHECK);
 		excludeRuntime.setText("Exclude Prompto Runtime Library");
+		excludeRuntime.setSelection(isExcludeRuntime());
 		return control;
+	}
+
+	private boolean isExcludeRuntime() {
+		try {
+			IProject project = (IProject) getElement().getAdapter(IProject.class);
+			String value = project.getPersistentProperty(LibraryNature.EXCLUDE_RUNTIME_PROPERTY);
+			return value==null ? false : Boolean.valueOf(value);
+		} catch(CoreException e) {
+			return false;
+		}
+	}
+
+	private void setExcludeRuntime(boolean exclude) {
+		try {
+			IProject project = (IProject) getElement().getAdapter(IProject.class);
+			project.setPersistentProperty(LibraryNature.EXCLUDE_RUNTIME_PROPERTY, String.valueOf(exclude));
+		} catch(CoreException e) {
+			// TODO
+		}
 	}
 
 	@Override
@@ -36,13 +56,8 @@ public class LibrariesPage extends PropertyPage {
 	
 	@Override
 	protected void performApply() {
-		try {
-			IProject project = (IProject) getElement().getAdapter(IProject.class);
-			boolean exclude = excludeRuntime.getSelection();
-			project.setPersistentProperty(LibraryNature.EXCLUDE_RUNTIME_PROPERTY, String.valueOf(exclude));
-		} catch(CoreException e) {
-			// TODO
-		}
+		boolean exclude = excludeRuntime.getSelection();
+		setExcludeRuntime(exclude);
 	}
 	
 	

@@ -76,13 +76,13 @@ public class LibraryProjectWizard extends PromptoProjectWizard {
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException {
 				createProject(project, description, monitor);
-				excludeRuntime(project, referencePage.excludeRuntime.getSelection(), monitor);
+				setExcludeRuntime(project, referencePage.excludeRuntime.getSelection(), monitor);
 			}
 
 		};
 	}
 	
-	private void excludeRuntime(IProject project, boolean selection, IProgressMonitor monitor) throws InvocationTargetException {
+	private void setExcludeRuntime(IProject project, boolean selection, IProgressMonitor monitor) throws InvocationTargetException {
 		try {
 			project.setPersistentProperty(LibraryNature.EXCLUDE_RUNTIME_PROPERTY, String.valueOf(selection));
 		} catch(CoreException e) {

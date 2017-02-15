@@ -34,7 +34,7 @@ public class ContentProvider implements ITreeContentProvider {
 	private boolean hasRuntime(IProject project) throws CoreException {
 		if(project.hasNature(CoreConstants.LIBRARY_NATURE_ID)) {
 			Object prop = project.getPersistentProperty(LibraryNature.EXCLUDE_RUNTIME_PROPERTY);
-			if(prop!=null && Boolean.getBoolean(prop.toString()))
+			if(prop!=null && Boolean.valueOf(prop.toString()))
 				return false;	
 		}
 		return true;

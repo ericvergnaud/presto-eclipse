@@ -68,8 +68,11 @@ public class RuntimeLibraryElement extends LibraryElement {
 			List<Object> children = new ArrayList<>();
 			try(ZipInputStream zip = new ZipInputStream(input)) {
 				ZipEntry entry = zip.getNextEntry();
-				if(entry.getName().startsWith("libraries/"))
-					children.add(new RuntimeFileElement(this, entry.getName().substring("libraries/".length())));
+				while(entry!=null) {
+					if(entry.getName().startsWith("libraries/") && !entry.getName().endsWith("/"))
+						children.add(new RuntimeFileElement(this, entry.getName().substring("libraries/".length())));
+					entry = zip.getNextEntry();
+				}
 			}
 			return children.toArray();
 		} catch(IOException e) {
