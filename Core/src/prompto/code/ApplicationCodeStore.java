@@ -4,7 +4,7 @@ import prompto.code.ICodeStore;
 
 public class ApplicationCodeStore extends EclipseCodeStore {
 
-	public ApplicationCodeStore(ICodeStore next) {
-		super(next);
+	public ApplicationCodeStore(ICodeStore runtime) {
+		super(runtime);
 	}
 }

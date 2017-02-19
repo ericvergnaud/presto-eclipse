@@ -39,7 +39,7 @@ public class MultiPageContributor extends MultiPageEditorActionBarContributor {
     }
 
     /**
-     * Returns the action registed with the given text editor.
+     * Returns the action registered with the given text editor.
      * @return IAction or null if editor is null.
      */
     protected IAction getAction(ITextEditor editor, String actionID) {
@@ -90,7 +90,7 @@ public class MultiPageContributor extends MultiPageEditorActionBarContributor {
 	private String translate(String actualCode, IFile actualFile, Dialect actualDialect, Dialect targetDialect) {
 		try {
 			IEclipseCodeStore store = StoreUtils.fetchStoreFor(actualFile);
-			Context context = store.getContext();
+			Context context = store.getProjectContext();
 			IParser parser = actualDialect.getParserFactory().newParser();
 			InputStream input = new ByteArrayInputStream(actualCode.getBytes());
 			DeclarationList dl = parser.parse(null, input);
@@ -106,9 +106,7 @@ public class MultiPageContributor extends MultiPageEditorActionBarContributor {
 	private void setActionHandlers(IEditorPart part) {
 		IActionBars actionBars = getActionBars();
         if (actionBars != null) {
-
             ITextEditor editor = (part instanceof ITextEditor) ? (ITextEditor) part : null;
-
             actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(),
                     getAction(editor, ActionFactory.DELETE.getId()));
             actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(),

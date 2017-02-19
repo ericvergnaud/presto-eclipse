@@ -21,8 +21,15 @@ import prompto.distribution.Distribution;
 import prompto.nullstore.NullStoreFactory;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory.Type;
+import prompto.utils.ProjectUtils;
 
 public abstract class StoreUtils {
+
+	public static IEclipseCodeStore setStoreFor(IFile file) throws CoreException {
+		IEclipseCodeStore store = fetchStoreFor(file);
+		ICodeStore.instance.set(store);	
+		return store;
+	}
 
 	public static synchronized IEclipseCodeStore fetchStoreFor(IFile file) throws CoreException {
 		IProject project = file.getProject();
@@ -49,6 +56,8 @@ public abstract class StoreUtils {
 	private static ICodeStore runtimeCodeStore = null;
 	
 	private static ICodeStore getRuntimeCodeStore(IProject project) throws CoreException {
+		if(!ProjectUtils.hasRuntime(project))
+			return null;
 		if(runtimeCodeStore==null)
 			runtimeCodeStore = new UpdatableCodeStore(getNullStore(), project.getName(), Version.emptyVersion.toString()) {
 				@Override protected ICodeStore bootstrapRuntime() {
@@ -90,5 +99,6 @@ public abstract class StoreUtils {
 			throw new CoreException(Status.CANCEL_STATUS);
 		}
 	}
+
 
 }

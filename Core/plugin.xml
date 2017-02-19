@@ -137,7 +137,7 @@
   			</possibleChildren>
   		</navigatorContent>
   </extension>
-    <extension point="org.eclipse.ui.menus">
+   <extension point="org.eclipse.ui.menus">
  		<menuContribution locationURI="popup:org.eclipse.ui.projectConfigure">
  			<command commandId="disable.prompto">
 		      	<visibleWhen>

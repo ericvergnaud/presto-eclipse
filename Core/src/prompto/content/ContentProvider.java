@@ -8,8 +8,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import prompto.core.CoreConstants;
-import prompto.core.LibraryNature;
+import prompto.utils.ProjectUtils;
 
 public class ContentProvider implements ITreeContentProvider {
 
@@ -19,7 +18,7 @@ public class ContentProvider implements ITreeContentProvider {
 			if(parentElement instanceof IProject) {
 				List<Object> children = new ArrayList<>();
 				children.add(new ReferencedProjectsElement((IProject)parentElement));
-				if(hasRuntime((IProject)parentElement))
+				if(ProjectUtils.hasRuntime((IProject)parentElement))
 					children.add(new RuntimeLibraryElement((IProject)parentElement));
 				return children.toArray();
 			} else if(parentElement instanceof ILibraryElement) {
@@ -31,15 +30,6 @@ public class ContentProvider implements ITreeContentProvider {
 		return new Object[0];
 	}
 	
-	private boolean hasRuntime(IProject project) throws CoreException {
-		if(project.hasNature(CoreConstants.LIBRARY_NATURE_ID)) {
-			Object prop = project.getPersistentProperty(LibraryNature.EXCLUDE_RUNTIME_PROPERTY);
-			if(prop!=null && Boolean.valueOf(prop.toString()))
-				return false;	
-		}
-		return true;
-	}
-
 	@Override
 	public boolean hasChildren(Object element) {
 		if(element instanceof IProject)

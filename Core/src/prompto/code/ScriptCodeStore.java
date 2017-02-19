@@ -4,8 +4,8 @@ import prompto.code.ICodeStore;
 
 public class ScriptCodeStore extends EclipseCodeStore {
 
-	protected ScriptCodeStore(ICodeStore next) {
-		super(next);
+	protected ScriptCodeStore(ICodeStore runtime) {
+		super(runtime);
 	}
 
 }

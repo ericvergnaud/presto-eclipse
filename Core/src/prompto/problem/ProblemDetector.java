@@ -67,9 +67,8 @@ public class ProblemDetector {
 	private void manageProblems() throws CoreException {
 		// need to ensure ICodeStore instance is constant, TODO use TLS
 		synchronized(ICodeStore.class) {
-			this.store = StoreUtils.fetchStoreFor(editedFile);
-			this.context = store.getContext();
-			ICodeStore.setInstance(store);
+			this.store = StoreUtils.setStoreFor(editedFile);
+			this.context = store.getProjectContext();
 			if(!initialized()) {
 				// need to register libraries before checking project files
 				manageImpact();
@@ -159,6 +158,7 @@ public class ProblemDetector {
 		}
 		ProblemCollector listener = new ProblemCollector();
 		context.setProblemListener(listener);
+		// register project declarations
 		try {
 			decls.register(context);
 		} catch(Exception e) {

@@ -24,13 +24,23 @@ import prompto.utils.CoreUtils;
 
 public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipseCodeStore {
 
-	Context context = Context.newGlobalContext();
+	Context runtimeContext = Context.newGlobalContext();
+	Context projectContext = runtimeContext.newLocalContext();
 	Set<IFile> files = Collections.newSetFromMap(new ConcurrentHashMap<IFile, Boolean>()); // creates a concurrent set
 	
-	protected EclipseCodeStore(ICodeStore next) {
-		super(next);
+	protected EclipseCodeStore(ICodeStore runtime) {
+		super(runtime);
+		registerRuntimeDeclarations(runtime);
 	}
 	
+	private void registerRuntimeDeclarations(ICodeStore runtime) {
+		if(runtime!=null) {
+			// only called from synchronized StoreUtils.fetchStoreFor 
+			ICodeStore.instance.set(this);
+			runtimeContext.fetchAndRegisterAllDeclarations();
+		}
+	}
+
 	@Override
 	public Dialect getModuleDialect() {
 		throw new UnsupportedOperationException();
@@ -53,8 +63,8 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 
 	@Override
-	public Context getContext() {
-		return context;
+	public Context getProjectContext() {
+		return projectContext;
 	}
 	
 	@Override
@@ -100,12 +110,12 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 		if(!(resource instanceof IFile))
 			return null;
 		String path = ((IFile)resource).getFullPath().toPortableString();
-		return context.findSectionFor(path, lineNumber);
+		return projectContext.findSectionFor(path, lineNumber);
 	}
 	
 	@Override
 	public ISection findSection(ISection section) {
-		return context.findSection(section);
+		return projectContext.findSection(section);
 	}
 	
 	@Override

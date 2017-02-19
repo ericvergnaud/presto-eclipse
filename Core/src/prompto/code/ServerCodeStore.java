@@ -5,8 +5,8 @@ import prompto.code.ICodeStore;
 
 public class ServerCodeStore extends EclipseCodeStore {
 
-	protected ServerCodeStore(ICodeStore next) {
-		super(next);
+	protected ServerCodeStore(ICodeStore runtime) {
+		super(runtime);
 	}
 
 }
