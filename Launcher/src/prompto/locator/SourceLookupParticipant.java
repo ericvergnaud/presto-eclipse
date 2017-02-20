@@ -11,7 +11,7 @@ public class SourceLookupParticipant extends AbstractSourceLookupParticipant {
 	public String getSourceName(Object object) throws CoreException {
 		if(object instanceof StackFrameProxy) {
 			StackFrameProxy proxy = (StackFrameProxy)object;
-			return proxy.getFile().getProjectRelativePath().toPortableString();
+			return proxy.getResource().getProjectRelativePath().toPortableString();
 		}
 		return null;
 	}

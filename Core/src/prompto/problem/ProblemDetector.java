@@ -22,12 +22,12 @@ import org.eclipse.jface.text.IDocument;
 
 import prompto.code.ICodeStore;
 import prompto.code.IEclipseCodeStore;
-import prompto.code.StoreUtils;
 import prompto.declaration.DeclarationList;
 import prompto.parser.Dialect;
 import prompto.parser.IParser;
 import prompto.runtime.Context;
 import prompto.utils.CoreUtils;
+import prompto.utils.StoreUtils;
 
 @SuppressWarnings("restriction")
 public class ProblemDetector {

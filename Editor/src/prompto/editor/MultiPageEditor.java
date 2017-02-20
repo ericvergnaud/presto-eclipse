@@ -5,7 +5,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
 import prompto.parser.Dialect;
@@ -18,14 +20,25 @@ public class MultiPageEditor extends MultiPageEditorPart {
 	
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		if (!(input instanceof IFileEditorInput))
+		if (input instanceof IFileEditorInput)
+			init((IFileEditorInput)input);
+		else if(input instanceof IURIEditorInput)
+			init((IURIEditorInput)input);
+		else	
 			throw new PartInitException("Unsupported input:" + input.getClass().getSimpleName());
-		IFile file = ((IFileEditorInput)input).getFile();
-		dialect = CoreUtils.getDialect(file);
-		setPartName(file.getName());
 		super.init(site, input);
 	}
 	
+	private void init(IURIEditorInput input) {
+		dialect = CoreUtils.getDialect(input.getURI());
+		setPartName(input.getName());
+	}
+
+	private void init(IFileEditorInput input) {
+		dialect = CoreUtils.getDialect(input.getFile());
+		setPartName(input.getFile().getName());
+	}
+
 	@Override
 	protected void createPages() {
 		for(Dialect d : Dialect.values())

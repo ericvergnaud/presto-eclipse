@@ -68,6 +68,11 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 	
 	@Override
+	public Context getRuntimeContext() {
+		return runtimeContext;
+	}
+	
+	@Override
 	public Collection<IFile> getFiles() throws CoreException {
 		return files;
 	}

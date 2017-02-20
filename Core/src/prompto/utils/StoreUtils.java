@@ -1,4 +1,4 @@
-package prompto.code;
+package prompto.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,13 +15,20 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.Version;
 
+import prompto.code.ApplicationCodeStore;
+import prompto.code.ICodeStore;
+import prompto.code.IEclipseCodeStore;
+import prompto.code.LibraryCodeStore;
+import prompto.code.ResourceCodeStore;
+import prompto.code.ScriptCodeStore;
+import prompto.code.ServerCodeStore;
+import prompto.code.UpdatableCodeStore;
 import prompto.code.ICodeStore.ModuleType;
 import prompto.core.CoreConstants;
 import prompto.distribution.Distribution;
 import prompto.nullstore.NullStoreFactory;
 import prompto.store.IStore;
 import prompto.store.IStoreFactory.Type;
-import prompto.utils.ProjectUtils;
 
 public abstract class StoreUtils {
 
@@ -32,8 +39,11 @@ public abstract class StoreUtils {
 	}
 
 	public static synchronized IEclipseCodeStore fetchStoreFor(IFile file) throws CoreException {
-		IProject project = file.getProject();
-		if(project.hasNature(CoreConstants.SCRIPTS_NATURE_ID))
+		return fetchStoreFor(file.getProject());
+	}
+	
+	public static synchronized IEclipseCodeStore fetchStoreFor(IProject project) throws CoreException {
+			if(project.hasNature(CoreConstants.SCRIPTS_NATURE_ID))
 			return new ScriptCodeStore(getRuntimeCodeStore(project));
 		else {
 			QualifiedName key = new QualifiedName(CoreConstants.CORE_PLUGIN_ID, "code_store");
@@ -55,7 +65,7 @@ public abstract class StoreUtils {
 	}
 	private static ICodeStore runtimeCodeStore = null;
 	
-	private static ICodeStore getRuntimeCodeStore(IProject project) throws CoreException {
+	public static ICodeStore getRuntimeCodeStore(IProject project) throws CoreException {
 		if(!ProjectUtils.hasRuntime(project))
 			return null;
 		if(runtimeCodeStore==null)

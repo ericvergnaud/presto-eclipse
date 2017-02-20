@@ -1,6 +1,5 @@
 package prompto.debugger;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.PlatformObject;
@@ -12,6 +11,7 @@ import org.eclipse.debug.core.model.IRegisterGroup;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.debug.ui.sourcelookup.ISourceDisplay;
 
 import prompto.core.CoreConstants;
 
@@ -20,7 +20,7 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 	DebugThread thread;
 	int index;
 	prompto.debug.IStackFrame frame;
-	IFile file = null;
+	IResource resource = null;
 
 	
 	public StackFrameProxy(DebugThread thread, int index, prompto.debug.IStackFrame frame) {
@@ -49,6 +49,10 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 		return thread;
 	}
 	
+	public IPromptoDebugTarget getTarget() {
+		return thread.getTarget();
+	}
+	
 	public prompto.debug.IStackFrame getStackFrame() {
 		return frame;
 	}
@@ -62,19 +66,29 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 		else if(adapter==ILaunch.class)
 			return getLaunch();
 		else if(adapter==IResource.class)
-			return getFile();
+			return getResource();
+		else if(adapter==ISourceDisplay.class)
+			return getSourceDisplay();
 		else
 			return super.getAdapter(adapter);
 	}
 	
-	public IFile getFile() {
-		if(file==null) try {
-			file = thread.getTarget().resolveFile(frame.getFilePath());
+	private Object getSourceDisplay() {
+		if("__store__".equals(frame.getFilePath()))
+			return new RuntimeSourceDisplay();
+		else
+			return super.getAdapter(ISourceDisplay.class);
+	}
+
+	public IResource getResource() {
+		if(resource==null) try {
+			resource = thread.getTarget().resolveFile(frame.getFilePath());
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		return file;
+		return resource;
 	}
+	
 
 	@Override
 	public boolean canStepInto() {
@@ -206,5 +220,7 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 		return this.thread.equals(sfp.thread)
 				&& this.index==sfp.index;
 	}
+
+
 
 }

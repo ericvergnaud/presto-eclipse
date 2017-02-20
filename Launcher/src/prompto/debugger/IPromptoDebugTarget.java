@@ -1,6 +1,7 @@
 package prompto.debugger;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.model.IDebugTarget;
 
@@ -13,4 +14,5 @@ public interface IPromptoDebugTarget extends IDebugTarget {
 	IFile resolveFile(String filePath) throws CoreException;
 	IDebugger getDebugger();
 	IDebugEventListener getDebugEventListener();
+	IProject getProject();
 }

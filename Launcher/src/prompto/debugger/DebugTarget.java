@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -54,6 +55,11 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	
 	public DebugThread getThread() {
 		return thread;
+	}
+	
+	@Override
+	public IProject getProject() {
+		return context.getProject();
 	}
 	
 	@Override

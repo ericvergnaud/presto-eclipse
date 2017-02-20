@@ -1,6 +1,9 @@
 package prompto.utils;
 
 import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -98,9 +101,17 @@ public abstract class CoreUtils {
 	public static Dialect getDialect(IFile file) {
 		return Dialect.valueOf(file.getFileExtension().substring(1, 2).toUpperCase());
 	}
+	
+	public static Dialect getDialect(URI uri) {
+		Path path = Paths.get(uri);
+		String name = path.getName(path.getNameCount()-1).toString();
+		String ext = name.substring(name.lastIndexOf('.')+1);
+		return Dialect.valueOf(ext.substring(1, 2).toUpperCase());
+	}
 
 	public static String getMethodSignature(IMethodDeclaration method, Dialect dialect) {
 		return method==null ? null : method.getSignature(dialect);
 	}
+
 
 }

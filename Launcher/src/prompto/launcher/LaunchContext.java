@@ -7,10 +7,10 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
 import prompto.code.IEclipseCodeStore;
-import prompto.code.StoreUtils;
 import prompto.core.RunType;
 import prompto.declaration.IDeclaration;
 import prompto.distribution.Distribution;
+import prompto.utils.StoreUtils;
 
 public class LaunchContext {
 
