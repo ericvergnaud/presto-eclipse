@@ -5,13 +5,14 @@ import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupParticipant;
 
 import prompto.debugger.StackFrameProxy;
 
-public class SourceLookupParticipant extends AbstractSourceLookupParticipant {
+public class ProjectSourceLookup extends AbstractSourceLookupParticipant {
 
 	@Override
 	public String getSourceName(Object object) throws CoreException {
 		if(object instanceof StackFrameProxy) {
 			StackFrameProxy proxy = (StackFrameProxy)object;
-			return proxy.getResource().getProjectRelativePath().toPortableString();
+			if(!"__store__".equals(proxy.getStackFrame().getFilePath()))
+				return proxy.getResource().getProjectRelativePath().toPortableString();
 		}
 		return null;
 	}

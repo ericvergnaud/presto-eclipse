@@ -11,7 +11,6 @@ import org.eclipse.debug.core.model.IRegisterGroup;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.debug.ui.sourcelookup.ISourceDisplay;
 
 import prompto.core.CoreConstants;
 
@@ -67,19 +66,10 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 			return getLaunch();
 		else if(adapter==IResource.class)
 			return getResource();
-		else if(adapter==ISourceDisplay.class)
-			return getSourceDisplay();
 		else
 			return super.getAdapter(adapter);
 	}
 	
-	private Object getSourceDisplay() {
-		if("__store__".equals(frame.getFilePath()))
-			return new RuntimeSourceDisplay();
-		else
-			return super.getAdapter(ISourceDisplay.class);
-	}
-
 	public IResource getResource() {
 		if(resource==null) try {
 			resource = thread.getTarget().resolveFile(frame.getFilePath());

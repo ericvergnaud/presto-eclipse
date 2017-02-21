@@ -7,8 +7,10 @@ public class SourceLocator extends AbstractSourceLookupDirector {
 
 	@Override
 	public void initializeParticipants() {
-		ISourceLookupParticipant slp = new SourceLookupParticipant();
-		addParticipants(new ISourceLookupParticipant[] { slp } );
+		addParticipants(new ISourceLookupParticipant[] { 
+				new ProjectSourceLookup(),
+				new RuntimeSourceLookup()
+			} );
 		
 	}
 
