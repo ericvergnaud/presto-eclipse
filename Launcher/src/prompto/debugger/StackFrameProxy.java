@@ -1,5 +1,8 @@
 package prompto.debugger;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.PlatformObject;
@@ -17,14 +20,12 @@ import prompto.core.CoreConstants;
 public class StackFrameProxy extends PlatformObject implements IStackFrame {
 
 	DebugThread thread;
-	int index;
 	prompto.debug.IStackFrame frame;
 	IResource resource = null;
 
 	
-	public StackFrameProxy(DebugThread thread, int index, prompto.debug.IStackFrame frame) {
+	public StackFrameProxy(DebugThread thread, prompto.debug.IStackFrame frame) {
 		this.thread = thread;
-		this.index = index;
 		this.frame = frame;
 	}
 
@@ -157,12 +158,15 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 
 	@Override
 	public IVariable[] getVariables() throws DebugException {
-		return new IVariable[0];
+		List<VariableProxy> variables = frame.getVariables().stream()
+				.map((v)->new VariableProxy(this, v))
+				.collect(Collectors.toList());
+		return variables.toArray(new IVariable[variables.size()]);
 	}
 
 	@Override
 	public boolean hasVariables() throws DebugException {
-		return true;
+		return frame.hasVariables();
 	}
 
 	@Override
@@ -208,7 +212,7 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 			return false;
 		StackFrameProxy sfp = (StackFrameProxy)obj;
 		return this.thread.equals(sfp.thread)
-				&& this.index==sfp.index;
+				&& frame.getIndex()==sfp.frame.getIndex();
 	}
 
 

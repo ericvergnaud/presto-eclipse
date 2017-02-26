@@ -1,5 +1,8 @@
 package prompto.debugger;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.ILaunch;
@@ -7,8 +10,6 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IThread;
-
-import prompto.debug.IStack;
 
 public class DebugThread extends PlatformObject implements IThread {
 	
@@ -161,14 +162,10 @@ public class DebugThread extends PlatformObject implements IThread {
 	public StackFrameProxy[] getStackFrames() throws DebugException {
 		if(target.isTerminated())
 			return new StackFrameProxy[0];
-		int index = 0;
-		IStack<?> stack = target.getDebugger().getStack(thread);
-		StackFrameProxy[] result = new StackFrameProxy[stack.size()];
-		for(prompto.debug.IStackFrame frame : stack) {
-			result[index] = new StackFrameProxy(this, index, frame);
-			index++;
-		}
-		return result;	
+		List<StackFrameProxy> frames = target.getDebugger().getStack(thread).stream()
+				.map((f)->new StackFrameProxy(this, f))
+				.collect(Collectors.toList());
+		return frames.toArray(new StackFrameProxy[frames.size()]);
 	}
 
 	@Override
