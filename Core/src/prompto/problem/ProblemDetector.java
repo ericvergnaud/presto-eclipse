@@ -51,6 +51,13 @@ public class ProblemDetector {
 		}
 	}
 	
+	static class PromptoProblemCollector extends ProblemCollector {
+		@Override
+		public boolean isCheckNative() {
+			return false;
+		}
+	}
+	
 	IFile editedFile;
 	IDocument editedDocument;
 	IEclipseCodeStore store;
@@ -106,7 +113,7 @@ public class ProblemDetector {
 		for(IFile file : store.getFiles()) {
 			if(editedDocument!=null && file.equals(editedFile))
 				continue; // already managed
-			ProblemCollector listener = new ProblemCollector();
+			ProblemCollector listener = new PromptoProblemCollector();
 			parseDeclarations(file, null, listener);
 			createProblemMarkers(file, listener.getProblems());
 		}
@@ -131,7 +138,7 @@ public class ProblemDetector {
 	}
 	
 	private void unregisterDeclarations(IFile inputFile) throws CoreException {
-		ProblemCollector listener = new ProblemCollector();
+		ProblemCollector listener = new PromptoProblemCollector();
 		context.setProblemListener(listener);
 		unregisterDeclarations(inputFile, listener);
 		createProblemMarkers(inputFile, listener.getProblems());
@@ -156,7 +163,7 @@ public class ProblemDetector {
 				continue; // already managed
 			decls.addAll(fileToDeclarationMap.get(file));
 		}
-		ProblemCollector listener = new ProblemCollector();
+		ProblemCollector listener = new PromptoProblemCollector();
 		context.setProblemListener(listener);
 		// register project declarations
 		try {
@@ -182,7 +189,7 @@ public class ProblemDetector {
 	}
 
 	private Collection<IProblem> checkDeclarations(IFile inputFile) {
-		ProblemCollector listener = new ProblemCollector();
+		ProblemCollector listener = new PromptoProblemCollector();
 		checkDeclarations(inputFile, listener);
 		return listener.getProblems();
 	}
@@ -233,7 +240,7 @@ public class ProblemDetector {
 	private void manageProblems(IFile file, IDocument document) throws CoreException {
 		try {
 			clearProblemMarkers(file);
-			ProblemCollector listener = new ProblemCollector();
+			ProblemCollector listener = new PromptoProblemCollector();
 			parseDeclarations(file, document, listener);
 			unregisterDeclarations(file, listener);
 			registerDeclarations(file, listener);
