@@ -27,6 +27,7 @@ import org.eclipse.debug.core.sourcelookup.containers.WorkspaceSourceContainer;
 
 import prompto.code.IEclipseCodeStore;
 import prompto.core.CoreConstants;
+import prompto.debug.DebugEventServer;
 import prompto.debug.DebugRequestClient;
 import prompto.debug.IDebugEventListener;
 import prompto.debug.IDebugger;
@@ -44,9 +45,10 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	}
 
 	LaunchContext context;
-	IDebugEventListener listener;
+	DebugEventServer eventServer; 
+	DebugEventListener listener;
+	DebugRequestClient debugger;
 	IProcess process;
-	IDebugger debugger;
 	DebugThread thread; // until Prompto supports Workers
 	
 	public DebugTarget(LaunchContext context) {
@@ -90,7 +92,7 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	
 	@Override
 	public String toString() {
-		return "Prompto@localhost:9999";
+		return "Prompto@localhost:" + eventServer.getPort();
 	}
 
 
@@ -98,23 +100,25 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	@Override
 	public void debug() throws CoreException {
 		try {
-			String[] commands = buildCommands();
+			listener = new DebugEventListener(this);
+			eventServer = new DebugEventServer(listener);
+			int port = eventServer.startListening();
+			String[] commands = buildCommands(port);
 			ProcessBuilder builder = new ProcessBuilder(commands)
 				.directory(new File(context.getDistribution().getDirectory()))
 				.inheritIO();
 			Process remote = builder.start();
 			String processName = getProcessName(remote);
-			listener = new DebugEventListener(this);
-			debugger = new DebugRequestClient(remote, "localhost", 9999, listener);
+			debugger = new DebugRequestClient(remote, eventServer);
 			process = DebugPlugin.newProcess(context.getLaunch(), remote, processName);
 			thread = new DebugThread(this, new prompto.debug.IThread() {}); 
 			context.getLaunch().addDebugTarget(this);
-			debugger.connect();
+			listener.waitConnected();
 			connectBreakpoints();
 			DebuggerUtils.startListeningToBreakpoints(this);
 			if(!context.isStopInMain())
 				debugger.resume(null);
-		} catch(IOException e) {
+		} catch(IOException | InterruptedException e) {
 			e.printStackTrace(System.err);
 			throw new CoreException(Status.CANCEL_STATUS);
 		}
@@ -128,14 +132,14 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 		return sb.toString();
 	}
 
-	private String[] buildCommands() throws CoreException {
+	private String[] buildCommands(int debugPort) throws CoreException {
 		ILaunchHelper helper = context.getLaunchHelper();
 		List<String> commands = new ArrayList<>();
 		commands.add("java");
 		commands.add("-jar");
 		commands.add(helper.getTargetJar(context));
 		commands.add("-debug_port");
-		commands.add("9999");
+		commands.add(String.valueOf(debugPort));
 		commands.addAll(helper.getTargetSpecifiers(context));
 		commands.add("-resources");
 		commands.add(Runner.getResourcesAsString(context));

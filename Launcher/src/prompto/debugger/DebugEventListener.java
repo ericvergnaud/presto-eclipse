@@ -15,6 +15,20 @@ public class DebugEventListener implements IDebugEventListener {
 		DebuggerUtils.fireCreationEvent(target);
 	}
 
+	public void waitConnected() throws InterruptedException {
+		synchronized (target) {
+			target.wait();
+		}
+	}
+
+	@Override
+	public void handleConnectedEvent(String host, int port) {
+		synchronized (target) {
+			target.notify();
+		}
+		DebuggerUtils.fireResumeEvent(target.getThread(), DebugEvent.UNSPECIFIED);
+	}
+
 	@Override
 	public void handleResumedEvent(ResumeReason reason) {
 		DebuggerUtils.fireResumeEvent(target.getThread(), debugEventFromResumeReason(reason));
