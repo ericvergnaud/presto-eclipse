@@ -2,6 +2,8 @@ package prompto.debugger;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,11 +11,13 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
@@ -30,11 +34,11 @@ import prompto.core.CoreConstants;
 import prompto.debug.DebugEventServer;
 import prompto.debug.DebugRequestClient;
 import prompto.debug.IDebugEventListener;
-import prompto.debug.IDebugger;
 import prompto.launcher.ILaunchHelper;
 import prompto.launcher.LaunchContext;
 import prompto.parser.ISection;
 import prompto.runner.Runner;
+import prompto.utils.ProjectUtils;
 import prompto.utils.ShellUtils;
 
 public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  {
@@ -70,7 +74,7 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	}
 	
 	@Override
-	public IDebugger getDebugger() {
+	public DebugRequestClient getDebugger() {
 		return debugger;
 	}
 	
@@ -116,7 +120,9 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 			listener.waitConnected();
 			connectBreakpoints();
 			DebuggerUtils.startListeningToBreakpoints(this);
-			if(!context.isStopInMain())
+			if(context.isStopInMain())
+				DebuggerUtils.fireSuspendEvent(this, DebugEvent.STEP_INTO);
+			else
 				debugger.resume(null);
 		} catch(IOException | InterruptedException e) {
 			e.printStackTrace(System.err);
@@ -143,6 +149,10 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 		commands.addAll(helper.getTargetSpecifiers(context));
 		commands.add("-resources");
 		commands.add(Runner.getResourcesAsString(context));
+		if(!ProjectUtils.hasRuntime(context.getProject())) {
+			commands.add("-loadRuntime");
+			commands.add("false");
+		}
 		Collection<String> args = Runner.getCommandLineArgs(context);
 		if(args!=null && !args.isEmpty())
 			commands.addAll(args);
@@ -151,13 +161,14 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	
 	@Override
 	public IFile resolveFile(String filePath) throws CoreException {
-		// need a workspace relative path
-		String workspacePath = ShellUtils.getRootPath().toPortableString();
-		if(filePath.startsWith(workspacePath))
-			filePath = filePath.substring(workspacePath.length());
-		// need a project relative path
-		IPath path = new Path(filePath).removeFirstSegments(1);
-		return (IFile)new WorkspaceSourceContainer().findSourceElements(path.toPortableString())[0];
+		try {
+			URI location = new URI(filePath);
+			IWorkspaceRoot root = ShellUtils.getRoot();
+			IFile[] files = root.findFilesForLocationURI(location);
+			return files.length==0 ? null : files[0];
+		} catch (URISyntaxException e) {
+			throw new CoreException(Status.CANCEL_STATUS);
+		}
 	}
 
 

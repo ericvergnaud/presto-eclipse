@@ -23,10 +23,10 @@ public class DebugEventListener implements IDebugEventListener {
 
 	@Override
 	public void handleConnectedEvent(String host, int port) {
+		target.getDebugger().setRemote(host, port);
 		synchronized (target) {
 			target.notify();
 		}
-		DebuggerUtils.fireResumeEvent(target.getThread(), DebugEvent.UNSPECIFIED);
 	}
 
 	@Override

@@ -4,7 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -19,11 +24,9 @@ import prompto.code.ApplicationCodeStore;
 import prompto.code.ICodeStore;
 import prompto.code.IEclipseCodeStore;
 import prompto.code.LibraryCodeStore;
-import prompto.code.ResourceCodeStore;
 import prompto.code.ScriptCodeStore;
 import prompto.code.ServerCodeStore;
 import prompto.code.UpdatableCodeStore;
-import prompto.code.ICodeStore.ModuleType;
 import prompto.core.CoreConstants;
 import prompto.distribution.Distribution;
 import prompto.nullstore.NullStoreFactory;
@@ -43,7 +46,7 @@ public abstract class StoreUtils {
 	}
 	
 	public static synchronized IEclipseCodeStore fetchStoreFor(IProject project) throws CoreException {
-			if(project.hasNature(CoreConstants.SCRIPTS_NATURE_ID))
+		if(project.hasNature(CoreConstants.SCRIPTS_NATURE_ID))
 			return new ScriptCodeStore(getRuntimeCodeStore(project));
 		else {
 			QualifiedName key = new QualifiedName(CoreConstants.CORE_PLUGIN_ID, "code_store");
@@ -69,37 +72,35 @@ public abstract class StoreUtils {
 		if(!ProjectUtils.hasRuntime(project))
 			return null;
 		if(runtimeCodeStore==null)
-			runtimeCodeStore = new UpdatableCodeStore(getNullStore(), project.getName(), Version.emptyVersion.toString()) {
-				@Override protected ICodeStore bootstrapRuntime() {
-					return bootstrapRuntimeFromDistribution();
-				}
-			};
+			runtimeCodeStore = new UpdatableCodeStore(getNullStore(), ()->getLibraryEntries(), project.getName(), Version.emptyVersion.toString());
 		return runtimeCodeStore;
 	}
 	
-	private static ICodeStore bootstrapRuntimeFromDistribution() {
+	private static Collection<URL> getLibraryEntries() {
 		Distribution dist = Distribution.getDefaultDistribution();
 		if(dist==null)
-			return null;
+			return Collections.emptyList();
+		List<URL> urls = new ArrayList<URL>();
 		File jarFile = Paths.get(dist.getDirectory(), "Runtime-0.0.1-SNAPSHOT.jar").toFile();
-		if(!jarFile.exists())
-			return null;
-		ICodeStore runtime = null;
-		try(InputStream input = new FileInputStream(jarFile)) {
+		addLibraryEntries(urls, jarFile);
+		jarFile = Paths.get(dist.getDirectory(), "Server-0.0.1-SNAPSHOT.jar").toFile();
+		addLibraryEntries(urls, jarFile);
+		return urls;
+	}
+	
+	private static void addLibraryEntries(List<URL> urls, File jarFile) {
+		if(jarFile.exists()) try(InputStream input = new FileInputStream(jarFile)) {
 			try(ZipInputStream zip = new ZipInputStream(input)) {
 				ZipEntry entry = zip.getNextEntry();
 				while(entry!=null) {
-					if(entry.getName().startsWith("libraries/") && !entry.getName().endsWith("/")) {
-						String jarUrl = "jar:" + jarFile.toURI().toURL() + "!/" + entry.getName();
-						runtime = new ResourceCodeStore(runtime, ModuleType.LIBRARY, jarUrl, "1.0.0");
-					}
+					if(entry.getName().startsWith("libraries/") && !entry.getName().endsWith("/"))
+						urls.add(new URL("jar:" + jarFile.toURI().toURL() + "!/" + entry.getName()));
 					entry = zip.getNextEntry();
 				}
 			}
 		} catch(IOException e) {
 			e.printStackTrace(System.err);
 		}
-		return runtime;
 	}
 	
 	private static IStore getNullStore() throws CoreException {
