@@ -16,7 +16,5 @@ public abstract class ProjectUtils {
 		}
 		return true;
 	}
-	
-	
 
 }
