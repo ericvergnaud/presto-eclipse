@@ -24,8 +24,7 @@ import prompto.utils.CoreUtils;
 
 public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipseCodeStore {
 
-	Context runtimeContext = Context.newGlobalContext();
-	Context projectContext = runtimeContext.newLocalContext();
+	Context projectContext = Context.newGlobalContext();
 	Set<IFile> files = Collections.newSetFromMap(new ConcurrentHashMap<IFile, Boolean>()); // creates a concurrent set
 	
 	protected EclipseCodeStore(ICodeStore runtime) {
@@ -37,7 +36,7 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 		if(runtime!=null) {
 			// only called from synchronized StoreUtils.fetchStoreFor 
 			ICodeStore.instance.set(this);
-			runtimeContext.fetchAndRegisterAllDeclarations();
+			projectContext.fetchAndRegisterAllDeclarations();
 		}
 	}
 
@@ -65,11 +64,6 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	@Override
 	public Context getProjectContext() {
 		return projectContext;
-	}
-	
-	@Override
-	public Context getRuntimeContext() {
-		return runtimeContext;
 	}
 	
 	@Override

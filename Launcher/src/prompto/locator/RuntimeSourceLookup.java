@@ -89,7 +89,7 @@ public class RuntimeSourceLookup implements ISourceLookupParticipant {
 								.addFileExtension(entryPath.substring(entryPath.lastIndexOf('.')+1));
 						File file = path.toFile();
 						if(!file.exists()) {
-							CodeWriter writer = new CodeWriter(decl.getDialect(), store.getRuntimeContext());
+							CodeWriter writer = new CodeWriter(decl.getDialect(), store.getProjectContext());
 							decl.toDialect(writer);
 							file.getParentFile().mkdirs();
 							try(OutputStream out = new FileOutputStream(file)) {

@@ -18,5 +18,4 @@ public interface IEclipseCodeStore extends ICodeStore {
 	Collection<IFile> getFiles() throws CoreException;
 	ISection findSection(IResource resource, int lineNumber);
 	Context getProjectContext();
-	Context getRuntimeContext();
 }
