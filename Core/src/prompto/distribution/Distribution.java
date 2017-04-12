@@ -1,9 +1,9 @@
 package prompto.distribution;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.stream.Collectors;
 
 import org.osgi.service.prefs.Preferences;
 
@@ -43,26 +43,18 @@ public class Distribution implements Comparable<Distribution>{
 	}
 	
 	public static String toPrefsString(Collection<Distribution> list) {
-		StringBuilder sb = new StringBuilder();
-		list.forEach((d)->{
-			sb.append(d.toString());
-			sb.append(':');
-		});
-		if(sb.length()>0)
-			sb.setLength(sb.length()-1); // trim last ':'
-		return sb.toString();
+		return list.stream()
+				.map(Distribution::toString)
+				.collect(Collectors.joining(":"));
 	}
 	
 	public static Collection<Distribution> fromPrefsString(String string) {
 		if(string.isEmpty()) 
 			return Collections.emptyList();
-		else {
-			List<Distribution> list = new ArrayList<>();
-			String[] parts = string.split(":");
-			for(String part : parts)
-				list.add(fromString(part));
-			return list;
-		}
+		else 
+			return Arrays.asList(string.split(":")).stream()
+					.map(Distribution::fromString)
+					.collect(Collectors.toList());
 	}
 	
 	

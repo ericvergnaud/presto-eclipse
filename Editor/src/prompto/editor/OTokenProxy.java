@@ -107,6 +107,7 @@ public class OTokenProxy implements IToken {
 		case EXPECTING:
 		case EXTENDS:
 		case FETCH:
+		case FILTERED:
 		case FLUSH:
 		case FROM:
 		case GETTER:

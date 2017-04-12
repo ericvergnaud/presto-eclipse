@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.Version;
 
+import prompto.addon.AddOn;
 import prompto.code.ApplicationCodeStore;
 import prompto.code.ICodeStore;
 import prompto.code.IEclipseCodeStore;
@@ -71,8 +72,10 @@ public abstract class StoreUtils {
 	public static ICodeStore getRuntimeCodeStore(IProject project) throws CoreException {
 		if(!ProjectUtils.hasRuntime(project))
 			return null;
-		if(runtimeCodeStore==null)
-			runtimeCodeStore = new UpdatableCodeStore(getNullStore(), ()->getLibraryEntries(), project.getName(), Version.emptyVersion.toString());
+		if(runtimeCodeStore==null) {
+			URL[] addOns = AddOn.allURLs();
+			runtimeCodeStore = new UpdatableCodeStore(getNullStore(), ()->getLibraryEntries(), project.getName(), Version.emptyVersion.toString(), addOns);
+		}
 		return runtimeCodeStore;
 	}
 	
@@ -93,7 +96,7 @@ public abstract class StoreUtils {
 			try(ZipInputStream zip = new ZipInputStream(input)) {
 				ZipEntry entry = zip.getNextEntry();
 				while(entry!=null) {
-					if(entry.getName().startsWith("libraries/") && !entry.getName().endsWith("/"))
+					if(entry.getName().startsWith("libraries/") && ResourceUtils.isPrompto(entry.getName()))
 						urls.add(new URL("jar:" + jarFile.toURI().toURL() + "!/" + entry.getName()));
 					entry = zip.getNextEntry();
 				}

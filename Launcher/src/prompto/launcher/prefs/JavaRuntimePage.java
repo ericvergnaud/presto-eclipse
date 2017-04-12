@@ -15,6 +15,8 @@ import org.apache.maven.execution.MavenExecutionRequest;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
@@ -26,6 +28,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -35,15 +39,19 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
+import prompto.addon.AddOn;
 import prompto.distribution.Artifact;
 import prompto.distribution.Distribution;
 import prompto.distribution.Version;
+import prompto.utils.ShellUtils;
 
 public class JavaRuntimePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
 
-	TableViewer viewer;
+	TableViewer runtimesViewer;
+	TableViewer addOnsViewer;
 	Set<Distribution> distributions = new TreeSet<>();
+	Set<String> addOns = new TreeSet<>(); 
 	
 	public JavaRuntimePage() {
 	}
@@ -60,6 +68,8 @@ public class JavaRuntimePage extends PreferencePage implements
 	public void init(IWorkbench workbench) {
 		Collection<Distribution> dists = Distribution.loadAll();
 		distributions.addAll(dists);
+		Collection<String> jars = AddOn.loadAll();
+		addOns.addAll(jars);
 	}
 
 	@Override
@@ -74,7 +84,8 @@ public class JavaRuntimePage extends PreferencePage implements
 	
 	@Override
 	public boolean performOk() {
-		return Distribution.storeAll(distributions);
+		return Distribution.storeAll(distributions)
+				&& AddOn.storeAll(addOns);
 	}
 
 	private Composite createMainControl(Composite parent) {
@@ -84,26 +95,68 @@ public class JavaRuntimePage extends PreferencePage implements
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		control.setLayout(layout);
-		createTableViewer(control);
-		Composite buttons = new Composite(control, SWT.NONE);
+		createRuntimeSection(control);
+		createAddOnsSection(control);
+		populateRuntimeViewer();
+		populateAddOnsViewer();
+		return control;
+	}
+
+	private void createRuntimeSection(Composite parent) {
+		createRuntimeTableViewer(parent);
+		createRuntimeButtons(parent);
+	}
+
+	private void createRuntimeButtons(Composite parent) {
+		Composite buttons = new Composite(parent, SWT.NONE);
 		buttons.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
-		layout = new GridLayout(3, false);
+		GridLayout layout = new GridLayout(3, false);
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		buttons.setLayout(layout);
 		createAddSnapshotButton(buttons);
-		createAddButton(buttons); 
-		createRemoveButton(buttons);
-		populateTableViewer();
-		return control;
+		createAddRuntimeButton(buttons); 
+		createDelRuntimeButton(buttons);
 	}
 
-	private void populateTableViewer() {
-		viewer.getTable().clearAll();
+	private void createAddOnsSection(Composite parent) {
+		createAddOnsLabel(parent);
+		createAddOnsTableViewer(parent);
+		createAddOnsButtons(parent);
+	}
+
+	private void createAddOnsButtons(Composite parent) {
+		Composite buttons = new Composite(parent, SWT.NONE);
+		buttons.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
+		GridLayout layout = new GridLayout(3, false);
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		buttons.setLayout(layout);
+		createAddAddOnButton(buttons); 
+		createDelAddOnButton(buttons);
+	}
+
+	private void createAddOnsLabel(Composite parent) {
+		int style = SWT.BOLD;
+		Label label = new Label(parent, style);
+		label.setText("Add-Ons");
+	}
+
+	private void populateRuntimeViewer() {
+		runtimesViewer.getTable().removeAll();
 		distributions.forEach((d)->{
-			TableItem item = new TableItem(viewer.getTable(), SWT.NULL);
+			TableItem item = new TableItem(runtimesViewer.getTable(), SWT.NULL);
 			item.setText(0, d.getVersion().toString());
 			item.setText(1, d.getDirectory());
+		});
+	}
+
+	private void populateAddOnsViewer() {
+		addOnsViewer.getTable().removeAll();
+		addOns.forEach((s)->{
+			TableItem item = new TableItem(addOnsViewer.getTable(), SWT.NULL);
+			item.setText(0, s);
+			item.setData(s);
 		});
 	}
 
@@ -137,7 +190,7 @@ public class JavaRuntimePage extends PreferencePage implements
 				deleteDistribution(artifact.getVersion());
 				createDistributionFromLocalPom(artifact);
 				registerDistribution(artifact.getVersion());
-				populateTableViewer();
+				populateRuntimeViewer();
 			} else {
 				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 				MessageBox alert = new MessageBox(shell, SWT.ICON_ERROR | SWT.ABORT);
@@ -232,7 +285,7 @@ public class JavaRuntimePage extends PreferencePage implements
 				artifact.getType(), null, Collections.emptyList());
 	}
 
-	private void createAddButton(Composite parent) {
+	private void createAddRuntimeButton(Composite parent) {
 		Button button = new Button(parent, SWT.NONE);
 		GridData gd = new GridData();
 		gd.widthHint = 80;
@@ -240,7 +293,7 @@ public class JavaRuntimePage extends PreferencePage implements
 		button.setText("Add...");
 	}
 
-	private void createRemoveButton(Composite parent) {
+	private void createDelRuntimeButton(Composite parent) {
 		Button button = new Button(parent, SWT.NONE);
 		GridData gd = new GridData();
 		gd.widthHint = 80;
@@ -248,21 +301,78 @@ public class JavaRuntimePage extends PreferencePage implements
 		button.setText("Remove");
 	}
 
-	private void createTableViewer(Composite parent) {
+	private void createRuntimeTableViewer(Composite parent) {
 		int options = SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION;
-		viewer = new TableViewer(parent, options );
-		Table table = viewer.getTable();
+		runtimesViewer = new TableViewer(parent, options );
+		Table table = runtimesViewer.getTable();
 		GridData data = new GridData(GridData.FILL_BOTH);
-		data.verticalSpan = 8;
+		data.verticalSpan = 6;
 		data.horizontalSpan = 2;
 		table.setLayoutData(data);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		TableColumn column = new TableColumn(table, SWT.LEFT);
 		column.setText("version");
-		column.setWidth(75);
+		column.setWidth(80);
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText("location");
-		column.setWidth(350);
+		column.setWidth(345);
 	}
+	
+	private void createAddOnsTableViewer(Composite parent) {
+		int options = SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION;
+		addOnsViewer = new TableViewer(parent, options );
+		Table table = addOnsViewer.getTable();
+		GridData data = new GridData(GridData.FILL_BOTH);
+		data.verticalSpan = 6;
+		data.horizontalSpan = 1;
+		table.setLayoutData(data);
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		TableColumn column = new TableColumn(table, SWT.LEFT);
+		column.setText("location");
+		column.setWidth(425);
+	}
+	
+	private void createAddAddOnButton(Composite parent) {
+		Button button = new Button(parent, SWT.NONE);
+		GridData gd = new GridData();
+		gd.widthHint = 80;
+		button.setLayoutData(gd);
+		button.setText("Add...");
+		button.addSelectionListener(selectionListener(this::onAddAddOn));
+	}
+	
+	void onAddAddOn(SelectionEvent e) {
+		FileDialog dialog = new FileDialog(ShellUtils.getShell(), SWT.SAVE);
+		dialog.setText("Select add-on:");
+		dialog.setFilterExtensions(new String[] { "*.jar"});
+		String selectedFile = dialog.open();
+		if(selectedFile!=null) {
+			addOns.add(selectedFile);
+			populateAddOnsViewer();
+		}
+	}
+
+	private void createDelAddOnButton(Composite parent) {
+		Button button = new Button(parent, SWT.NONE);
+		GridData gd = new GridData();
+		gd.widthHint = 80;
+		button.setLayoutData(gd);
+		button.setText("Remove");
+		button.addSelectionListener(selectionListener(this::onDelAddOn));
+	}
+
+	void onDelAddOn(SelectionEvent e) {
+		ISelection sel = addOnsViewer.getSelection();
+		if(sel instanceof StructuredSelection) {
+			String addOn = (String)((StructuredSelection)sel).getFirstElement();
+			if(addOn!=null) {
+				addOns.remove(addOn);
+				populateAddOnsViewer();
+			}
+		}
+	}
+
+
 }
