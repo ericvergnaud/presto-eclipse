@@ -7,11 +7,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 
+import prompto.addon.AddOn;
 import prompto.launcher.ILaunchHelper;
 import prompto.launcher.LaunchContext;
 
@@ -41,6 +45,10 @@ public abstract class Runner {
 		commands.addAll(helper.getTargetSpecifiers(context));
 		commands.add("-resources");
 		commands.add(getResourcesAsString(context));
+		if(hasAddOns()) {
+			commands.add("-addOns");
+			commands.add(getAddOnsAsString(context));
+		}
 		Collection<String> args = helper.getCommandLineArgs(context);
 		if(args!=null && !args.isEmpty())
 			commands.addAll(args);
@@ -62,16 +70,26 @@ public abstract class Runner {
 
 	public static String getResourcesAsString(LaunchContext context) throws CoreException {
 		ILaunchHelper helper = context.getLaunchHelper();
-		StringBuilder sb = new StringBuilder();
-		sb.append('"');
-		helper.getSourceFiles(context).forEach((file)->{
-			sb.append(file.getLocation().toOSString());
-			sb.append(',');
-		});
-		if(sb.length()>1)
-			sb.setLength(sb.length()-1);
-		sb.append('"');
-		return sb.toString();
+		return "\""
+				+ helper.getSourceFiles(context).stream()
+					.map(IFile::getLocation)
+					.map(IPath::toOSString)
+					.collect(Collectors.joining(","))
+				+ "\"";
 	}
+	
+	private static boolean hasAddOns() {
+		return !AddOn.loadAll().isEmpty();
+	}
+
+
+	public static String getAddOnsAsString(LaunchContext context) throws CoreException {
+		return "\"" 
+				+ Arrays.asList(AddOn.allURLs()).stream()
+						.map(Object::toString)
+						.collect(Collectors.joining(","))
+				+ "\"";
+	}
+
 
 }
