@@ -96,7 +96,7 @@ public abstract class StoreUtils {
 			try(ZipInputStream zip = new ZipInputStream(input)) {
 				ZipEntry entry = zip.getNextEntry();
 				while(entry!=null) {
-					if(entry.getName().startsWith("libraries/") && ResourceUtils.isPrompto(entry.getName()))
+					if(entry.getName().startsWith("libraries/") && ResourceUtils.isPromptoLibrary(entry.getName()))
 						urls.add(new URL("jar:" + jarFile.toURI().toURL() + "!/" + entry.getName()));
 					entry = zip.getNextEntry();
 				}
