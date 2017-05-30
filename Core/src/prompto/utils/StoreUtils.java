@@ -27,7 +27,7 @@ import prompto.code.IEclipseCodeStore;
 import prompto.code.LibraryCodeStore;
 import prompto.code.ScriptCodeStore;
 import prompto.code.ServerCodeStore;
-import prompto.code.UpdatableCodeStore;
+import prompto.code.QueryableCodeStore;
 import prompto.core.CoreConstants;
 import prompto.distribution.Distribution;
 import prompto.nullstore.NullStoreFactory;
@@ -74,7 +74,7 @@ public abstract class StoreUtils {
 			return null;
 		if(runtimeCodeStore==null) {
 			URL[] addOns = AddOn.allURLs();
-			runtimeCodeStore = new UpdatableCodeStore(getNullStore(), ()->getLibraryEntries(), project.getName(), Version.emptyVersion.toString(), addOns);
+			runtimeCodeStore = new QueryableCodeStore(getNullStore(), ()->getLibraryEntries(), project.getName(), Version.emptyVersion.toString(), addOns);
 		}
 		return runtimeCodeStore;
 	}

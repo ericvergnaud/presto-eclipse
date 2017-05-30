@@ -123,11 +123,20 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 	
 	@Override
+	public Resource fetchSpecificResource(String path, Version version) {
+		return null;
+	}
+	
+	@Override
 	public void storeModule(Module module) throws PromptoError {
 	}
 	
 	@Override
 	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object projectId) throws PromptoError {
+	}
+	
+	@Override
+	public void storeResource(Resource resource, Object moduleId) {
 	}
 	
 }
