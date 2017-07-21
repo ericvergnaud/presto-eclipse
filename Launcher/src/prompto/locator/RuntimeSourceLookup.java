@@ -72,7 +72,7 @@ public class RuntimeSourceLookup implements ISourceLookupParticipant {
 			if(store==null)
 				return null;
 			else {
-				Iterator<IDeclaration> decls = store.fetchLatestDeclarations(proxy.getStackFrame().getMethodName());
+				Iterator<IDeclaration> decls = store.fetchLatestDeclarations(proxy.getStackFrame().getMethodName()).iterator();
 				while(decls.hasNext()) {
 					IDeclaration decl = decls.next();
 					if(decl instanceof IMethodDeclaration) {

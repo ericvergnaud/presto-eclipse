@@ -3,7 +3,6 @@ package prompto.code;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -128,12 +127,13 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 	
 	@Override
-	public void storeModule(Module module) throws PromptoError {
+	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError {
 	}
 	
 	@Override
-	public void storeDeclarations(Iterator<IDeclaration> declarations, Dialect dialect, Version version, Object projectId) throws PromptoError {
+	public void storeModule(Module module) throws PromptoError {
 	}
+	
 	
 	@Override
 	public void storeResource(Resource resource, Object moduleId) {
