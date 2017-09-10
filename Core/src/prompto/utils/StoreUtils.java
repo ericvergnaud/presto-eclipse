@@ -18,7 +18,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
-import org.osgi.framework.Version;
 
 import prompto.addon.AddOn;
 import prompto.code.ApplicationCodeStore;
@@ -28,11 +27,10 @@ import prompto.code.LibraryCodeStore;
 import prompto.code.ScriptCodeStore;
 import prompto.code.ServerCodeStore;
 import prompto.code.QueryableCodeStore;
+import prompto.code.Version;
 import prompto.core.CoreConstants;
 import prompto.distribution.Distribution;
-import prompto.nullstore.NullStoreFactory;
 import prompto.store.IStore;
-import prompto.store.IStoreFactory.Type;
 
 public abstract class StoreUtils {
 
@@ -74,7 +72,7 @@ public abstract class StoreUtils {
 			return null;
 		if(runtimeCodeStore==null) {
 			URL[] addOns = AddOn.allURLs();
-			runtimeCodeStore = new QueryableCodeStore(getNullStore(), ()->getLibraryEntries(), project.getName(), Version.emptyVersion.toString(), addOns);
+			runtimeCodeStore = new QueryableCodeStore(getNullStore(), ()->getLibraryEntries(), project.getName(), Version.LATEST, addOns);
 		}
 		return runtimeCodeStore;
 	}
@@ -107,11 +105,7 @@ public abstract class StoreUtils {
 	}
 	
 	private static IStore getNullStore() throws CoreException {
-		try {
-			return new NullStoreFactory().newStore(null, Type.CODE);
-		} catch(Throwable t) {
-			throw new CoreException(Status.CANCEL_STATUS);
-		}
+		return null;
 	}
 
 
