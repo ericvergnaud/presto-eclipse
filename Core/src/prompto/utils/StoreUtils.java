@@ -23,12 +23,13 @@ import prompto.addon.AddOn;
 import prompto.code.ApplicationCodeStore;
 import prompto.code.ICodeStore;
 import prompto.code.IEclipseCodeStore;
+import prompto.code.ImmutableCodeStore;
 import prompto.code.LibraryCodeStore;
 import prompto.code.ScriptCodeStore;
 import prompto.code.ServerCodeStore;
 import prompto.code.QueryableCodeStore;
-import prompto.code.Version;
 import prompto.core.CoreConstants;
+import prompto.intrinsic.PromptoVersion;
 import prompto.distribution.Distribution;
 import prompto.store.IStore;
 
@@ -71,8 +72,9 @@ public abstract class StoreUtils {
 		if(!ProjectUtils.hasRuntime(project))
 			return null;
 		if(runtimeCodeStore==null) {
+			ICodeStore runtime = ImmutableCodeStore.bootstrapRuntime(()->getLibraryEntries());
 			URL[] addOns = AddOn.allURLs();
-			runtimeCodeStore = new QueryableCodeStore(getNullStore(), ()->getLibraryEntries(), project.getName(), Version.LATEST, addOns);
+			runtimeCodeStore = new QueryableCodeStore(getNullStore(), runtime, project.getName(), PromptoVersion.LATEST, addOns);
 		}
 		return runtimeCodeStore;
 	}

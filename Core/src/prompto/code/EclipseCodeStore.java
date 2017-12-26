@@ -20,6 +20,7 @@ import prompto.parser.ISection;
 import prompto.problem.ProblemDetector;
 import prompto.runtime.Context;
 import prompto.utils.CoreUtils;
+import prompto.intrinsic.PromptoVersion;
 
 public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipseCodeStore {
 
@@ -56,7 +57,7 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 
 	
 	@Override
-	public Version getModuleVersion() {
+	public PromptoVersion getModuleVersion() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -117,17 +118,17 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 	
 	@Override
-	public <T extends Module> T fetchModule(ModuleType type, String name, Version version) throws PromptoError {
+	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		return null;
 	}
 	
 	@Override
-	public Resource fetchSpecificResource(String path, Version version) {
+	public Resource fetchSpecificResource(String path, PromptoVersion version) {
 		return null;
 	}
 	
 	@Override
-	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Version version, Object moduleId) throws PromptoError {
+	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, PromptoVersion version, Object moduleId) throws PromptoError {
 	}
 	
 	@Override

@@ -37,9 +37,9 @@
 			<location>/Users/ericvergnaud/.m2/repository/org/prompto/Core/0.0.1-SNAPSHOT/Core-0.0.1-SNAPSHOT.jar</location>
 		</link>
 		<link>
-			<name>libs/antlr4-runtime-4.5.jar</name>
+			<name>libs/antlr4-runtime-4.7.1.jar</name>
 			<type>1</type>
-			<location>/Users/ericvergnaud/.m2/repository/org/antlr/antlr4-runtime/4.5/antlr4-runtime-4.5.jar</location>
+			<location>/Users/ericvergnaud/.m2/repository/org/antlr/antlr4-runtime/4.7.1/antlr4-runtime-4.7.1.jar</location>
 		</link>
 		<link>
 			<name>libs/jackson-annotations-2.6.0.jar</name>
@@ -60,6 +60,11 @@
 			<name>libs/joda-time-2.0.jar</name>
 			<type>1</type>
 			<location>/Users/ericvergnaud/.m2/repository/joda-time/joda-time/2.0/joda-time-2.0.jar</location>
+		</link>
+		<link>
+			<name>libs/slf4j-api-1.7.25.jar</name>
+			<type>1</type>
+			<location>/Users/ericvergnaud/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar</location>
 		</link>
 	</linkedResources>
 </projectDescription>
