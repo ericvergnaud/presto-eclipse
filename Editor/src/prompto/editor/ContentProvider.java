@@ -150,7 +150,7 @@ public class ContentProvider implements ITreeContentProvider {
 	}
 
 	private void populateSymbols(Element elem, IEnumeratedDeclaration<?> decl) {
-		for(Symbol s : decl.getSymbols()) {
+		for(Symbol s : decl.getSymbolsList()) {
 			Element child = new Element();
 			child.name = s.getName();
 			child.section = s;
