@@ -52,6 +52,8 @@ public class OTokenProxy implements IToken {
 		case RESOURCE:
 		case TEXT:
 		case TIME:
+		case UUID:
+		case VERSION:
 			return Constants.TYPE_PARTITION_NAME;
 		case CHAR_LITERAL:
 		case DATETIME_LITERAL:
