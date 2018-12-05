@@ -19,3 +19,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.m2e.maven.runtime;bundle-version="1.6.2",
  org.eclipse.core.filesystem;bundle-version="1.4.100"
 Export-Package: prompto.debugger
+Automatic-Module-Name: prompto.launcher

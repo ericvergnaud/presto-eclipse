@@ -54,3 +54,4 @@ Export-Package: org.antlr.v4.runtime,
  prompto.type,
  prompto.utils,
  prompto.value
+Automatic-Module-Name: prompto.core

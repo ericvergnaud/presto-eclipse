@@ -21,3 +21,4 @@ Bundle-ClassPath: .
 Import-Package: org.eclipse.debug.core,
  org.eclipse.debug.core.model,
  org.eclipse.debug.ui.actions
+Automatic-Module-Name: prompto.editor

@@ -265,7 +265,7 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({"rawtypes","unchecked"})
 	public Object getAdapter(Class adapter) {
 		if (adapter == IDebugElement.class)
 			return this;

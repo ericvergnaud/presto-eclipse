@@ -59,7 +59,7 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 
 
 	@Override
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object getAdapter(Class adapter) {
 		if (adapter == IDebugElement.class)
 			return this;
