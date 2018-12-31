@@ -117,6 +117,12 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 		return projectContext.findSection(section);
 	}
 	
+	
+	@Override
+	protected Module fetchModule(String name, PromptoVersion version) {
+		return null;
+	}
+	
 	@Override
 	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		return null;
