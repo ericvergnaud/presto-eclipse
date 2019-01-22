@@ -28,8 +28,8 @@ import org.eclipse.debug.core.model.IThread;
 
 import prompto.code.IEclipseCodeStore;
 import prompto.core.CoreConstants;
-import prompto.debug.DebugEventServer;
-import prompto.debug.DebugRequestClient;
+import prompto.debug.JavaDebugEventListener;
+import prompto.debug.JavaDebugRequestClient;
 import prompto.debug.IDebugEventListener;
 import prompto.launcher.ILaunchHelper;
 import prompto.launcher.LaunchContext;
@@ -46,9 +46,9 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	}
 
 	LaunchContext context;
-	DebugEventServer eventServer; 
+	JavaDebugEventListener eventServer; 
 	DebugEventListener listener;
-	DebugRequestClient debugger;
+	JavaDebugRequestClient debugger;
 	IProcess process;
 	DebugThread thread; // until Prompto supports Workers
 	
@@ -71,7 +71,7 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	}
 	
 	@Override
-	public DebugRequestClient getDebugger() {
+	public JavaDebugRequestClient getDebugger() {
 		return debugger;
 	}
 	
@@ -102,7 +102,7 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 	public void debug() throws CoreException {
 		try {
 			listener = new DebugEventListener(this);
-			eventServer = new DebugEventServer(listener);
+			eventServer = new JavaDebugEventListener(listener);
 			int port = eventServer.startListening();
 			String[] commands = buildCommands(port);
 			ProcessBuilder builder = new ProcessBuilder(commands)
@@ -110,7 +110,7 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 				.inheritIO();
 			Process remote = builder.start();
 			String processName = getProcessName(remote);
-			debugger = new DebugRequestClient(remote, eventServer);
+			debugger = new JavaDebugRequestClient(remote, eventServer);
 			process = DebugPlugin.newProcess(context.getLaunch(), remote, processName);
 			thread = new DebugThread(this, new prompto.debug.IThread() {}); 
 			context.getLaunch().addDebugTarget(this);

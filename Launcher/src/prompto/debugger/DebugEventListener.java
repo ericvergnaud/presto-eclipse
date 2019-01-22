@@ -2,6 +2,7 @@ package prompto.debugger;
 
 import org.eclipse.debug.core.DebugEvent;
 
+import prompto.debug.IDebugEvent;
 import prompto.debug.IDebugEventListener;
 import prompto.debug.ResumeReason;
 import prompto.debug.SuspendReason;
@@ -22,8 +23,8 @@ public class DebugEventListener implements IDebugEventListener {
 	}
 
 	@Override
-	public void handleConnectedEvent(String host, int port) {
-		target.getDebugger().setRemote(host, port);
+	public void handleConnectedEvent(IDebugEvent.Connected event) {
+		target.getDebugger().setRemote(event.getHost(), event.getPort());
 		synchronized (target) {
 			target.notify();
 		}
