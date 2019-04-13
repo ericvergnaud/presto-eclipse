@@ -14,11 +14,11 @@ import org.eclipse.debug.core.model.IThread;
 public class DebugThread extends PlatformObject implements IThread {
 	
 	IPromptoDebugTarget target;
-	prompto.debug.IThread thread;
+	prompto.debug.IWorker worker;
 	
-	public DebugThread(IPromptoDebugTarget target, prompto.debug.IThread thread) {
+	public DebugThread(IPromptoDebugTarget target, prompto.debug.IWorker worker) {
 		this.target = target;
-		this.thread = thread;
+		this.worker = worker;
 	}
 	
 	public IPromptoDebugTarget getTarget() {
@@ -63,62 +63,62 @@ public class DebugThread extends PlatformObject implements IThread {
 
 	@Override
 	public boolean canResume() {
-		return target.getDebugger().canResume(thread);
+		return target.getDebugger().canResume(worker);
 	}
 
 	@Override
 	public void resume() throws DebugException {
-		target.getDebugger().resume(thread);
+		target.getDebugger().resume(worker);
 	}
 	
 	@Override
 	public boolean canSuspend() {
-		return target.getDebugger().canSuspend(thread);
+		return target.getDebugger().canSuspend(worker);
 	}
 
 	@Override
 	public boolean isSuspended() {
-		return target.getDebugger().isSuspended(thread);
+		return target.getDebugger().isSuspended(worker);
 	}
 
 	@Override
 	public void suspend() throws DebugException {
-		target.getDebugger().suspend(thread);
+		target.getDebugger().suspend(worker);
 	}
 
 	@Override
 	public boolean canStepInto() {
-		return target.getDebugger().canStepInto(thread);
+		return target.getDebugger().canStepInto(worker);
 	}
 
 	@Override
 	public boolean canStepOver() {
-		return target.getDebugger().canStepOver(thread);
+		return target.getDebugger().canStepOver(worker);
 	}
 
 	@Override
 	public boolean canStepReturn() {
-		return target.getDebugger().canStepOut(thread);
+		return target.getDebugger().canStepOut(worker);
 	}
 
 	@Override
 	public boolean isStepping() {
-		return target.getDebugger().isStepping(thread);
+		return target.getDebugger().isStepping(worker);
 	}
 
 	@Override
 	public void stepInto() throws DebugException {
-		target.getDebugger().stepInto(thread);
+		target.getDebugger().stepInto(worker);
 	}
 
 	@Override
 	public void stepOver() throws DebugException {
-		target.getDebugger().stepOver(thread);
+		target.getDebugger().stepOver(worker);
 	}
 
 	@Override
 	public void stepReturn() throws DebugException {
-		target.getDebugger().stepOut(thread);
+		target.getDebugger().stepOut(worker);
 	}
 
 
@@ -162,7 +162,7 @@ public class DebugThread extends PlatformObject implements IThread {
 	public StackFrameProxy[] getStackFrames() throws DebugException {
 		if(target.isTerminated())
 			return new StackFrameProxy[0];
-		List<StackFrameProxy> frames = target.getDebugger().getStack(thread).stream()
+		List<StackFrameProxy> frames = target.getDebugger().getStack(worker).stream()
 				.map((f)->new StackFrameProxy(this, f))
 				.collect(Collectors.toList());
 		return frames.toArray(new StackFrameProxy[frames.size()]);

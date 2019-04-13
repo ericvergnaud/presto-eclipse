@@ -30,6 +30,7 @@ import prompto.code.IEclipseCodeStore;
 import prompto.core.CoreConstants;
 import prompto.debug.JavaDebugEventListener;
 import prompto.debug.JavaDebugRequestClient;
+import prompto.debug.LeanWorker;
 import prompto.debug.IDebugEventListener;
 import prompto.launcher.ILaunchHelper;
 import prompto.launcher.LaunchContext;
@@ -96,8 +97,6 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 		return "Prompto@localhost:" + eventServer.getPort();
 	}
 
-
-	
 	@Override
 	public void debug() throws CoreException {
 		try {
@@ -109,10 +108,10 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 				.directory(new File(context.getDistribution().getDirectory()))
 				.inheritIO();
 			Process remote = builder.start();
+			debugger = new JavaDebugRequestClient.Process(remote, eventServer);
 			String processName = getProcessName(remote);
-			debugger = new JavaDebugRequestClient(remote, eventServer);
 			process = DebugPlugin.newProcess(context.getLaunch(), remote, processName);
-			thread = new DebugThread(this, new prompto.debug.IThread() {}); 
+			thread = new DebugThread(this, new LeanWorker()); 
 			context.getLaunch().addDebugTarget(this);
 			listener.waitConnected();
 			connectBreakpoints();

@@ -166,12 +166,12 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 
 	@Override
 	public boolean hasVariables() throws DebugException {
-		return frame.hasVariables();
+		return frame.getVariables().size() > 0;
 	}
 
 	@Override
 	public int getLineNumber() throws DebugException {
-		return frame.getLine();
+		return frame.getStatementLine();
 	}
 
 	@Override

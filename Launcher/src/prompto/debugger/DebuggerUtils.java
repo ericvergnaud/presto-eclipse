@@ -87,7 +87,7 @@ public class DebuggerUtils {
 	}
 
 	public static String getProjectRelativePath(IProject project, ISection section) {
-		String filePath = section.getFilePath();
+		String filePath = section.getPath();
 		String projectPath = project.getFullPath().toPortableString();
 		if (filePath.startsWith(projectPath))
 			filePath = filePath.substring(projectPath.length());

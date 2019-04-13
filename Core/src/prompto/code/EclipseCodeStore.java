@@ -17,6 +17,8 @@ import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;
+import prompto.parser.Location;
+import prompto.parser.Section;
 import prompto.problem.ProblemDetector;
 import prompto.runtime.Context;
 import prompto.utils.CoreUtils;
@@ -109,12 +111,13 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 		if(!(resource instanceof IFile))
 			return null;
 		String path = ((IFile)resource).getFullPath().toPortableString();
-		return projectContext.findSectionFor(path, lineNumber);
+		Section section = new Section(path, new Location(0, lineNumber, 0), new Location(0, lineNumber, 0), Dialect.E, false);
+		return projectContext.locateSection(section);
 	}
 	
 	@Override
 	public ISection findSection(ISection section) {
-		return projectContext.findSection(section);
+		return projectContext.locateSection(section);
 	}
 	
 	

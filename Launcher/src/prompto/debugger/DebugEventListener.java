@@ -4,6 +4,7 @@ import org.eclipse.debug.core.DebugEvent;
 
 import prompto.debug.IDebugEvent;
 import prompto.debug.IDebugEventListener;
+import prompto.debug.IWorker;
 import prompto.debug.ResumeReason;
 import prompto.debug.SuspendReason;
 
@@ -29,9 +30,39 @@ public class DebugEventListener implements IDebugEventListener {
 			target.notify();
 		}
 	}
+	
+	@Override
+	public void handleReadyEvent() {
+		// TODO 
+	}
+	
+	
+	@Override
+	public void handleStartedEvent(IWorker worker) {
+		// TODO
+	}
+	
 
 	@Override
-	public void handleResumedEvent(ResumeReason reason) {
+	public void handleSuspendedEvent(IWorker worker, SuspendReason reason) {
+		DebuggerUtils.fireSuspendEvent(target.getThread(), debugEventFromSuspendReason(reason));
+	}
+
+	private int debugEventFromSuspendReason(SuspendReason reason) {
+		switch(reason) {
+		case STEPPING:
+			return DebugEvent.STEP_END;
+		case BREAKPOINT :
+			return DebugEvent.BREAKPOINT;
+		case SUSPENDED:
+			return DebugEvent.CLIENT_REQUEST;
+		default:
+			return 0;
+		}
+	}
+
+	@Override
+	public void handleResumedEvent(IWorker worker, ResumeReason reason) {
 		DebuggerUtils.fireResumeEvent(target.getThread(), debugEventFromResumeReason(reason));
 	}
 
@@ -49,23 +80,10 @@ public class DebugEventListener implements IDebugEventListener {
 			return 0;
 		}
 	}
-
+	
 	@Override
-	public void handleSuspendedEvent(SuspendReason reason) {
-		DebuggerUtils.fireSuspendEvent(target.getThread(), debugEventFromSuspendReason(reason));
-	}
-
-	private int debugEventFromSuspendReason(SuspendReason reason) {
-		switch(reason) {
-		case STEPPING:
-			return DebugEvent.STEP_END;
-		case BREAKPOINT :
-			return DebugEvent.BREAKPOINT;
-		case SUSPENDED:
-			return DebugEvent.CLIENT_REQUEST;
-		default:
-			return 0;
-		}
+	public void handleCompletedEvent(IWorker worker) {
+		// TODO 
 	}
 
 	@Override
