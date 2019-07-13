@@ -127,6 +127,11 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 	
 	@Override
+	public Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError {
+		return null;
+	}
+	
+	@Override
 	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		return null;
 	}
