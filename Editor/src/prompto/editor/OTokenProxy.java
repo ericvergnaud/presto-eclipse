@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
 import prompto.editor.Constants;
+
 import static prompto.parser.OLexer.*;
 
 public class OTokenProxy implements IToken {
@@ -47,7 +48,7 @@ public class OTokenProxy implements IToken {
 		case DOCUMENT:
 		case IMAGE:
 		case INTEGER:
-		case METHOD_T:
+		case METHOD_COLON:
 		case PERIOD:
 		case RESOURCE:
 		case TEXT:
@@ -114,7 +115,7 @@ public class OTokenProxy implements IToken {
 		case FROM:
 		case GETTER:
 		case IN:
-		case INVOKE:
+		case INVOKE_COLON:
 		case IS:
 		case JAVA:
 		case JAVASCRIPT:
@@ -151,6 +152,7 @@ public class OTokenProxy implements IToken {
 		case TO:
 		case VERIFYING:
 		case WHERE:
+		case WIDGET:
 		case WITH:
 		case WRITE:
 			return Constants.KEYWORD_PARTITION_NAME;

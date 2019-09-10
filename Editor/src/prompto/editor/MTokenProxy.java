@@ -5,6 +5,8 @@ import org.eclipse.jface.text.rules.IToken;
 
 import prompto.parser.MLexer;
 import prompto.editor.Constants;
+
+import static prompto.parser.ELexer.WIDGET;
 import static prompto.parser.MLexer.*;
 
 public class MTokenProxy implements IToken {
@@ -55,7 +57,7 @@ public class MTokenProxy implements IToken {
 		case DOCUMENT:
 		case IMAGE:
 		case INTEGER:
-		case METHOD_T:
+		case METHOD_COLON:
 		case PERIOD:
 		case RESOURCE:
 		case TEXT:
@@ -123,7 +125,7 @@ public class MTokenProxy implements IToken {
 		case FROM:
 		case GETTER:
 		case IN:
-		case INVOKE:
+		case INVOKE_COLON:
 		case IS:
 		case JAVA:
 		case JAVASCRIPT:
@@ -160,6 +162,7 @@ public class MTokenProxy implements IToken {
 		case TO:
 		case VERIFYING:
 		case WHERE:
+		case WIDGET:
 		case WITH:
 		case WRITE:
 			return Constants.KEYWORD_PARTITION_NAME;

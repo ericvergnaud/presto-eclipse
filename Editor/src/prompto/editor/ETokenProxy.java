@@ -54,7 +54,7 @@ public class ETokenProxy implements IToken {
 		case DOCUMENT:
 		case IMAGE:
 		case INTEGER:
-		case METHOD_T:
+		case METHOD_COLON:
 		case PERIOD:
 		case RESOURCE:
 		case TEXT:
@@ -121,7 +121,7 @@ public class ETokenProxy implements IToken {
 		case FROM:
 		case GETTER:
 		case IN:
-		case INVOKE:
+		case INVOKE_COLON:
 		case IS:
 		case JAVA:
 		case JAVASCRIPT:
@@ -158,6 +158,7 @@ public class ETokenProxy implements IToken {
 		case TO:
 		case VERIFYING:
 		case WHERE:
+		case WIDGET:
 		case WITH:
 		case WRITE:
 			return Constants.KEYWORD_PARTITION_NAME;
