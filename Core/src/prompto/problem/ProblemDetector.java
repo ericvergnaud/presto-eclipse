@@ -184,7 +184,8 @@ public class ProblemDetector {
 		}
 		for(Map.Entry<String,List<IProblem>> entry : problemsMap.entrySet()) {
 			IFile file = pathToFileMap.get(entry.getKey());
-			createProblemMarkers(file, entry.getValue());
+			if(file!=null) // happens when source is <INTERNAL>
+				createProblemMarkers(file, entry.getValue());
 		}
 	}
 
