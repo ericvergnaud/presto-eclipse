@@ -18,7 +18,7 @@ public class TranslatedInput implements IEditorInput {
 		this.input = input;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public Object getAdapter(Class adapter) {
 		return input.getAdapter(adapter);

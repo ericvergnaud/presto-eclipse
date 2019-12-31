@@ -177,7 +177,7 @@ public class SourceEditor extends AbstractDecoratedTextEditor {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public Object getAdapter(Class klass) {
 		if(IContentOutlinePage.class==klass)

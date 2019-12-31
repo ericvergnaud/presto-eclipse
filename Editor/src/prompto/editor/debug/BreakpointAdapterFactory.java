@@ -6,7 +6,7 @@ import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
 
 import prompto.editor.MultiPageEditor;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({"rawtypes"})
 public class BreakpointAdapterFactory extends PlatformObject implements IAdapterFactory {
 
 	@Override
