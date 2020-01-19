@@ -139,7 +139,6 @@ public class MTokenProxy implements IToken {
 		case NOTHING:
 		case NULL:
 		case ON:
-		case OPEN:
 		case OPERATOR:
 		case OR:
 		case ORDER:

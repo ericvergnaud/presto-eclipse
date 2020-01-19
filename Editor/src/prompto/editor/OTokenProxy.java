@@ -129,7 +129,6 @@ public class OTokenProxy implements IToken {
 		case NOTHING:
 		case NULL:
 		case ON:
-		case OPEN:
 		case OPERATOR:
 		case OR:
 		case ORDER:

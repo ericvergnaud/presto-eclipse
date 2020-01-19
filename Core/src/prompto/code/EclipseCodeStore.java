@@ -26,7 +26,7 @@ import prompto.intrinsic.PromptoVersion;
 
 public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipseCodeStore {
 
-	Context projectContext = Context.newGlobalContext();
+	Context projectContext = Context.newGlobalsContext();
 	Set<IFile> files = Collections.newSetFromMap(new ConcurrentHashMap<IFile, Boolean>()); // creates a concurrent set
 	
 	protected EclipseCodeStore(ICodeStore runtime) {
