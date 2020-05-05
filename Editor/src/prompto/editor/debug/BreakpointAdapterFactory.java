@@ -6,21 +6,21 @@ import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
 
 import prompto.editor.MultiPageEditor;
 
-@SuppressWarnings({"rawtypes"})
+@SuppressWarnings("unchecked")
 public class BreakpointAdapterFactory extends PlatformObject implements IAdapterFactory {
 
 	@Override
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
+	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
 		if(adapterType==IToggleBreakpointsTarget.class) {
 	     if (adaptableObject instanceof MultiPageEditor) {
-	    	 return new BreakpointAdapter();
+	    	 return (T)new BreakpointAdapter();
 	     }
 		}
 	    return super.getAdapter(adapterType);
 	} 
 
 	@Override
-	public Class[] getAdapterList() {
+	public Class<?>[] getAdapterList() {
 		return new Class[]{ IToggleBreakpointsTarget.class };
 	}
 

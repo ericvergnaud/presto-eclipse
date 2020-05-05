@@ -142,7 +142,21 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 	
 	@Override
+	public Iterable<Module> fetchAllModules() throws PromptoError {
+		return null;
+	}
+	
+	@Override
 	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, PromptoVersion version, Object moduleId) throws PromptoError {
+	}
+	
+	@Override
+	public void storeDependency(Dependency dependency) {
+	}
+	
+	@Override
+	public void dropModule(Module module) {
+		
 	}
 	
 	@Override

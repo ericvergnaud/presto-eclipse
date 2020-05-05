@@ -177,11 +177,11 @@ public class SourceEditor extends AbstractDecoratedTextEditor {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	@Override
-	public Object getAdapter(Class klass) {
+	public <T> T getAdapter(Class<T> klass) {
 		if(IContentOutlinePage.class==klass)
-			return outliner;
+			return (T)outliner;
 		else
 			return super.getAdapter(klass);
 	}

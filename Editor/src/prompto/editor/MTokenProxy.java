@@ -104,7 +104,6 @@ public class MTokenProxy implements IToken {
 		case BY:
 		case CATEGORY:
 		case CLASS:
-		case CLOSE:
 		case CODE:
 		case CONTAINS:
 		case CSHARP:
