@@ -8,8 +8,8 @@ import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
+import prompto.ide.utils.CoreUtils;
 import prompto.parser.Dialect;
-import prompto.utils.CoreUtils;
 
 public class MultiPageEditor extends MultiPageEditorPart {
 

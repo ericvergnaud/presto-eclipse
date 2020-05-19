@@ -6,11 +6,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
-import prompto.code.IEclipseCodeStore;
-import prompto.core.RunType;
 import prompto.declaration.IDeclaration;
-import prompto.distribution.Distribution;
-import prompto.utils.StoreUtils;
+import prompto.ide.code.IEclipseCodeStore;
+import prompto.ide.core.RunType;
+import prompto.ide.distribution.Distribution;
+import prompto.ide.utils.StoreUtils;
 
 public class LaunchContext {
 
@@ -82,7 +82,7 @@ public class LaunchContext {
 	}
 
 	public Distribution getDistribution() {
-		return prompto.distribution.Distribution.getDefaultDistribution();
+		return prompto.ide.distribution.Distribution.getDefaultDistribution();
 	}
 
 	public ILaunchHelper getLaunchHelper() {

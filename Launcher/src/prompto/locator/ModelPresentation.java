@@ -11,8 +11,8 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
+import prompto.ide.core.CoreConstants;
 import prompto.parser.Dialect;
-import prompto.core.CoreConstants;
 
 public class ModelPresentation extends LabelProvider implements IDebugModelPresentation {
 

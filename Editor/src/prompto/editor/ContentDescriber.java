@@ -9,7 +9,7 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.ITextContentDescriber;
 
-import prompto.core.CoreConstants;
+import prompto.ide.core.CoreConstants;
 
 public class ContentDescriber implements ITextContentDescriber {
 

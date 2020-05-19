@@ -8,7 +8,7 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
-import prompto.code.IEclipseCodeStore;
+import prompto.ide.code.IEclipseCodeStore;
 import prompto.runner.Runner;
 
 public interface ILaunchHelper {

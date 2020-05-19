@@ -12,8 +12,8 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointListener;
 import org.eclipse.debug.core.model.IBreakpoint;
 
+import prompto.ide.core.CoreConstants;
 import prompto.parser.ISection;
-import prompto.core.CoreConstants;
 
 public class DebuggerUtils {
 

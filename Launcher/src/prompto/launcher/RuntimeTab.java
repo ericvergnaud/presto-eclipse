@@ -9,7 +9,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import prompto.utils.ImageUtils;
+import prompto.ide.utils.ImageUtils;
 
 public class RuntimeTab extends AbstractLaunchConfigurationTab {
 

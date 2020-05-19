@@ -5,7 +5,7 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.part.FileEditorInput;
 
-import prompto.problem.ProblemDetector;
+import prompto.ide.problem.ProblemDetector;
 
 public class DocumentProvider extends TextFileDocumentProvider {
 

@@ -13,13 +13,13 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupDirector;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
 
-import prompto.code.IEclipseCodeStore;
 import prompto.debugger.StackFrameProxy;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.ide.code.IEclipseCodeStore;
+import prompto.ide.utils.StoreUtils;
 import prompto.launcher.Plugin;
 import prompto.utils.CodeWriter;
-import prompto.utils.StoreUtils;
 
 public class RuntimeSourceLookup implements ISourceLookupParticipant {
 

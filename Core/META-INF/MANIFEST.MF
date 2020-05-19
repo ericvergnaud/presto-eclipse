@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: prompto Core plugin
 Bundle-SymbolicName: prompto.core;singleton:=true
 Bundle-Version: 1.0.0.0
-Bundle-Activator: prompto.core.Plugin
+Bundle-Activator: prompto.ide.core.Plugin
 Bundle-Vendor: prompto
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -33,25 +33,25 @@ Export-Package: org.antlr.v4.runtime,
  org.joda.time.field,
  org.joda.time.format,
  org.joda.time.tz,
- prompto.addon,
- prompto.code,
- prompto.core,
  prompto.csharp,
  prompto.debug,
  prompto.declaration,
- prompto.distribution,
  prompto.error,
  prompto.expression,
  prompto.grammar,
+ prompto.ide.addon,
+ prompto.ide.code,
+ prompto.ide.core,
+ prompto.ide.distribution,
+ prompto.ide.problem,
+ prompto.ide.utils,
  prompto.java,
  prompto.javascript,
  prompto.literal,
  prompto.parser,
- prompto.problem,
  prompto.python,
  prompto.runtime,
  prompto.statement,
  prompto.type,
- prompto.utils,
  prompto.value
 Automatic-Module-Name: prompto.core

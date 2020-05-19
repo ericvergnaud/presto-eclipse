@@ -26,11 +26,11 @@ import org.eclipse.swt.widgets.Text;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
-import prompto.core.RunType;
-import prompto.utils.ImageUtils;
-import prompto.utils.CoreUtils;
-import prompto.utils.RcpUtils;
-import prompto.utils.ShellUtils;
+import prompto.ide.core.RunType;
+import prompto.ide.utils.CoreUtils;
+import prompto.ide.utils.ImageUtils;
+import prompto.ide.utils.RcpUtils;
+import prompto.ide.utils.ShellUtils;
 
 public abstract class LaunchTabBase extends AbstractLaunchConfigurationTab {
 

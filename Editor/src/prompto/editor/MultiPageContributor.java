@@ -14,13 +14,13 @@ import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import prompto.code.IEclipseCodeStore;
 import prompto.declaration.DeclarationList;
+import prompto.ide.code.IEclipseCodeStore;
+import prompto.ide.utils.StoreUtils;
 import prompto.parser.Dialect;
 import prompto.parser.IParser;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
-import prompto.utils.StoreUtils;
 
 /**
  * Manages the installation/deinstallation of global actions for multi-page editors.

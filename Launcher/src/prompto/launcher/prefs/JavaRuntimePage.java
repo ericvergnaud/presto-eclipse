@@ -39,11 +39,11 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
-import prompto.addon.AddOn;
-import prompto.distribution.Artifact;
-import prompto.distribution.Distribution;
-import prompto.distribution.Version;
-import prompto.utils.ShellUtils;
+import prompto.ide.addon.AddOn;
+import prompto.ide.distribution.Artifact;
+import prompto.ide.distribution.Distribution;
+import prompto.ide.distribution.Version;
+import prompto.ide.utils.ShellUtils;
 
 public class JavaRuntimePage extends PreferencePage implements
 		IWorkbenchPreferencePage {

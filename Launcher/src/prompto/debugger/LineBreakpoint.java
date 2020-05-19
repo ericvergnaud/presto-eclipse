@@ -5,8 +5,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
+import prompto.ide.core.CoreConstants;
 import prompto.parser.ISection;
-import prompto.core.CoreConstants;
 
 
 public class LineBreakpoint extends org.eclipse.debug.core.model.LineBreakpoint {

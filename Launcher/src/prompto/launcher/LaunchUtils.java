@@ -5,10 +5,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 
-import prompto.core.RunType;
 import prompto.declaration.IDeclaration;
-import prompto.utils.CoreUtils;
-import prompto.utils.ShellUtils;
+import prompto.ide.core.RunType;
+import prompto.ide.utils.CoreUtils;
+import prompto.ide.utils.ShellUtils;
 
 public class LaunchUtils {
 

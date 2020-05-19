@@ -3,25 +3,25 @@
 <plugin>
 	<extension id="prompto.nature.scripts" point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="prompto.core.ScriptsNature"/>
+         <run class="prompto.ide.core.ScriptsNature"/>
       </runtime>
       <one-of-nature id="prompto.natures"/>
    </extension>
 	<extension id="prompto.nature.library" point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="prompto.core.LibraryNature"/>
+         <run class="prompto.ide.core.LibraryNature"/>
       </runtime>
       <one-of-nature id="prompto.natures"/>
    </extension>
 	<extension id="prompto.nature.application" point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="prompto.core.ApplicationNature"/>
+         <run class="prompto.ide.core.ApplicationNature"/>
       </runtime>
       <one-of-nature id="prompto.natures"/>
    </extension>
 	<extension id="prompto.nature.server" point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="prompto.core.ServerNature"/>
+         <run class="prompto.ide.core.ServerNature"/>
       </runtime>
       <one-of-nature id="prompto.natures"/>
    </extension>
@@ -43,7 +43,7 @@
   	<category id="prompto.project" name="Prompto"/>
   	<wizard
          category="prompto.project"
-         class="prompto.wizard.ScriptsProjectWizard"
+         class="prompto.ide.wizard.ScriptsProjectWizard"
          icon="images/scripts_wizard.gif"
          id="prompto.project.scripts"
          name="Prompto Scripts Project"
@@ -53,7 +53,7 @@
   	<category id="prompto.project" name="Prompto"/>
   	<wizard
          category="prompto.project"
-         class="prompto.wizard.LibraryProjectWizard"
+         class="prompto.ide.wizard.LibraryProjectWizard"
          icon="images/library_wizard.gif"
          id="prompto.project.library"
          name="Prompto Library Project"
@@ -63,7 +63,7 @@
   	<category id="prompto.project" name="Prompto"/>
   	<wizard
          category="prompto.project"
-         class="prompto.wizard.ApplicationProjectWizard"
+         class="prompto.ide.wizard.ApplicationProjectWizard"
          icon="images/application_wizard.gif"
          id="prompto.project.application"
          name="Prompto Application Project"
@@ -73,7 +73,7 @@
   	<category id="prompto.project" name="Prompto"/>
   	<wizard
          category="prompto.project"
-         class="prompto.wizard.ServerProjectWizard"
+         class="prompto.ide.wizard.ServerProjectWizard"
          icon="images/server_wizard.gif"
          id="prompto.project.server"
          name="Prompto Server Project"
@@ -82,21 +82,21 @@
   <extension
         point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="prompto.core.prefs.Initializer">
+            class="prompto.ide.core.prefs.Initializer">
       </initializer>
   </extension>
      <extension
       point = "org.eclipse.ui.preferencePages">
       <page
          id="prompto.prefs.root"
-         class="prompto.core.prefs.RootPage"
+         class="prompto.ide.core.prefs.RootPage"
          name="Prompto">
       </page>
    </extension>  
   <extension point="org.eclipse.ui.propertyPages"> 
   	<page id="prompto.core.libraries" 
   		name="Prompto Libraries"
-  		class="prompto.core.props.LibrariesPage">
+  		class="prompto.ide.core.props.LibrariesPage">
          <enabledWhen>
 			<and>
 				<instanceof value="org.eclipse.core.resources.IProject"/>
@@ -116,8 +116,8 @@
   </extension>
   <extension point="org.eclipse.ui.navigator.navigatorContent">
   		<navigatorContent id="prompto.content.libraries" name="Libraries"
-  		contentProvider="prompto.content.ContentProvider"
-  		labelProvider="prompto.content.LabelProvider"
+  		contentProvider="prompto.ide.content.ContentProvider"
+  		labelProvider="prompto.ide.content.LabelProvider"
   		activeByDefault="true"
   		icon="images/library.gif"
   		priority="normal">
@@ -133,7 +133,7 @@
 		        </and>
   			</triggerPoints>
   			<possibleChildren>
-  				<instanceof value="prompto.content.ILibraryElement"/>
+  				<instanceof value="prompto.ide.content.ILibraryElement"/>
   			</possibleChildren>
   		</navigatorContent>
   </extension>
@@ -200,11 +200,11 @@
         </menuContribution> 
    </extension>
    <extension point="org.eclipse.ui.commands">
-      <command id="disable.prompto" defaultHandler="prompto.menu.DisablePromptoNatureHandler" name="Remove Prompto nature" />
-      <command id="enable.prompto.scripts" defaultHandler="prompto.menu.EnableScriptsNatureHandler" name="Add Prompto Scripts nature" />
-      <command id="enable.prompto.library" defaultHandler="prompto.menu.EnableLibraryNatureHandler" name="Add Prompto Library nature" />
-      <command id="enable.prompto.server" defaultHandler="prompto.menu.EnableServerNatureHandler" name="Add Prompto Server nature" />
-      <command id="enable.prompto.application" defaultHandler="prompto.menu.EnableApplicationNatureHandler" name="Add Prompto Application nature" />
+      <command id="disable.prompto" defaultHandler="prompto.ide.menu.DisablePromptoNatureHandler" name="Remove Prompto nature" />
+      <command id="enable.prompto.scripts" defaultHandler="prompto.ide.menu.EnableScriptsNatureHandler" name="Add Prompto Scripts nature" />
+      <command id="enable.prompto.library" defaultHandler="prompto.ide.menu.EnableLibraryNatureHandler" name="Add Prompto Library nature" />
+      <command id="enable.prompto.server" defaultHandler="prompto.ide.menu.EnableServerNatureHandler" name="Add Prompto Server nature" />
+      <command id="enable.prompto.application" defaultHandler="prompto.ide.menu.EnableApplicationNatureHandler" name="Add Prompto Application nature" />
    </extension>
    
 </plugin>

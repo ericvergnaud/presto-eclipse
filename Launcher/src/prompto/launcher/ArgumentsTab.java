@@ -14,8 +14,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
+import prompto.ide.utils.ImageUtils;
 import prompto.utils.CmdLineParser;
-import prompto.utils.ImageUtils;
 
 public class ArgumentsTab extends AbstractLaunchConfigurationTab {
 

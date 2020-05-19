@@ -5,7 +5,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.texteditor.ResourceMarkerAnnotationModel;
 
-import prompto.core.CoreConstants;
+import prompto.ide.core.CoreConstants;
 
 public class AnnotationModel extends ResourceMarkerAnnotationModel {
 

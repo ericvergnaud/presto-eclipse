@@ -15,7 +15,7 @@ import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
 
-import prompto.core.CoreConstants;
+import prompto.ide.core.CoreConstants;
 
 public class StackFrameProxy extends PlatformObject implements IStackFrame {
 

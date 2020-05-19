@@ -1,6 +1,6 @@
 package prompto.launcher;
 
-import prompto.core.RunType;
+import prompto.ide.core.RunType;
 
 public class LaunchServerTab extends LaunchTabBase {
 	

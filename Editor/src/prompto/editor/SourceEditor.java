@@ -24,9 +24,9 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 // import prompto.eclipse.plugin.lang.FormattingStrategy;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;
-import prompto.problem.ProblemDetector;
 import prompto.editor.ContentProvider.Element;
 import prompto.editor.prefs.SyntaxColoring;
+import prompto.ide.problem.ProblemDetector;
 
 public class SourceEditor extends AbstractDecoratedTextEditor {
 

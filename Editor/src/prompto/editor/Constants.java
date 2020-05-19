@@ -3,7 +3,7 @@ package prompto.editor;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
-import prompto.utils.ImageUtils;
+import prompto.ide.utils.ImageUtils;
 
 public class Constants {
 

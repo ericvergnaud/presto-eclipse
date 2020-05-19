@@ -15,7 +15,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 
-import prompto.addon.AddOn;
+import prompto.ide.addon.AddOn;
 import prompto.launcher.ILaunchHelper;
 import prompto.launcher.LaunchContext;
 

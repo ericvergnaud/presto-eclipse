@@ -26,18 +26,18 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IThread;
 
-import prompto.code.IEclipseCodeStore;
-import prompto.core.CoreConstants;
 import prompto.debug.JavaDebugEventListener;
 import prompto.debug.JavaDebugRequestClient;
 import prompto.debug.LeanWorker;
+import prompto.ide.code.IEclipseCodeStore;
+import prompto.ide.core.CoreConstants;
+import prompto.ide.utils.ProjectUtils;
+import prompto.ide.utils.ShellUtils;
 import prompto.debug.IDebugEventListener;
 import prompto.launcher.ILaunchHelper;
 import prompto.launcher.LaunchContext;
 import prompto.parser.ISection;
 import prompto.runner.Runner;
-import prompto.utils.ProjectUtils;
-import prompto.utils.ShellUtils;
 
 public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  {
 	

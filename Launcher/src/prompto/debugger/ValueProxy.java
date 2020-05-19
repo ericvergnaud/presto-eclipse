@@ -8,7 +8,7 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 
-import prompto.core.CoreConstants;
+import prompto.ide.core.CoreConstants;
 
 public class ValueProxy extends PlatformObject implements IValue {
 
