@@ -157,6 +157,11 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 	
 	@Override
+	public Iterable<IDeclaration> fetchDeclarationsWithAnnotations(Set<String> annotations) {
+		return null;
+	}
+	
+	@Override
 	public void storeDependency(Dependency dependency) {
 	}
 	
