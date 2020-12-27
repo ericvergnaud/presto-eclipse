@@ -6,7 +6,6 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 
 import prompto.parser.Dialect;
-import prompto.editor.Constants;
 
 public class SourceViewerConfiguration extends TextSourceViewerConfiguration {
 

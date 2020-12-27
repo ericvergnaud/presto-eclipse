@@ -7,7 +7,6 @@ import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 
 import prompto.parser.Dialect;
-import prompto.editor.Constants;
 
 public class DocumentSetupParticipant implements IDocumentSetupParticipant {
 

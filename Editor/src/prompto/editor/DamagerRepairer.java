@@ -5,7 +5,6 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.ITokenScanner;
 
-import prompto.editor.Plugin;
 import prompto.editor.prefs.SyntaxColoring.ColorPreference;
 
 public class DamagerRepairer extends DefaultDamagerRepairer {

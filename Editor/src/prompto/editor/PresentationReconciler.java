@@ -4,7 +4,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 
 import prompto.parser.Dialect;
-import prompto.editor.Constants;
 
 public class PresentationReconciler extends org.eclipse.jface.text.presentation.PresentationReconciler {
 

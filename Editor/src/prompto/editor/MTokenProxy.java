@@ -4,9 +4,7 @@ import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
 import prompto.parser.MLexer;
-import prompto.editor.Constants;
 
-import static prompto.parser.ELexer.WIDGET;
 import static prompto.parser.MLexer.*;
 
 public class MTokenProxy implements IToken {

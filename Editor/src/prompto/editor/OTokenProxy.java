@@ -4,7 +4,6 @@ package prompto.editor;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.rules.IToken;
 
-import prompto.editor.Constants;
 
 import static prompto.parser.OLexer.*;
 
