@@ -3,3 +3,5 @@
 Plugin/*
 Core/src/presto/core/ApplicationNature.java
 Eclipse**
+**/.classpath
+**/.settings/*
