@@ -7,4 +7,5 @@ public class ApplicationCodeStore extends EclipseCodeStore {
 	public ApplicationCodeStore(ICodeStore runtime) {
 		super(runtime);
 	}
+
 }

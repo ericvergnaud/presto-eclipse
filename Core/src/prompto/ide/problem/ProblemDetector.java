@@ -141,9 +141,10 @@ public class ProblemDetector {
 	
 	private void unregisterDeclarations(IFile inputFile) throws CoreException {
 		ProblemCollector listener = new PromptoProblemCollector();
-		context.setProblemListener(listener);
+		context.pushProblemListener(listener);
 		unregisterDeclarations(inputFile, listener);
 		createProblemMarkers(inputFile, listener.getProblems());
+		context.popProblemListener();
 	}
 
 	private Collection<IProblem> unregisterDeclarations(IFile inputFile, ProblemCollector listener) {
@@ -166,7 +167,7 @@ public class ProblemDetector {
 			decls.addAll(fileToDeclarationMap.get(file));
 		}
 		ProblemCollector listener = new PromptoProblemCollector();
-		context.setProblemListener(listener);
+		context.pushProblemListener(listener);
 		// register project declarations
 		try {
 			decls.register(context);
@@ -199,7 +200,7 @@ public class ProblemDetector {
 
 
 	private void checkDeclarations(IFile inputFile, ProblemCollector listener) {
-		context.setProblemListener(listener);
+		context.pushProblemListener(listener);
 		try {
 			DeclarationList dl = fileToDeclarationMap.get(inputFile);
 			if(dl!=null)
@@ -257,7 +258,7 @@ public class ProblemDetector {
 	}
 	
 	private void registerDeclarations(IFile inputFile, ProblemCollector listener) throws CoreException {
-		context.setProblemListener(listener);
+		context.pushProblemListener(listener);
 		try {
 			DeclarationList dl = fileToDeclarationMap.get(inputFile);
 			if(dl!=null)

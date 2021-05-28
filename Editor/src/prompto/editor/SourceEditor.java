@@ -139,8 +139,8 @@ public class SourceEditor extends AbstractDecoratedTextEditor {
 	}
 
 	public void select(IDocument doc, ISection s) throws BadLocationException {
-		int start = doc.getLineOffset(s.getStart().getLine()-1) + s.getStart().getColumn();
-		int end = doc.getLineOffset(s.getEnd().getLine()-1) + s.getEnd().getColumn();
+		int start = doc.getLineOffset(s.getStartLocation().getLine()-1) + s.getStartLocation().getColumn();
+		int end = doc.getLineOffset(s.getEndLocation().getLine()-1) + s.getEndLocation().getColumn();
 		this.selectAndReveal(start, end - start);
 	}
 

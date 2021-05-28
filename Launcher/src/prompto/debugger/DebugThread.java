@@ -14,9 +14,9 @@ import org.eclipse.debug.core.model.IThread;
 public class DebugThread extends PlatformObject implements IThread {
 	
 	IPromptoDebugTarget target;
-	prompto.debug.IWorker worker;
+	prompto.debug.worker.IWorker worker;
 	
-	public DebugThread(IPromptoDebugTarget target, prompto.debug.IWorker worker) {
+	public DebugThread(IPromptoDebugTarget target, prompto.debug.worker.IWorker worker) {
 		this.target = target;
 		this.worker = worker;
 	}
@@ -162,7 +162,7 @@ public class DebugThread extends PlatformObject implements IThread {
 	public StackFrameProxy[] getStackFrames() throws DebugException {
 		if(target.isTerminated())
 			return new StackFrameProxy[0];
-		List<StackFrameProxy> frames = target.getDebugger().getStack(worker).stream()
+		List<StackFrameProxy> frames = target.getDebugger().getWorkerStack(worker).stream()
 				.map((f)->new StackFrameProxy(this, f))
 				.collect(Collectors.toList());
 		return frames.toArray(new StackFrameProxy[frames.size()]);

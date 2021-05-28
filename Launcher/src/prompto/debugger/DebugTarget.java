@@ -26,17 +26,17 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IThread;
 
+import prompto.debug.IDebugEventListener;
 import prompto.debug.JavaDebugEventListener;
 import prompto.debug.JavaDebugRequestClient;
-import prompto.debug.LeanWorker;
+import prompto.debug.worker.LeanWorker;
 import prompto.ide.code.IEclipseCodeStore;
 import prompto.ide.core.CoreConstants;
 import prompto.ide.utils.ProjectUtils;
 import prompto.ide.utils.ShellUtils;
-import prompto.debug.IDebugEventListener;
 import prompto.launcher.ILaunchHelper;
 import prompto.launcher.LaunchContext;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runner.Runner;
 
 public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  {
@@ -185,9 +185,10 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 
 	public void connectLineBreakpoint(LineBreakpoint breakpoint) throws CoreException {
 		IEclipseCodeStore store = context.getCodeStore();
-		ISection section = store.findSection(breakpoint.getResource(), breakpoint.getLineNumber());
+		ICodeSection section = store.findSection(breakpoint.getResource(), breakpoint.getLineNumber());
 		breakpoint.setEnabled(section!=null);
-		section.setAsBreakpoint(breakpoint.isEnabled());
+		if(section!=null)
+			section.getSection().setAsBreakpoint(breakpoint.isEnabled());
 	}
 	
 
@@ -230,9 +231,9 @@ public class DebugTarget extends PlatformObject implements IPromptoDebugTarget  
 
 	public void disconnectLineBreakpoint(LineBreakpoint breakpoint) throws CoreException {
 		IEclipseCodeStore store = context.getCodeStore();
-		ISection section = store.findSection(breakpoint.getResource(), breakpoint.getLineNumber());
+		ICodeSection section = store.findSection(breakpoint.getResource(), breakpoint.getLineNumber());
 		if(section!=null)
-			section.setAsBreakpoint(false);
+			section.getSection().setAsBreakpoint(false);
 	}
 	
 	@Override

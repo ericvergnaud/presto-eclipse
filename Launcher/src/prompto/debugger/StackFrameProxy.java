@@ -20,11 +20,11 @@ import prompto.ide.core.CoreConstants;
 public class StackFrameProxy extends PlatformObject implements IStackFrame {
 
 	DebugThread thread;
-	prompto.debug.IStackFrame frame;
+	prompto.debug.stack.IStackFrame frame;
 	IResource resource = null;
 
 	
-	public StackFrameProxy(DebugThread thread, prompto.debug.IStackFrame frame) {
+	public StackFrameProxy(DebugThread thread, prompto.debug.stack.IStackFrame frame) {
 		this.thread = thread;
 		this.frame = frame;
 	}
@@ -53,7 +53,7 @@ public class StackFrameProxy extends PlatformObject implements IStackFrame {
 		return thread.getTarget();
 	}
 	
-	public prompto.debug.IStackFrame getStackFrame() {
+	public prompto.debug.stack.IStackFrame getStackFrame() {
 		return frame;
 	}
 

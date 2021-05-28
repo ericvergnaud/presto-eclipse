@@ -8,7 +8,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 import prompto.code.ICodeStore;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 
 public interface IEclipseCodeStore extends ICodeStore {
@@ -16,6 +16,6 @@ public interface IEclipseCodeStore extends ICodeStore {
 	void setProject(IProject project) throws CoreException;
 	void setFile(IFile file) throws CoreException;
 	Collection<IFile> getFiles() throws CoreException;
-	ISection findSection(IResource resource, int lineNumber);
+	ICodeSection findSection(IResource resource, int lineNumber);
 	Context getProjectContext();
 }

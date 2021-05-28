@@ -2,9 +2,9 @@ package prompto.debugger;
 
 import org.eclipse.debug.core.DebugEvent;
 
-import prompto.debug.IDebugEvent;
+import prompto.debug.event.ConnectedDebugEvent;
 import prompto.debug.IDebugEventListener;
-import prompto.debug.IWorker;
+import prompto.debug.worker.IWorker;
 import prompto.debug.ResumeReason;
 import prompto.debug.SuspendReason;
 
@@ -24,7 +24,7 @@ public class DebugEventListener implements IDebugEventListener {
 	}
 
 	@Override
-	public void handleConnectedEvent(IDebugEvent.Connected event) {
+	public void onConnectedEvent(ConnectedDebugEvent event) {
 		target.getDebugger().setRemote(event.getHost(), event.getPort());
 		synchronized (target) {
 			target.notify();
@@ -32,25 +32,25 @@ public class DebugEventListener implements IDebugEventListener {
 	}
 	
 	@Override
-	public void handleReadyEvent() {
+	public void onProcessReadyEvent() {
 		// TODO 
 	}
 	
 	
 	@Override
-	public void handleStartedEvent(IWorker worker) {
+	public void onWorkerStartedEvent(IWorker worker) {
 		// TODO
 	}
 	
 
 	@Override
-	public void handleSuspendedEvent(IWorker worker, SuspendReason reason) {
+	public void onWorkerSuspendedEvent(IWorker worker, SuspendReason reason) {
 		DebuggerUtils.fireSuspendEvent(target.getThread(), debugEventFromSuspendReason(reason));
 	}
 
 	private int debugEventFromSuspendReason(SuspendReason reason) {
 		switch(reason) {
-		case STEPPING:
+		case STEPPED:
 			return DebugEvent.STEP_END;
 		case BREAKPOINT :
 			return DebugEvent.BREAKPOINT;
@@ -62,7 +62,7 @@ public class DebugEventListener implements IDebugEventListener {
 	}
 
 	@Override
-	public void handleResumedEvent(IWorker worker, ResumeReason reason) {
+	public void onWorkerResumedEvent(IWorker worker, ResumeReason reason) {
 		DebuggerUtils.fireResumeEvent(target.getThread(), debugEventFromResumeReason(reason));
 	}
 
@@ -82,12 +82,12 @@ public class DebugEventListener implements IDebugEventListener {
 	}
 	
 	@Override
-	public void handleCompletedEvent(IWorker worker) {
+	public void onWorkerCompletedEvent(IWorker worker) {
 		// TODO 
 	}
 
 	@Override
-	public void handleTerminatedEvent() {
+	public void onProcessTerminatedEvent() {
 		target.notifyTerminated();
 		DebuggerUtils.fireTerminateEvent(target);
 	}

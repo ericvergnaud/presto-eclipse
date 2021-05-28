@@ -24,6 +24,7 @@ import prompto.ide.core.RunType;
 import prompto.ide.problem.ProblemDetector;
 import prompto.ide.utils.CoreUtils;
 import prompto.parser.Dialect;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.parser.Location;
 import prompto.parser.Section;
@@ -113,17 +114,18 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 
 	@Override
-	public ISection findSection(IResource resource, int lineNumber) {
+	public ICodeSection findSection(IResource resource, int lineNumber) {
 		if(!(resource instanceof IFile))
 			return null;
 		String path = ((IFile)resource).getFullPath().toPortableString();
 		Section section = new Section(path, new Location(0, lineNumber, 0), new Location(0, lineNumber, 0), Dialect.E, false);
-		return projectContext.locateSection(section);
+		return projectContext.locateCodeSection(section);
 	}
 	
 	@Override
 	public ISection findSection(ISection section) {
-		return projectContext.locateSection(section);
+		ICodeSection cs = projectContext.locateCodeSection(section);
+		return cs!=null ? cs.getSection() : null;
 	}
 	
 	
@@ -133,17 +135,17 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	}
 	
 	@Override
-	public Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError {
+	public Object fetchVersionedModuleDbId(String name, PromptoVersion version) throws PromptoError {
 		return null;
 	}
 	
 	@Override
-	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
+	public <T extends Module> T fetchVersionedModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		return null;
 	}
 	
 	@Override
-	public Resource fetchSpecificResource(String path, PromptoVersion version) {
+	public Resource fetchVersionedResource(String path, PromptoVersion version) {
 		return null;
 	}
 	

@@ -13,9 +13,9 @@ import prompto.ide.core.CoreConstants;
 public class VariableProxy extends PlatformObject implements IVariable {
 
 	StackFrameProxy frame;
-	prompto.debug.IVariable variable;
+	prompto.debug.variable.IVariable variable;
 	
-	public VariableProxy(StackFrameProxy frame, prompto.debug.IVariable variable) {
+	public VariableProxy(StackFrameProxy frame, prompto.debug.variable.IVariable variable) {
 		this.frame = frame;
 		this.variable = variable;
 	}

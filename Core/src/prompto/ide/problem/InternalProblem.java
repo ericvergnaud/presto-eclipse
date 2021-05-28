@@ -31,6 +31,16 @@ public class InternalProblem implements IProblem {
 	}
 	
 	@Override
+	public int getEndLine() {
+		return 0;
+	}
+	
+	@Override
+	public int getEndColumn() {
+		return 0;
+	}
+	
+	@Override
 	public int getStartIndex() {
 		return 0;
 	}

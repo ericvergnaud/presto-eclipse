@@ -77,7 +77,7 @@ public class RuntimeSourceLookup implements ISourceLookupParticipant {
 					IDeclaration decl = decls.next();
 					if(decl instanceof IMethodDeclaration) {
 						// TODO manage proto
-						String entryPath = decl.getPath();
+						String entryPath = decl.getSection().getPath();
 						IPath path = Plugin.getDefault()
 								.getStateLocation()
 								.addTrailingSeparator()

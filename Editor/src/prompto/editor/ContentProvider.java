@@ -143,17 +143,17 @@ public class ContentProvider implements ITreeContentProvider {
 	private Element populateEnumerated(IEnumeratedDeclaration<?> decl) {
 		Element elem = new Element();
 		elem.name = decl.getName();
-		elem.section = decl;
+		elem.section = decl.getSection();
 		elem.type = ContentType.ENUMERATED;
 		populateSymbols(elem, decl);
 		return elem;
 	}
 
 	private void populateSymbols(Element elem, IEnumeratedDeclaration<?> decl) {
-		for(Symbol s : decl.getSymbolsList()) {
+		for(Symbol sym : decl.getSymbolsList()) {
 			Element child = new Element();
-			child.name = s.getName();
-			child.section = s;
+			child.name = sym.getName();
+			child.section = sym.getSection();
 			child.type = ContentType.SYMBOL;
 			elem.children.add(child);
 		}
@@ -163,7 +163,7 @@ public class ContentProvider implements ITreeContentProvider {
 		try {
 			Element elem = new Element();
 			elem.name = decl.getName();
-			elem.section = decl;
+			elem.section = decl.getSection();
 			elem.type = ContentType.METHOD;
 			if(decl instanceof ConcreteMethodDeclaration) 
 				populateStatements(elem, ((ConcreteMethodDeclaration)decl).getStatements());
@@ -188,7 +188,7 @@ public class ContentProvider implements ITreeContentProvider {
 	private Element populateTest(TestMethodDeclaration decl) {
 		Element elem = new Element();
 		elem.name = decl.getName().toString();
-		elem.section = decl;
+		elem.section = decl.getSection();
 		elem.type = ContentType.METHOD;
 		populateStatements(elem, decl.getStatements());
 		return elem;
@@ -197,7 +197,7 @@ public class ContentProvider implements ITreeContentProvider {
 	private Element populateCategory(CategoryDeclaration decl) {
 		Element elem = new Element();
 		elem.name = decl.getName().toString();
-		elem.section = decl;
+		elem.section = decl.getSection();
 		elem.type = decl instanceof IEnumeratedDeclaration ? ContentType.ENUMERATED : ContentType.CATEGORY;
 		populateInherited(elem, decl.getDerivedFrom());
 		if(decl.getAttributes()!=null) for(Identifier name : decl.getAttributes()) {
@@ -225,7 +225,7 @@ public class ContentProvider implements ITreeContentProvider {
 		if(names!=null) for(Identifier name : names) {
 			Element child = new Element();
 			child.name = name.toString();
-			child.section = name;
+			child.section = name.getSection();
 			child.type = ContentType.CATEGORY;
 			elem.children.add(child);
 		}
@@ -234,7 +234,7 @@ public class ContentProvider implements ITreeContentProvider {
 	private Element populateAttribute(AttributeDeclaration decl) {
 		Element elem = new Element();
 		elem.name = decl.getName().toString();
-		elem.section = decl;
+		elem.section = decl.getSection();
 		elem.type = ContentType.ATTRIBUTE;
 		return elem;
 	}
@@ -242,7 +242,7 @@ public class ContentProvider implements ITreeContentProvider {
 	private Element populateAttribute(Identifier name) {
 		Element elem = new Element();
 		elem.name = name.toString();
-		elem.section = name;
+		elem.section = name.getSection();
 		elem.type = ContentType.ATTRIBUTE;
 		return elem;
 	}

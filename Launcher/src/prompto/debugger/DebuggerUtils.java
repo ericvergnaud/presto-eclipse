@@ -101,7 +101,7 @@ public class DebuggerUtils {
 	}
 
 	public static IMarker createMarker(IResource resource, ISection section) throws CoreException {
-		return createMarker(resource, section.getStart().getLine());
+		return createMarker(resource, section.getStartLocation().getLine());
 	}
 
 	public static IMarker createMarker(IResource resource, int lineNumber) throws CoreException {

@@ -13,9 +13,9 @@ import prompto.ide.core.CoreConstants;
 public class ValueProxy extends PlatformObject implements IValue {
 
 	VariableProxy variable;
-	prompto.debug.IValue value;
+	prompto.debug.value.IValue value;
 	
-	public ValueProxy(VariableProxy variable, prompto.debug.IValue value) {
+	public ValueProxy(VariableProxy variable, prompto.debug.value.IValue value) {
 		this.variable = variable;
 		this.value = value;
 	}
