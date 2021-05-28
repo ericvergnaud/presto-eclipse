@@ -42,9 +42,9 @@
 			<location>/Users/ericvergnaud/.m2/repository/org/prompto/Standalone/0.0.1-SNAPSHOT/Standalone-0.0.1-SNAPSHOT-tests.jar</location>
 		</link>
 		<link>
-			<name>libs/antlr4-runtime-4.7.1.jar</name>
+			<name>libs/antlr4-runtime-4.9.2.jar</name>
 			<type>1</type>
-			<location>/Users/ericvergnaud/.m2/repository/org/antlr/antlr4-runtime/4.7.1/antlr4-runtime-4.7.1.jar</location>
+			<location>/Users/ericvergnaud/.m2/repository/org/antlr/antlr4-runtime/4.9.2/antlr4-runtime-4.9.2.jar</location>
 		</link>
 		<link>
 			<name>libs/jackson-annotations-2.6.0.jar</name>

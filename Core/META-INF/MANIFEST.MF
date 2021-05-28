@@ -17,7 +17,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libs/joda-time-2.0.jar,
  libs/slf4j-api-1.7.25.jar,
- libs/antlr4-runtime-4.7.1.jar,
+ libs/antlr4-runtime-4.9.2.jar,
  libs/jackson-core-2.6.2.jar,
  libs/jackson-databind-2.6.2.jar,
  libs/jackson-annotations-2.6.0.jar,
