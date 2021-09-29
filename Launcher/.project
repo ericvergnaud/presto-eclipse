@@ -3,6 +3,7 @@
 	<name>Launcher</name>
 	<comment></comment>
 	<projects>
+		<project>Core</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

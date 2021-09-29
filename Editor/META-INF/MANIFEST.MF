@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui,
  prompto.core;bundle-version="1.0.0",
  prompto.launcher;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-15
 Bundle-ClassPath: .
 Import-Package: org.eclipse.debug.core,
  org.eclipse.debug.core.model,

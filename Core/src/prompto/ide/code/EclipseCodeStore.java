@@ -3,6 +3,7 @@ package prompto.ide.code;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -180,5 +181,13 @@ public abstract class EclipseCodeStore extends BaseCodeStore implements IEclipse
 	@Override
 	public void storeResource(Resource resource, Object moduleId) {
 	}
+	
+	@Override
+	protected void doFetchLatestResourcesWithMimeTypes(List<Resource> arg0, Set<String> arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	
 }
